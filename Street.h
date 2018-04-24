@@ -6,10 +6,16 @@
 #include "Vehicle.h"
 
 class Cross;
+class Vehicle;
 
 class Road : public GameObject
 {
+public:
+    std::queue<Vehicle*> vehiclesBeg;
+    std::queue<Vehicle*> vehiclesEnd;
 
+    float length;
+    Vec3 direction;
 };
 
 class Street : public Road
@@ -26,8 +32,7 @@ private:
     Cross* crossBeg;
     Cross* crossEnd;
 
-    std::queue<Vehicle> vehiclesBeg;
-    std::queue<Vehicle> vehiclesEnd;
+
 };
 
 /*class StreetOneDir : Street
@@ -69,8 +74,8 @@ public:
     Garage(Vec3 p, Cross *c);
 
     Cross *cross;
-    std::queue<Vehicle*> vehicles;
-    std::queue<Vehicle*> toDelete;
+    //std::queue<Vehicle*> vehicles;
+    //std::queue<Vehicle*> toDelete;
 
     float frec;
     float curTime;

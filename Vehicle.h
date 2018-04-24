@@ -2,20 +2,32 @@
 #define VEHICLE_H
 
 #include "GameObject.h"
+#include "Street.h"
+
+class Road;
+class Cross;
 
 class Vehicle : public GameObject
 {
 public:
-
-private:
-    float velocity;
-    void update(float delta);
+    Vehicle(Road *spawnRoad);
 protected:
+    float velocity;
+    float stopTime;
+    float xPos;
+    //Vec3 direction;
+    void update(float delta);
 
+    Road *curRoad;
+    Cross *curCross;
+    Vehicle *frontVeh;
 };
 
 class Car : public Vehicle
 {
+public:
+    Car(Road *spawnRoad);
+
 private:
 
     void update(float delta);

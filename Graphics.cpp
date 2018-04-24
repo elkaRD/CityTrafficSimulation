@@ -12,6 +12,33 @@ Vec3::Vec3(float a, float b, float c)
     z=c;
 }
 
+float Vec3::dst(Vec3 b, Vec3 e)
+{
+    float dx = e.x-b.x;
+    float dy = e.y-b.y;
+    float dz = e.z-b.z;
+
+    return sqrt(dx*dx + dy*dy + dz*dz);
+}
+
+void Vec3::normalize()
+{
+    float dst = sqrt(x*x+y*y+z*z);
+    x /= dst;
+    y /= dst;
+    z /= dst;
+}
+
+Vec3 operator + (const Vec3& left, const Vec3& right)
+{
+    return Vec3(left.x + right.x, left.y + right.y, left.z + right.z);
+}
+
+Vec3 operator - (const Vec3& left, const Vec3& right)
+{
+    return Vec3(left.x - right.x, left.y - right.y, left.z - right.z);
+}
+
 void Graphics::draw()
 {
 

@@ -28,6 +28,10 @@ Street::Street(Cross *begCross, Cross *endCross)
 
     crossBeg->streets.push_back(temp);
     crossEnd->streets.push_back(temp);
+
+    length = Vec3::dst(crossBeg->getPos(), crossEnd->getPos());
+    direction = crossEnd->getPos() - crossBeg->getPos();
+    direction.normalize();
 }
 
 void Street::draw()
@@ -69,8 +73,8 @@ void Garage::update(float delta)
 void Garage::spotCar()
 {
     Vehicle *temp;
-    temp = new Car();
-    vehicles.push(temp);
+    temp = new Car(this);
+    vehiclesBeg.push(temp);
 
     cout<<"spotted car by "<<id<<endl;
 }

@@ -12,6 +12,12 @@
 }
 */
 
+float GameObject::randFloat(float minV, float maxV)
+{
+    float d = maxV - minV;
+    return minV + d*(rand()%1000)/1000.0;
+}
+
 void GameObject::setPos(Vec3 p)
 {
     pos = p;

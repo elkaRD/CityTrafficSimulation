@@ -4,6 +4,7 @@
 #include <cmath>
 #include <cstdio>
 #include <string>
+#include <cstdlib>
 #include <queue>
 #include "Graphics.h"
 
@@ -28,6 +29,7 @@ protected:
     Vec3 rot;
 
     virtual void update(float delta);
+    float randFloat(float minV, float maxV);
     //virtual void draw();
 };
 
