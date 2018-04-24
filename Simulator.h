@@ -28,7 +28,17 @@ private:
     std::vector<GameObject*> objects;
 
 
+    void redraw();
+
     static bool didInit;
+
+    static int snglBuf[];// = {GLX_RGBA, GLX_DEPTH_SIZE, 16, None};
+    static int dblBuf[];//  = {GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
+
+    static Display   *dpy;
+    static Window     win;
+    GLfloat    xAngle = 42.0, yAngle = 82.0, zAngle = 112.0;
+    static GLboolean  doubleBuffer;// = GL_TRUE;
 };
 
 //int init(int argc, char** argv);

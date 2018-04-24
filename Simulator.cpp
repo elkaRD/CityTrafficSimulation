@@ -6,13 +6,17 @@
 
 #include"Simulator.h"
 
-static int snglBuf[] = {GLX_RGBA, GLX_DEPTH_SIZE, 16, None};
-static int dblBuf[]  = {GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
+//static int snglBuf[] = {GLX_RGBA, GLX_DEPTH_SIZE, 16, None};
+//static int dblBuf[]  = {GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
 
-Display   *dpy;
-Window     win;
-GLfloat    xAngle = 42.0, yAngle = 82.0, zAngle = 112.0;
-GLboolean  doubleBuffer = GL_TRUE;
+int Simulator::snglBuf[] = {GLX_RGBA, GLX_DEPTH_SIZE, 16, None};
+int Simulator::dblBuf[]  = {GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
+
+Display   *Simulator::dpy = NULL;
+Window    Simulator::win = (Window) NULL;
+/*GLfloat    xAngle = 42.0, yAngle = 82.0, zAngle = 112.0;
+GLboolean  doubleBuffer = GL_TRUE;*/
+GLboolean Simulator::doubleBuffer = GL_TRUE;
 
 void fatalError(char *message)
 {
@@ -20,7 +24,7 @@ void fatalError(char *message)
   exit(1);
 }
 
-void redraw(void)
+void Simulator::redraw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
