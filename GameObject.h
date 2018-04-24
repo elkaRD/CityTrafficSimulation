@@ -7,18 +7,7 @@
 #include <queue>
 #include "Graphics.h"
 
-class Vec3
-{
-public:
 
-    Vec3();
-    Vec3(float a, float b, float c);
-
-    float x,y,z;
-    //friend std::istream& operator >> (std::istream& in, Vec3& right);
-};
-
-//std::istream& operator >> (std::istream& in, Vec3& right);
 
 class GameObject : public Graphics
 {
@@ -28,17 +17,18 @@ public:
     Vec3 getPos();
     Vec3 getRot();
     std::string id;
-private:
+//private:
 
 
-    void updateObject();
+    void updateObject(float delta);
+    void drawObject();
 
 protected:
     Vec3 pos;
     Vec3 rot;
 
-    virtual void update();
-
+    virtual void update(float delta);
+    //virtual void draw();
 };
 
 #endif // GAMEOBJECT_H

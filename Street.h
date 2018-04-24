@@ -17,6 +17,8 @@ class Street : public Road
 public:
     Street(Cross *begCross, Cross *endCross);
 
+    void draw();
+
 private:
     //Vec3 begPos;
     //Vec3 endPos;
@@ -50,10 +52,32 @@ public:
 
     struct OneStreet
     {
-        Street street;
+        Street *street;
         std::queue<Vehicle> vehicles;
+        bool enabled = true;
     };
     std::vector<OneStreet> streets;
+
+    void update(float delta);
+
+    void draw();
+};
+
+class Garage : public Road
+{
+public:
+    Garage(Vec3 p, Cross *c);
+
+    Cross *cross;
+    std::queue<Vehicle*> vehicles;
+    std::queue<Vehicle*> toDelete;
+
+    float frec;
+    float curTime;
+
+    void draw();
+    void update(float delta);
+    void spotCar();
 };
 
 #endif // STREET_H

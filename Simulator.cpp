@@ -6,6 +6,9 @@
 #include"Simulator.h"
 using namespace std;
 
+int Simulator::width = 1280;
+int Simulator::height = 720;
+
 int Simulator::snglBuf[] = {GLX_RGBA, GLX_DEPTH_SIZE, 16, None};
 int Simulator::dblBuf[]  = {GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
 
@@ -23,38 +26,51 @@ void Simulator::redraw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    glPushMatrix();
+
+        /*Graphics g;
+        g.setColor(0,0,0);
+        g.drawCube(1);*/
+
+        for (int i=0;i<objects.size();i++)
+        {
+            objects[i]->drawObject();
+        }
+
+    glPopMatrix();
+
     /* front face */
-    glBegin(GL_QUADS);
+    /*glBegin(GL_QUADS);
     glPushMatrix();
         glScalef(0.5,0.5,0.5);
-      //glColor3f(0.0, 0.7, 0.1);  /* green */
-      glVertex3f(-1.0, 1.0, 1.0);
+      glColor3f(0.0, 0.7, 0.1);  /* green */
+      /*glVertex3f(-1.0, 1.0, 1.0);
       glVertex3f(1.0, 1.0, 1.0);
       glVertex3f(1.0, -1.0, 1.0);
       glVertex3f(-1.0, -1.0, 1.0);
 
       /* back face */
       //glColor3f(0.9, 1.0, 0.0);  /* yellow */
-      glVertex3f(-1.0, 1.0, -1.0);
+      /*glVertex3f(-1.0, 1.0, -1.0);
       glVertex3f(1.0, 1.0, -1.0);
       glVertex3f(1.0, -1.0, -1.0);
       glVertex3f(-1.0, -1.0, -1.0);
 
       /* top side face */
       //glColor3f(0.2, 0.2, 1.0);  /* blue */
-      glVertex3f(-1.0, 1.0, 1.0);
+      /*glVertex3f(-1.0, 1.0, 1.0);
       glVertex3f(1.0, 1.0, 1.0);
       glVertex3f(1.0, 1.0, -1.0);
       glVertex3f(-1.0, 1.0, -1.0);
 
       /* bottom side face */
       //glColor3f(0.7, 0.0, 0.1);  /* red */
-      glVertex3f(-1.0, -1.0, 1.0);
+      /*glVertex3f(-1.0, -1.0, 1.0);
       glVertex3f(1.0, -1.0, 1.0);
       glVertex3f(1.0, -1.0, -1.0);
       glVertex3f(-1.0, -1.0, -1.0);
     glPopMatrix();
-    glEnd();
+    glEnd();*/
 
   if (doubleBuffer)
     glXSwapBuffers(dpy, win);/* buffer swap does implicit glFlush */
@@ -112,7 +128,7 @@ int Simulator::init(int argc, char **argv)
   swa.event_mask = KeyPressMask    | ExposureMask
                  | ButtonPressMask | StructureNotifyMask;
   win = XCreateWindow(dpy, RootWindow(dpy, vi->screen), 0, 0,
-                      300, 300, 0, vi->depth, InputOutput, vi->visual,
+                      1280, 720, 0, vi->depth, InputOutput, vi->visual,
                       CWBorderPixel | CWColormap | CWEventMask, &swa);
   XSetStandardProperties(dpy, win, "main", "main", None,
                          argv, argc, NULL);
@@ -134,13 +150,15 @@ int Simulator::init(int argc, char **argv)
   /* frame buffer clears should be to black */
   glClearColor(0.0, 0.0, 0.0, 0.0);
 
+    float screenRatio = width / height *2.0;
+
   /* set up projection transform */
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glFrustum(-1.0, 1.0, -1.0, 1.0, 1.0, 10.0);
+  glFrustum(-1.0 * screenRatio, 1.0 * screenRatio, -1.0, 1.0, 20.0, 1000.0);
   /* establish initial viewport */
   /* pedantic, full window size is default viewport */
-  glViewport(0, 0, 300, 300);
+  glViewport(0, 0, 1280, 720);
 
   printf( "Press left mouse button to rotate around X axis\n" );
   printf( "Press middle mouse button to rotate around Y axis\n" );
@@ -167,11 +185,14 @@ void Simulator::run()
     GLboolean            needRedraw = GL_FALSE, recalcModelView = GL_TRUE;;
     XEvent               event;
 
+    startTime = time(0);
+    lastTime = startTime;
+
     while (1)
   {
-    do
+    /*do
     {
-      XNextEvent(dpy, &event);
+      /*XNextEvent(dpy, &event);
       switch (event.type)
       {
         case KeyPress:
@@ -181,13 +202,13 @@ void Simulator::run()
           char       buffer[1];
           /* It is necessary to convert the keycode to a
            * keysym before checking if it is an escape */
-          kevent = (XKeyEvent *) &event;
+          /*kevent = (XKeyEvent *) &event;
           if (   (XLookupString((XKeyEvent *)&event,buffer,1,&keysym,NULL) == 1)
               && (keysym == (KeySym)XK_Escape) )
             exit(0);
           break;
         }
-        /*case ButtonPress:
+        case ButtonPress:
           recalcModelView = GL_TRUE;
           switch (event.xbutton.button)
           {
@@ -198,18 +219,19 @@ void Simulator::run()
             case 3: zAngle += 10.0;
               break;
           }
-          break;*/
+          break;
         case ConfigureNotify:
           glViewport(0, 0, event.xconfigure.width,
                      event.xconfigure.height);
           /* fall through... */
-        case Expose:
+        /*case Expose:
           needRedraw = GL_TRUE;
           break;
       }
     } while(XPending(dpy)); /* loop to compress events */
 
-    if (recalcModelView)
+    recalcModelView = GL_TRUE;
+    //if (recalcModelView)
     {
       glMatrixMode(GL_MODELVIEW);
 
@@ -217,18 +239,25 @@ void Simulator::run()
       glLoadIdentity();
         glClearColor(1,1,1,1);
       /* move the camera back three units */
-      glTranslatef(0.0, 0.0, -3.0);
+      glTranslatef(0,0,-20);
+      glRotatef(-90,1,0,0);
+      glTranslatef(0.0, 100.0, 0.0);
+      //glRotatef(90,0,0,1);
 
       /* rotate by X, Y, and Z angles */
       /*glRotatef(xAngle, 0.1, 0.0, 0.0);
       glRotatef(yAngle, 0.0, 0.1, 0.0);
-      glRotatef(zAngle, 0.0, 0.0, 1.0);*/
+      glRotatef(zAngle, 0.0, 0.0, 1.0);
+      xAngle +=0.1;*/
 
       recalcModelView = GL_FALSE;
       needRedraw = GL_TRUE;
     }
     if (needRedraw)
     {
+        clock_t newTime = time(0);
+        update(difftime(newTime, lastTime));
+        lastTime = newTime;
       redraw();
       needRedraw = GL_FALSE;
     }
@@ -250,51 +279,90 @@ void Simulator::loadRoad(string fileName)
 
         vector<Cross*>crosses;
 
-        string type;
-        string id;
-        file >> type >> id;
-        if (type.compare("SK") == 0)
+        while (!file.eof())
         {
-            float x1,y1,z1;
-            float x2,y2,z2;
-            file >> x1 >> y1 >> z1;// >> x1 >> y2 >> z2;
-            Vec3 v1(x1,y1,z1);
-            //Vec3 v2(x2,y2,z2);
-
-            GameObject *temp;
-            temp = new Cross(v1);
-            temp->id = id;
-            objects.push_back(temp);
-            crosses.push_back(dynamic_cast<Cross*>(temp));
-        }
-        if (type.compare("ST") == 0)
-        {
-            string begCrossID;
-            string endCrossID;
-            file >> begCrossID >> endCrossID;
-            Cross *crossB;
-            Cross *crossE;
-
-            for (int i=0;i<crosses.size();i++)
+            string type;
+            string id;
+            file >> type >> id;
+            if (type.compare("SK") == 0)
             {
-                if (crosses[i]->id.compare(begCrossID) == 0)
-                {
-                    crossB = crosses[i];
-                    break;
-                }
-            }
-            for (int i=0;i<crosses.size();i++)
-            {
-                if (crosses[i]->id.compare(endCrossID) == 0)
-                {
-                    crossE = crosses[i];
-                    break;
-                }
-            }
+                float x1,y1,z1;
+                float x2,y2,z2;
+                file >> x1 >> y1 >> z1;// >> x1 >> y2 >> z2;
+                Vec3 v1(x1,y1,z1);
+                //Vec3 v2(x2,y2,z2);
 
-            GameObject *temp;
-            temp = new Street(crossB, crossE);
+                GameObject *temp;
+                temp = new Cross(v1);
+                temp->id = id;
+                objects.push_back(temp);
+                crosses.push_back(dynamic_cast<Cross*>(temp));
+
+                cout<<"dodano cross: "<<id<<endl;
+            }
+            if (type.compare("ST") == 0)
+            {
+                string begCrossID;
+                string endCrossID;
+                file >> begCrossID >> endCrossID;
+                Cross *crossB;
+                Cross *crossE;
+
+                for (int i=0;i<crosses.size();i++)
+                {
+                    if (crosses[i]->id.compare(begCrossID) == 0)
+                    {
+                        crossB = crosses[i];
+                        break;
+                    }
+                }
+                for (int i=0;i<crosses.size();i++)
+                {
+                    if (crosses[i]->id.compare(endCrossID) == 0)
+                    {
+                        crossE = crosses[i];
+                        break;
+                    }
+                }
+
+                GameObject *temp;
+                temp = new Street(crossB, crossE);
+                temp->id = id;
+                objects.push_back(temp);
+
+                cout<<"dodano street: "<<id<<endl;
+            }
+            if (type.compare("GA") == 0)
+            {
+                string jointCross;
+                float x,y,z;
+                file >> jointCross >> x >> y >> z;
+                Vec3 v(x,y,z);
+                Cross *cross;
+                for(int i=0;i<objects.size();i++)
+                {
+                    if (crosses[i]->id.compare(jointCross) == 0)
+                    {
+                        cross = crosses[i];
+                        break;
+                    }
+                }
+                GameObject *temp;
+                temp = new Garage(v, cross);
+                temp->id = id;
+                objects.push_back(temp);
+
+                cout<<"dodano garage: "<<id<<endl;
+            }
         }
     }
     file.close();
+}
+
+void Simulator::update(float delta)
+{
+    for(int i=0;i<objects.size();i++)
+    {
+        objects[i]->updateObject(delta);
+    }
 }

@@ -9,7 +9,7 @@ public:
 
 private:
     float velocity;
-    void update();
+    void update(float delta);
 protected:
 
 };
@@ -18,7 +18,8 @@ class Car : public Vehicle
 {
 private:
 
-    void draw() override;
+    void update(float delta);
+    void draw();
 };
 
 #endif // VEHICLE_H
