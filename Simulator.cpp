@@ -3,19 +3,14 @@
  * X64 compilation: gcc -o -L/usr/X11/lib64 main main.c -lGL -lX11
  */
 
-
 #include"Simulator.h"
-
-//static int snglBuf[] = {GLX_RGBA, GLX_DEPTH_SIZE, 16, None};
-//static int dblBuf[]  = {GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
+using namespace std;
 
 int Simulator::snglBuf[] = {GLX_RGBA, GLX_DEPTH_SIZE, 16, None};
 int Simulator::dblBuf[]  = {GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
 
 Display   *Simulator::dpy = NULL;
 Window    Simulator::win = (Window) NULL;
-/*GLfloat    xAngle = 42.0, yAngle = 82.0, zAngle = 112.0;
-GLboolean  doubleBuffer = GL_TRUE;*/
 GLboolean Simulator::doubleBuffer = GL_TRUE;
 
 void fatalError(char *message)
@@ -30,32 +25,35 @@ void Simulator::redraw()
 
     /* front face */
     glBegin(GL_QUADS);
-      glColor3f(0.0, 0.7, 0.1);  /* green */
+    glPushMatrix();
+        glScalef(0.5,0.5,0.5);
+      //glColor3f(0.0, 0.7, 0.1);  /* green */
       glVertex3f(-1.0, 1.0, 1.0);
       glVertex3f(1.0, 1.0, 1.0);
       glVertex3f(1.0, -1.0, 1.0);
       glVertex3f(-1.0, -1.0, 1.0);
 
       /* back face */
-      glColor3f(0.9, 1.0, 0.0);  /* yellow */
+      //glColor3f(0.9, 1.0, 0.0);  /* yellow */
       glVertex3f(-1.0, 1.0, -1.0);
       glVertex3f(1.0, 1.0, -1.0);
       glVertex3f(1.0, -1.0, -1.0);
       glVertex3f(-1.0, -1.0, -1.0);
 
       /* top side face */
-      glColor3f(0.2, 0.2, 1.0);  /* blue */
+      //glColor3f(0.2, 0.2, 1.0);  /* blue */
       glVertex3f(-1.0, 1.0, 1.0);
       glVertex3f(1.0, 1.0, 1.0);
       glVertex3f(1.0, 1.0, -1.0);
       glVertex3f(-1.0, 1.0, -1.0);
 
       /* bottom side face */
-      glColor3f(0.7, 0.0, 0.1);  /* red */
+      //glColor3f(0.7, 0.0, 0.1);  /* red */
       glVertex3f(-1.0, -1.0, 1.0);
       glVertex3f(1.0, -1.0, 1.0);
       glVertex3f(1.0, -1.0, -1.0);
       glVertex3f(-1.0, -1.0, -1.0);
+    glPopMatrix();
     glEnd();
 
   if (doubleBuffer)
@@ -71,7 +69,6 @@ int Simulator::init(int argc, char **argv)
   XSetWindowAttributes swa;
   GLXContext           cx;
 
-  //GLboolean            /*needRedraw = GL_FALSE,*/ recalcModelView = GL_TRUE;
   int                  dummy;
 
   /*** (1) open a connection to the X server ***/
@@ -190,7 +187,7 @@ void Simulator::run()
             exit(0);
           break;
         }
-        case ButtonPress:
+        /*case ButtonPress:
           recalcModelView = GL_TRUE;
           switch (event.xbutton.button)
           {
@@ -201,7 +198,7 @@ void Simulator::run()
             case 3: zAngle += 10.0;
               break;
           }
-          break;
+          break;*/
         case ConfigureNotify:
           glViewport(0, 0, event.xconfigure.width,
                      event.xconfigure.height);
@@ -218,14 +215,14 @@ void Simulator::run()
 
       /* reset modelview matrix to the identity matrix */
       glLoadIdentity();
-
+        glClearColor(1,1,1,1);
       /* move the camera back three units */
       glTranslatef(0.0, 0.0, -3.0);
 
       /* rotate by X, Y, and Z angles */
-      glRotatef(xAngle, 0.1, 0.0, 0.0);
+      /*glRotatef(xAngle, 0.1, 0.0, 0.0);
       glRotatef(yAngle, 0.0, 0.1, 0.0);
-      glRotatef(zAngle, 0.0, 0.0, 1.0);
+      glRotatef(zAngle, 0.0, 0.0, 1.0);*/
 
       recalcModelView = GL_FALSE;
       needRedraw = GL_TRUE;
@@ -238,3 +235,66 @@ void Simulator::run()
   }
 }
 
+
+void Simulator::loadRoad(string fileName)
+{
+    fstream file;
+    file.open(fileName.c_str(), ios::app | ios::in);
+    if (file.good())
+    {
+        /*string data;
+        getline(file, data);
+
+        stringstream ss;
+        ss << data;*/
+
+        vector<Cross*>crosses;
+
+        string type;
+        string id;
+        file >> type >> id;
+        if (type.compare("SK") == 0)
+        {
+            float x1,y1,z1;
+            float x2,y2,z2;
+            file >> x1 >> y1 >> z1;// >> x1 >> y2 >> z2;
+            Vec3 v1(x1,y1,z1);
+            //Vec3 v2(x2,y2,z2);
+
+            GameObject *temp;
+            temp = new Cross(v1);
+            temp->id = id;
+            objects.push_back(temp);
+            crosses.push_back(dynamic_cast<Cross*>(temp));
+        }
+        if (type.compare("ST") == 0)
+        {
+            string begCrossID;
+            string endCrossID;
+            file >> begCrossID >> endCrossID;
+            Cross *crossB;
+            Cross *crossE;
+
+            for (int i=0;i<crosses.size();i++)
+            {
+                if (crosses[i]->id.compare(begCrossID) == 0)
+                {
+                    crossB = crosses[i];
+                    break;
+                }
+            }
+            for (int i=0;i<crosses.size();i++)
+            {
+                if (crosses[i]->id.compare(endCrossID) == 0)
+                {
+                    crossE = crosses[i];
+                    break;
+                }
+            }
+
+            GameObject *temp;
+            temp = new Street(crossB, crossE);
+        }
+    }
+    file.close();
+}

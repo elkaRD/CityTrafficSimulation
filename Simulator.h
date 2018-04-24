@@ -11,7 +11,11 @@
 #include <X11/keysym.h>
 
 #include "GameObject.h"
+#include "Street.h"
 #include <vector>
+#include <fstream>
+#include <string>
+#include <sstream>
 
 class Simulator
 {
@@ -19,14 +23,14 @@ public:
     static int init(int argc, char** argv);
 
     Simulator();
-    void loadRoad();
+    void loadRoad(std::string fileName);
     void run();
 private:
     void update(float delta);
     void registerObject(GameObject go);
     void destroyObject(GameObject go);
-    std::vector<GameObject*> objects;
 
+    std::vector<GameObject*> objects;
 
     void redraw();
 
@@ -37,7 +41,7 @@ private:
 
     static Display   *dpy;
     static Window     win;
-    GLfloat    xAngle = 42.0, yAngle = 82.0, zAngle = 112.0;
+    //GLfloat    xAngle = 42.0, yAngle = 82.0, zAngle = 112.0;
     static GLboolean  doubleBuffer;// = GL_TRUE;
 };
 

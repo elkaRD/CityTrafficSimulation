@@ -1,13 +1,21 @@
 #ifndef STREET_H
 #define STREET_H
 
-#include "Road.h"
+//#include "Road.h"
+#include "GameObject.h"
+#include "Vehicle.h"
 
 class Cross;
 
-class Street
+class Road : public GameObject
+{
+
+};
+
+class Street : public Road
 {
 public:
+    Street(Cross *begCross, Cross *endCross);
 
 private:
     //Vec3 begPos;
@@ -33,10 +41,13 @@ private:
     vector<Vehicle> vehicles2;
 };*/
 
-class Cross
+class Cross : public Road
 {
     //std::vector<Street> streets;
     //std::vector<std::vector<Vehicle>>
+public:
+    Cross(Vec3 position);
+
     struct OneStreet
     {
         Street street;

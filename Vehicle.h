@@ -3,18 +3,18 @@
 
 #include "GameObject.h"
 
-class Vehicle : GameObject
+class Vehicle : public GameObject
 {
 public:
 
 private:
     float velocity;
-    void update() override;
+    void update();
 protected:
 
 };
 
-class Car : Vehicle
+class Car : public Vehicle
 {
 private:
 
