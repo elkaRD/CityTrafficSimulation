@@ -2,7 +2,7 @@
 #include<iostream>
 using namespace std;
 
-Cross::Cross(Simulator *engine, Vec3 position)
+Cross::Cross(Vec3 position)// : GameObject(engine)
 {
     pos = position;
 }
@@ -18,7 +18,7 @@ void Cross::draw()
     drawCube(2);
 }
 
-Street::Street(Simulator *engine, Cross *begCross, Cross *endCross)
+Street::Street(Cross *begCross, Cross *endCross)
 {
     crossBeg = begCross;
     crossEnd = endCross;
@@ -47,6 +47,8 @@ Garage::Garage(Simulator *engine, Vec3 p, Cross *c)
     Cross::OneStreet temp;
     temp.enabled = false;
 
+    gameEngine = engine;
+
     cross->streets.push_back(temp);
 
     curTime = 0;
@@ -70,13 +72,16 @@ void Garage::update(float delta)
     }
 }
 
+void registerNewObject(Simulator *engine, GameObject *go);
+
 void Garage::spotCar()
 {
     Vehicle *temp;
     temp = new Car(this);
+    temp->curRoad = this;
     vehiclesBeg.push(temp);
-
 //    gameEngine->registerObject(temp);
+    registerNewObject(gameEngine, temp);
 
     cout<<"spotted car by "<<id<<endl;
 }

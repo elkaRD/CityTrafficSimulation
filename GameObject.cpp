@@ -10,6 +10,16 @@
 }
 */
 
+GameObject::GameObject()
+{
+
+}
+
+GameObject::GameObject(Simulator *engine)
+{
+    gameEngine = engine;
+}
+
 float GameObject::randFloat(float minV, float maxV)
 {
     float d = maxV - minV;

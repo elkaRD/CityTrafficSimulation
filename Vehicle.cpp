@@ -1,4 +1,7 @@
 #include "Vehicle.h"
+#include "Street.h"
+
+class Road;
 
 Vehicle::Vehicle(Road *spawnRoad)
 {

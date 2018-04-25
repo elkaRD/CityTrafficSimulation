@@ -25,7 +25,7 @@ public:
 class Street : public Road
 {
 public:
-    Street(Simulator *engine, Cross *begCross, Cross *endCross);
+    Street(Cross *begCross, Cross *endCross);
 
     void draw();
 
@@ -57,7 +57,7 @@ class Cross : public Road
     //std::vector<Street> streets;
     //std::vector<std::vector<Vehicle>>
 public:
-    Cross(Simulator *engine, Vec3 position);
+    Cross(Vec3 position);
 
     struct OneStreet
     {

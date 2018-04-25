@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <queue>
 #include "Graphics.h"
+//#include "Vehicle.h"
 //#include "Simulator.h"
 
 class Simulator;
@@ -20,7 +21,8 @@ public:
     Vec3 getRot();
     std::string id;
 //private:
-
+    GameObject();
+    GameObject(Simulator *engine);
 
     void updateObject(float delta);
     void drawObject();

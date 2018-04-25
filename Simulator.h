@@ -12,9 +12,14 @@
 
 //#include "Graphics.h"
 
+class Simulator;
+class GameObject;
+void registerNewObject(Simulator *engine, GameObject *go);
+
 #include "GameObject.h"
-#include "Vehicle.h"
 #include "Street.h"
+#include "Vehicle.h"
+
 #include <vector>
 #include <fstream>
 #include <string>
@@ -56,7 +61,11 @@ private:
     static Window     win;
     GLfloat    xAngle = 42.0, yAngle = 82.0, zAngle = 112.0;
     static GLboolean  doubleBuffer;// = GL_TRUE;
+
+    friend void registerNewObject(Simulator *engine, GameObject *go);
 };
+
+
 
 //int init(int argc, char** argv);
 

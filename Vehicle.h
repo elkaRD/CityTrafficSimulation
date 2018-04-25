@@ -2,7 +2,7 @@
 #define VEHICLE_H
 
 #include "GameObject.h"
-#include "Street.h"
+//#include "Street.h"
 
 
 class Road;
@@ -13,7 +13,7 @@ class Vehicle : public GameObject
 {
 public:
     Vehicle(Road *spawnRoad);
-protected:
+//protected:
     float velocity;
     float stopTime;
     float xPos;
