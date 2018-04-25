@@ -7,8 +7,9 @@
 #include <cstdlib>
 #include <queue>
 #include "Graphics.h"
+//#include "Simulator.h"
 
-
+class Simulator;
 
 class GameObject : public Graphics
 {
@@ -30,6 +31,9 @@ protected:
 
     virtual void update(float delta);
     float randFloat(float minV, float maxV);
+
+    public:
+    Simulator *gameEngine;
     //virtual void draw();
 };
 

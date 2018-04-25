@@ -293,7 +293,7 @@ void Simulator::loadRoad(string fileName)
                 //Vec3 v2(x2,y2,z2);
 
                 GameObject *temp;
-                temp = new Cross(v1);
+                temp = new Cross(this, v1);
                 temp->id = id;
                 objects.push_back(temp);
                 crosses.push_back(dynamic_cast<Cross*>(temp));
@@ -326,7 +326,7 @@ void Simulator::loadRoad(string fileName)
                 }
 
                 GameObject *temp;
-                temp = new Street(crossB, crossE);
+                temp = new Street(this, crossB, crossE);
                 temp->id = id;
                 objects.push_back(temp);
 
@@ -348,7 +348,7 @@ void Simulator::loadRoad(string fileName)
                     }
                 }
                 GameObject *temp;
-                temp = new Garage(v, cross);
+                temp = new Garage(this, v, cross);
                 temp->id = id;
                 objects.push_back(temp);
 
@@ -365,4 +365,9 @@ void Simulator::update(float delta)
     {
         objects[i]->updateObject(delta);
     }
+}
+
+void Simulator::registerObject(GameObject *go)
+{
+    objects.push_back(go);
 }

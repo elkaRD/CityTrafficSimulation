@@ -15,11 +15,18 @@ public:
     float x,y,z;
     static float dst(Vec3 b, Vec3 e);
     void normalize();
+    Vec3& operator += (const Vec3& right);
+    Vec3& operator -= (const Vec3& right);
+    Vec3& operator *= (const float right);
+    Vec3& operator /= (const float right);
+
     //friend std::istream& operator >> (std::istream& in, Vec3& right);
 };
 
-Vec3 operator + (const Vec3& left, const Vec3& right);
-Vec3 operator - (const Vec3& left, const Vec3& right);
+Vec3 operator + (Vec3 left, const Vec3& right);
+Vec3 operator - (Vec3 left, const Vec3& right);
+Vec3 operator * (Vec3 left, const float right);
+Vec3 operator / (Vec3 left, const float right);
 
 //std::istream& operator >> (std::istream& in, Vec3& right);
 

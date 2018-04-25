@@ -29,14 +29,66 @@ void Vec3::normalize()
     z /= dst;
 }
 
-Vec3 operator + (const Vec3& left, const Vec3& right)
+Vec3& Vec3::operator += (const Vec3& right)
 {
-    return Vec3(left.x + right.x, left.y + right.y, left.z + right.z);
+    x += right.x;
+    y += right.y;
+    z += right.z;
+
+    return *this;
 }
 
-Vec3 operator - (const Vec3& left, const Vec3& right)
+Vec3& Vec3::operator -= (const Vec3& right)
 {
-    return Vec3(left.x - right.x, left.y - right.y, left.z - right.z);
+    x -= right.x;
+    y -= right.y;
+    z -= right.z;
+
+    return *this;
+}
+
+Vec3& Vec3::operator *= (const float right)
+{
+    x *= right;
+    y *= right;
+    z *= right;
+
+    return *this;
+}
+
+Vec3& Vec3::operator /= (const float right)
+{
+    x /= right;
+    y /= right;
+    z /= right;
+
+    return *this;
+}
+
+Vec3 operator + (Vec3 left, const Vec3& right)
+{
+    //return Vec3(left.x + right.x, left.y + right.y, left.z + right.z);
+    left += right;
+    return left;
+}
+
+Vec3 operator - (Vec3 left, const Vec3& right)
+{
+    //return Vec3(left.x - right.x, left.y - right.y, left.z - right.z);
+    left -= right;
+    return left;
+}
+
+Vec3 operator * (Vec3 left, const float right)
+{
+    left *= right;
+    return left;
+}
+
+Vec3 operator / (Vec3 left, const float right)
+{
+    left /= right;
+    return left;
 }
 
 void Graphics::draw()

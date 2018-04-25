@@ -1,7 +1,5 @@
 #include "GameObject.h"
 
-
-
 /*std::istream& operator >> (std::istream& in, Vec3& right)
 {
     //in >> right.x >> right.y >> right.z;

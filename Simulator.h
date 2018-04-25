@@ -10,8 +10,10 @@
 #include <X11/X.h>    /* X11 constant (e.g. TrueColor) */
 #include <X11/keysym.h>
 
-#include "Graphics.h"
+//#include "Graphics.h"
+
 #include "GameObject.h"
+#include "Vehicle.h"
 #include "Street.h"
 #include <vector>
 #include <fstream>
@@ -19,7 +21,7 @@
 #include <sstream>
 #include <ctime>
 #include <iostream>
-
+class GameObject;
 class Simulator
 {
     friend GameObject;
@@ -32,8 +34,8 @@ public:
     void run();
 private:
     void update(float delta);
-    void registerObject(GameObject go);
-    void destroyObject(GameObject go);
+    void registerObject(GameObject *go);
+    void destroyObject(GameObject *go);
 
     std::vector<GameObject*> objects;
 

@@ -4,8 +4,10 @@
 #include "GameObject.h"
 #include "Street.h"
 
+
 class Road;
 class Cross;
+//class GameObject;
 
 class Vehicle : public GameObject
 {

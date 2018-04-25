@@ -7,10 +7,14 @@
 
 class Cross;
 class Vehicle;
+//class GameObject;
+class Simulator;
+//void Simulator::registerObject(GameObject *go);
 
 class Road : public GameObject
 {
 public:
+
     std::queue<Vehicle*> vehiclesBeg;
     std::queue<Vehicle*> vehiclesEnd;
 
@@ -21,7 +25,7 @@ public:
 class Street : public Road
 {
 public:
-    Street(Cross *begCross, Cross *endCross);
+    Street(Simulator *engine, Cross *begCross, Cross *endCross);
 
     void draw();
 
@@ -53,7 +57,7 @@ class Cross : public Road
     //std::vector<Street> streets;
     //std::vector<std::vector<Vehicle>>
 public:
-    Cross(Vec3 position);
+    Cross(Simulator *engine, Vec3 position);
 
     struct OneStreet
     {
@@ -71,7 +75,7 @@ public:
 class Garage : public Road
 {
 public:
-    Garage(Vec3 p, Cross *c);
+    Garage(Simulator *engine, Vec3 p, Cross *c);
 
     Cross *cross;
     //std::queue<Vehicle*> vehicles;
