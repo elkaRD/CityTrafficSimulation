@@ -14,6 +14,7 @@ public:
 
     float x,y,z;
     static float dst(Vec3 b, Vec3 e);
+    static Vec3 lerp(Vec3 b, Vec3 e, float s);
     void normalize();
     Vec3& operator += (const Vec3& right);
     Vec3& operator -= (const Vec3& right);

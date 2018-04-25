@@ -29,6 +29,9 @@ Street::Street(Cross *begCross, Cross *endCross)
     crossBeg->streets.push_back(temp);
     crossEnd->streets.push_back(temp);
 
+    begPos = crossBeg->getPos();
+    endPos = crossEnd->getPos();
+
     length = Vec3::dst(crossBeg->getPos(), crossEnd->getPos());
     direction = crossEnd->getPos() - crossBeg->getPos();
     direction.normalize();
@@ -43,6 +46,9 @@ Garage::Garage(Simulator *engine, Vec3 p, Cross *c)
 {
     pos = p;
     cross = c;
+
+    begPos = pos;
+    endPos = cross->getPos();
 
     Cross::OneStreet temp;
     temp.enabled = false;
@@ -63,10 +69,11 @@ void Garage::draw()
 
 void Garage::update(float delta)
 {
-    //cout<<curTime<<" "<<delta<<endl;
+    cout<<id<<"   "<<curTime<<" "<<delta<<endl;
     curTime += delta;
     if (curTime > frec)
     {
+        cout<<"%%%%%%%"<<endl;
         curTime = 0;
         spotCar();
     }

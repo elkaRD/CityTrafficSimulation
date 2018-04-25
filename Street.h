@@ -18,6 +18,9 @@ public:
     std::queue<Vehicle*> vehiclesBeg;
     std::queue<Vehicle*> vehiclesEnd;
 
+    Vec3 begPos;
+    Vec3 endPos;
+
     float length;
     Vec3 direction;
 };

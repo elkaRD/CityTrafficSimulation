@@ -17,15 +17,20 @@ Vehicle::Vehicle(Road *spawnRoad)
         frontVeh = curRoad->vehiclesBeg.back();
     }
 }
-
+#include<iostream>
+using namespace std;
 void Vehicle::update(float delta)
 {
-
+    cout<<xPos<<endl;
+    xPos += velocity * delta;
+    float s = xPos / curRoad->length;
+    pos = Vec3::lerp(curRoad->begPos, curRoad->endPos, s);
 }
 
 Car::Car(Road *spawnRoad) : Vehicle(spawnRoad)
 {
 //    Vehicle(spawnRoad);
+    velocity = randFloat(2,5);
 }
 
 void Car::update(float delta)
@@ -36,5 +41,5 @@ void Car::update(float delta)
 void Car::draw()
 {
     setColor(0,1,0);
-    drawCube(5);
+    drawCube(0.2,4,0.2);
 }

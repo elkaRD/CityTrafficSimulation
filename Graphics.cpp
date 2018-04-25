@@ -21,6 +21,11 @@ float Vec3::dst(Vec3 b, Vec3 e)
     return sqrt(dx*dx + dy*dy + dz*dz);
 }
 
+Vec3 Vec3::lerp(Vec3 b, Vec3 e, float s)
+{
+    return (e-b)*s;
+}
+
 void Vec3::normalize()
 {
     float dst = sqrt(x*x+y*y+z*z);

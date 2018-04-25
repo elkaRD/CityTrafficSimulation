@@ -185,7 +185,9 @@ void Simulator::run()
     GLboolean            needRedraw = GL_FALSE, recalcModelView = GL_TRUE;;
     XEvent               event;
 
-    startTime = time(0);
+    //startTime = time(0);
+    //lastTime = startTime;
+    gettimeofday(&startTime, 0);
     lastTime = startTime;
 
     while (1)
@@ -255,8 +257,12 @@ void Simulator::run()
     }
     if (needRedraw)
     {
-        clock_t newTime = time(0);
-        update(difftime(newTime, lastTime));
+        timeval newTime;
+        gettimeofday(&newTime, 0);
+        float delta = newTime.tv_usec - lastTime.tv_usec;
+        delta /= 1000000;
+        //cout<<delta<<endl;
+        update(delta);
         lastTime = newTime;
       redraw();
       needRedraw = GL_FALSE;

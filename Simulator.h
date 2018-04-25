@@ -26,6 +26,8 @@ void registerNewObject(Simulator *engine, GameObject *go);
 #include <sstream>
 #include <ctime>
 #include <iostream>
+#include <unistd.h>
+#include <sys/time.h>
 class GameObject;
 class Simulator
 {
@@ -46,8 +48,8 @@ private:
 
     void redraw();
 
-    clock_t startTime;
-    clock_t lastTime;
+    timeval startTime;
+    timeval lastTime;
 
     static bool didInit;
 
