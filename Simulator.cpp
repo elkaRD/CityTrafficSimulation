@@ -259,9 +259,20 @@ void Simulator::run()
     {
         timeval newTime;
         gettimeofday(&newTime, 0);
-        float delta = newTime.tv_usec - lastTime.tv_usec;
-        delta /= 1000000;
-        //cout<<delta<<endl;
+        //float timeB = (int)newTime.tv_sec + (float)newTime.tv_usec / 1000000.0;
+        float timeB = (long long)newTime.tv_sec;
+        float timeE = lastTime.tv_sec + (float)lastTime.tv_usec / 1000000.0;
+        //float delta =  0;//newTime.tv_sec;// - lastTime.tv_sec;
+        //delta += newTime.tv_usec / 1000000.0;
+        //delta -= lastTime.tv_sec;
+        //delta -= lastTime.tv_usec / 1000000.0;
+//        delta +=
+        //delta /= 1000000;
+        int secB = newTime.tv_sec * 1000000 + newTime.tv_usec;
+        int secE = lastTime.tv_sec * 1000000 + lastTime.tv_usec;
+        float delta = secB - secE;
+        delta /= 1000000.0;
+        //cout<<"                  "<<fixed<<newTime.tv_usec<<"  "<<timeE<<"  "<<timeB<<"   "<<delta<<endl;
         update(delta);
         lastTime = newTime;
       redraw();

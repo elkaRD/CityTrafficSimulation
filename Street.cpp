@@ -69,11 +69,11 @@ void Garage::draw()
 
 void Garage::update(float delta)
 {
-    cout<<id<<"   "<<curTime<<" "<<delta<<endl;
+    //cout<<id<<"   "<<curTime<<" "<<delta<<endl;
     curTime += delta;
     if (curTime > frec)
     {
-        cout<<"%%%%%%%"<<endl;
+        //cout<<"%%%%%%%"<<endl;
         curTime = 0;
         spotCar();
     }
