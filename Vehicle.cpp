@@ -6,7 +6,7 @@ class Road;
 Vehicle::Vehicle(Road *spawnRoad)
 {
     maxV = randFloat(1, 1.5);
-    minV = randFloat(0.05, 0.1);
+    minV = randFloat(0.02, 0.08);
     velocity = 0;
     stopTime = randFloat(0.5, 0.8);
     acceleration = randFloat(0.1,0.2);
@@ -41,17 +41,21 @@ void Vehicle::update(float delta)
     {
         velocity = posDiff - acceleration * stopTime * stopTime / 2.0;
         velocity /= stopTime;
-        isBraking = false;
+        isBraking = true;
     }
     else if (posDiff > newDst)
     {
         velocity = posDiff - acceleration * stopTime * stopTime / 2.0;
         velocity /= stopTime;
         //velocity += acceleration * delta;
-        isBraking = true;
+        isBraking = false;
     }
 
-    if (velocity < 0.05) velocity = 0;
+    if (velocity < minV)
+    {
+        velocity = 0;
+        isBraking = true;
+    }
 
     if (velocity > maxV)
     {
