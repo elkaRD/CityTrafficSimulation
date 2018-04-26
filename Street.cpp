@@ -17,7 +17,7 @@ void Cross::update(float delta)
 void Cross::draw()
 {
     setColor(1,0,0);
-    drawCube(2);
+    drawCube(2, 0.1, 2);
 }
 
 Street::Street(Cross *begCross, Cross *endCross)
@@ -93,8 +93,11 @@ void Garage::update(float delta)
 
 void registerNewObject(Simulator *engine, GameObject *go);
 
+//int number = 0;
 void Garage::spotCar()
 {
+    //number ++;
+    //if (number > 3) return;
     Vehicle *temp;
     temp = new Car(this);
     temp->curRoad = this;

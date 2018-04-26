@@ -5,12 +5,16 @@ class Road;
 
 Vehicle::Vehicle(Road *spawnRoad)
 {
-    maxV = velocity = randFloat(2, 5);
-    stopTime = randFloat(0.5 , 1.0);
-    acceleration = randFloat(0.8,1.2);
+    maxV = randFloat(1, 1.5);
+    minV = randFloat(0.05, 0.1);
+    velocity = 0;
+    stopTime = randFloat(0.5, 0.8);
+    acceleration = randFloat(0.1,0.2);
     vehicleLength = 0.2;
 
     xPos = 0;
+
+    isBraking = false;
 
     gameEngine = spawnRoad->gameEngine;
 
@@ -23,9 +27,9 @@ Vehicle::Vehicle(Road *spawnRoad)
 }
 #include<iostream>
 using namespace std;
-//bool pierwszy = true;
-//Vehicle *pie;
-//int kla = 0;
+bool pierwszy = true;
+Vehicle *pie;
+int kla = 0;
 void Vehicle::update(float delta)
 {
     xPos += velocity * delta;
@@ -35,28 +39,35 @@ void Vehicle::update(float delta)
 
     if (newDst > posDiff)
     {
-        velocity = newDst - acceleration * stopTime * stopTime / 2.0;
+        velocity = posDiff - acceleration * stopTime * stopTime / 2.0;
         velocity /= stopTime;
+        isBraking = false;
     }
     else if (posDiff > newDst)
     {
         velocity = posDiff - acceleration * stopTime * stopTime / 2.0;
         velocity /= stopTime;
+        //velocity += acceleration * delta;
+        isBraking = true;
     }
+
+    if (velocity < 0.05) velocity = 0;
 
     if (velocity > maxV)
     {
         velocity = maxV;
     }
 
-    /*if ((xPos > 2 && pierwszy) || pie == this)
+    cout << "         "<<velocity<<endl;
+
+    if ((xPos > 2 && pierwszy) || pie == this)
     {xPos = 2;
     pie= this;
     pierwszy = false;
     kla++;
     if (kla > 300)
         pie = NULL;
-    }*/
+    }
 
     float s = xPos / curRoad->length;
     //cout<<xPos<<"   "<<getDst()<<endl;
@@ -79,7 +90,9 @@ void Vehicle::update(float delta)
         {
             if (curCross->streets[i].street == curRoad)
             {
-                //desiredTurn = randInt(0, curCross->streets.size()-1)
+                desiredTurn = randInt(0, curCross->streets.size()-2);
+                if (desiredTurn >= i) desiredTurn++;
+
                 curCross->streets[i].vehicles.push(this);
 
                 break;
@@ -110,5 +123,12 @@ void Car::update(float delta)
 void Car::draw()
 {
     setColor(0,1,0);
+
+    if (isBraking)
+    {
+        setColor(1,0,0);
+    }
+
     drawCube(0.2,4,0.2);
+
 }

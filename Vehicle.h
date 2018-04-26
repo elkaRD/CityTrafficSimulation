@@ -15,11 +15,13 @@ public:
     Vehicle(Road *spawnRoad);
 //protected:
     float maxV;
+    float minV;
     float velocity;
     float stopTime;
     float acceleration;
     float xPos;
     float vehicleLength;
+    bool isBraking;
     //Vec3 direction;
     void update(float delta);
 
