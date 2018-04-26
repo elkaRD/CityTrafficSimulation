@@ -147,6 +147,8 @@ int Simulator::init(int argc, char **argv)
   glDepthFunc(GL_LESS);    /* pedantic, GL_LESS is the default */
   glClearDepth(1.0);       /* pedantic, 1.0 is the default */
 
+  initLight();
+
   /* frame buffer clears should be to black */
   glClearColor(0.0, 0.0, 0.0, 0.0);
 
@@ -246,11 +248,12 @@ void Simulator::run()
       glTranslatef(0.0, 100.0, 0.0);
       //glRotatef(90,0,0,1);
 
+
       /* rotate by X, Y, and Z angles */
-      /*glRotatef(xAngle, 0.1, 0.0, 0.0);
-      glRotatef(yAngle, 0.0, 0.1, 0.0);
-      glRotatef(zAngle, 0.0, 0.0, 1.0);
-      xAngle +=0.1;*/
+      //glRotatef(xAngle, 0.1, 0.1, 0.0);
+      /*glRotatef(yAngle, 0.0, 0.1, 0.0);
+      glRotatef(zAngle, 0.0, 0.0, 1.0);*/
+      //xAngle +=0.1;
 
       recalcModelView = GL_FALSE;
       needRedraw = GL_TRUE;
@@ -272,13 +275,43 @@ void Simulator::run()
         int secE = lastTime.tv_sec * 1000000 + lastTime.tv_usec;
         float delta = secB - secE;
         delta /= 1000000.0;
+        delta *= MULTIPLY_TIME;
         //cout<<"                  "<<fixed<<newTime.tv_usec<<"  "<<timeE<<"  "<<timeB<<"   "<<delta<<endl;
+        cout<<delta<<endl;
         update(delta);
         lastTime = newTime;
       redraw();
       needRedraw = GL_FALSE;
     }
   }
+}
+
+void Simulator::initLight()
+{
+    const GLfloat lambient[]  = { 0.3,0.3,0.3, 1.0f };
+    const GLfloat ldiffuse[]  = { 1,1,1, 1.0f };    //111
+    const GLfloat lspecular[] = { 0,0,0, 1.0f };    //111
+    const GLfloat lposition[] = { 30,30,30, 0.0f };
+
+    const GLfloat mambient[]    = { 0.7f, 0.7f, 0.7f, 1.0f };
+    const GLfloat mdiffuse[]    = { 0.8f, 0.8f, 0.8f, 1.0f };
+    const GLfloat mspecular[]   = { 0,0,0, 1.0f };               //111
+    const GLfloat shininess[] = { 100 };
+
+    glEnable(GL_LIGHT0);
+    glEnable(GL_NORMALIZE);
+    glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_LIGHTING);
+
+    glLightfv(GL_LIGHT0, GL_AMBIENT,  lambient);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE,  ldiffuse);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, lspecular);
+    glLightfv(GL_LIGHT0, GL_POSITION, lposition);
+
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   mambient);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   mdiffuse);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  mspecular);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 }
 
 

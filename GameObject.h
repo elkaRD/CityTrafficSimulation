@@ -33,6 +33,7 @@ protected:
 
     virtual void update(float delta);
     float randFloat(float minV, float maxV);
+    int randInt(int minV, int maxV);
 
     public:
     Simulator *gameEngine;

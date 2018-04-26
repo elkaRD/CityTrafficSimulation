@@ -5,6 +5,8 @@ using namespace std;
 Cross::Cross(Vec3 position)// : GameObject(engine)
 {
     pos = position;
+
+
 }
 
 void Cross::update(float delta)
@@ -25,8 +27,12 @@ Street::Street(Cross *begCross, Cross *endCross)
 
     Cross::OneStreet temp;
     temp.street = this;
+    temp.enabled = true;
+    temp.direction = true;
 
     crossBeg->streets.push_back(temp);
+
+    temp.direction = false;
     crossEnd->streets.push_back(temp);
 
     begPos = crossBeg->getPos();
@@ -45,17 +51,20 @@ void Street::draw()
 Garage::Garage(Simulator *engine, Vec3 p, Cross *c)
 {
     pos = p;
-    cross = c;
+    crossEnd = c;
+    crossBeg = NULL;
 
     begPos = pos;
-    endPos = cross->getPos();
+    endPos = crossEnd->getPos();
+
+    length = Vec3::dst(begPos, endPos);
 
     Cross::OneStreet temp;
     temp.enabled = false;
 
     gameEngine = engine;
 
-    cross->streets.push_back(temp);
+    crossEnd->streets.push_back(temp);
 
     curTime = 0;
     frec = 3;
@@ -70,6 +79,9 @@ void Garage::draw()
 void Garage::update(float delta)
 {
     //cout<<id<<"   "<<curTime<<" "<<delta<<endl;
+    if (vehiclesBeg.size() > 0)
+    cout<< vehiclesBeg.back()->xPos <<endl;
+    if (vehiclesBeg.size() == 0 || (vehiclesBeg.size() > 0 && vehiclesBeg.back()->xPos > 1))
     curTime += delta;
     if (curTime > frec)
     {
@@ -86,6 +98,7 @@ void Garage::spotCar()
     Vehicle *temp;
     temp = new Car(this);
     temp->curRoad = this;
+    temp->direction = true;
     vehiclesBeg.push(temp);
 //    gameEngine->registerObject(temp);
     registerNewObject(gameEngine, temp);

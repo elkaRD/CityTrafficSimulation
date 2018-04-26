@@ -23,6 +23,9 @@ public:
 
     float length;
     Vec3 direction;
+
+    Cross* crossBeg;
+    Cross* crossEnd;
 };
 
 class Street : public Road
@@ -36,8 +39,7 @@ private:
     //Vec3 begPos;
     //Vec3 endPos;
 
-    Cross* crossBeg;
-    Cross* crossEnd;
+
 
 
 };
@@ -65,8 +67,9 @@ public:
     struct OneStreet
     {
         Street *street;
-        std::queue<Vehicle> vehicles;
+        std::queue<Vehicle*> vehicles;
         bool enabled = true;
+        bool direction;
     };
     std::vector<OneStreet> streets;
 
@@ -80,7 +83,7 @@ class Garage : public Road
 public:
     Garage(Simulator *engine, Vec3 p, Cross *c);
 
-    Cross *cross;
+    //Cross *cross;
     //std::queue<Vehicle*> vehicles;
     //std::queue<Vehicle*> toDelete;
 

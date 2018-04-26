@@ -20,6 +20,8 @@ void registerNewObject(Simulator *engine, GameObject *go);
 #include "Street.h"
 #include "Vehicle.h"
 
+#define MULTIPLY_TIME 5
+
 #include <vector>
 #include <fstream>
 #include <string>
@@ -63,6 +65,8 @@ private:
     static Window     win;
     GLfloat    xAngle = 42.0, yAngle = 82.0, zAngle = 112.0;
     static GLboolean  doubleBuffer;// = GL_TRUE;
+
+    static void initLight();
 
     friend void registerNewObject(Simulator *engine, GameObject *go);
 };

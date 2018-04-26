@@ -14,11 +14,20 @@ class Vehicle : public GameObject
 public:
     Vehicle(Road *spawnRoad);
 //protected:
+    float maxV;
     float velocity;
     float stopTime;
+    float acceleration;
     float xPos;
+    float vehicleLength;
     //Vec3 direction;
     void update(float delta);
+
+    float getDst();
+
+    bool direction;
+
+    int desiredTurn;
 
     Road *curRoad;
     Cross *curCross;

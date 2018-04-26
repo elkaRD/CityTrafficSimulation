@@ -29,6 +29,8 @@ Vec3 operator - (Vec3 left, const Vec3& right);
 Vec3 operator * (Vec3 left, const float right);
 Vec3 operator / (Vec3 left, const float right);
 
+std::ostream& operator << (std::ostream& out, const Vec3& right);
+
 //std::istream& operator >> (std::istream& in, Vec3& right);
 
 class Graphics

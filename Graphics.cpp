@@ -1,4 +1,5 @@
 #include "Graphics.h"
+using namespace std;
 
 Vec3::Vec3()
 {
@@ -23,7 +24,7 @@ float Vec3::dst(Vec3 b, Vec3 e)
 
 Vec3 Vec3::lerp(Vec3 b, Vec3 e, float s)
 {
-    return (e-b)*s;
+    return b+(e-b)*s;
 }
 
 void Vec3::normalize()
@@ -94,6 +95,12 @@ Vec3 operator / (Vec3 left, const float right)
 {
     left /= right;
     return left;
+}
+
+ostream& operator << (ostream& out, const Vec3& right)
+{
+    out << "(" << right.x << ", " << right.y << ", " << right.z << ")";
+    return out;
 }
 
 void Graphics::draw()

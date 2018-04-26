@@ -26,6 +26,12 @@ float GameObject::randFloat(float minV, float maxV)
     return minV + d*(rand()%1000)/1000.0;
 }
 
+int GameObject::randInt(int minV, int maxV)
+{
+    int d = maxV - minV;
+    return minV + rand()%d;
+}
+
 void GameObject::setPos(Vec3 p)
 {
     pos = p;
