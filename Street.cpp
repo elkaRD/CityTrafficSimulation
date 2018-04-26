@@ -2,6 +2,17 @@
 #include<iostream>
 using namespace std;
 
+float Road::freeSpace(bool dir)
+{
+    if (dir)
+    {
+        if (vehiclesBeg.size() == 0) return length;
+        return length - vehiclesBeg.back()->xPos;
+    }
+    if (vehiclesEnd.size() == 0) return length;
+    return length - vehiclesEnd.back()->xPos;
+}
+
 Cross::Cross(Vec3 position)// : GameObject(engine)
 {
     pos = position;
@@ -27,14 +38,14 @@ void Cross::update(float delta)
                 j = (j+1)%streets.size();
             }
             if (i == j) break;
-            priority = (i+1) % streets.size();
+            priority = (j) % streets.size();
             break;
         }
     }
 
     if (priority > 0)
     {
-        //cout<<streets[priority].vehicles.size()<<endl;
+        cout<<streets[priority].vehicles.size()<<endl;
         streets[priority].vehicles[0]->allowedToCross = true;
 
         for(int i=1;i<streets[priority].vehicles.size();i++)
@@ -128,6 +139,13 @@ void Garage::update(float delta)
 
 void registerNewObject(Simulator *engine, GameObject *go);
 
+string Garage::itos(int x)
+{
+    ostringstream ss;
+    ss << x;
+    return ss.str();
+}
+
 //int number = 0;
 void Garage::spotCar()
 {
@@ -137,6 +155,8 @@ void Garage::spotCar()
     temp = new Car(this);
     temp->curRoad = this;
     temp->direction = true;
+    temp->id = "CAR_" + itos(Vehicle::numVeh) + id;
+    temp->isFirstVeh = vehiclesBeg.size() == 0;
     vehiclesBeg.push(temp);
 //    gameEngine->registerObject(temp);
     registerNewObject(gameEngine, temp);

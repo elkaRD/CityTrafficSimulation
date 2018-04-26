@@ -30,11 +30,19 @@ public:
     bool direction;
 
     int desiredTurn;
+    Road *nextRoad;
     bool allowedToCross;
+
+    bool isChanging;
 
     Road *curRoad;
     Cross *curCross;
     Vehicle *frontVeh;
+    Vehicle *backVeh;
+    bool isFirstVeh;
+
+    //int idnum;
+    static int numVeh;
 };
 
 class Car : public Vehicle

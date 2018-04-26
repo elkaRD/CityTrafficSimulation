@@ -4,6 +4,7 @@
 //#include "Road.h"
 #include "GameObject.h"
 #include "Vehicle.h"
+#include <sstream>
 
 class Cross;
 class Vehicle;
@@ -23,6 +24,7 @@ public:
 
     float length;
     Vec3 direction;
+    virtual float freeSpace(bool dir);
 
     Cross* crossBeg;
     Cross* crossEnd;
@@ -92,6 +94,7 @@ public:
 
     void draw();
     void update(float delta);
+    std::string itos(int x);
     void spotCar();
 };
 

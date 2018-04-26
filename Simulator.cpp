@@ -277,7 +277,7 @@ void Simulator::run()
         delta /= 1000000.0;
         delta *= MULTIPLY_TIME;
         //cout<<"                  "<<fixed<<newTime.tv_usec<<"  "<<timeE<<"  "<<timeB<<"   "<<delta<<endl;
-        cout<<delta<<endl;
+        //cout<<delta<<endl;
         update(delta);
         lastTime = newTime;
       redraw();
