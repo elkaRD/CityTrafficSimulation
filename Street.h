@@ -66,8 +66,8 @@ public:
 
     struct OneStreet
     {
-        Street *street;
-        std::queue<Vehicle*> vehicles;
+        Road *street;
+        std::vector<Vehicle*> vehicles;
         bool enabled = true;
         bool direction;
     };

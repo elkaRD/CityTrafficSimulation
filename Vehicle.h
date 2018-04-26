@@ -30,6 +30,7 @@ public:
     bool direction;
 
     int desiredTurn;
+    bool allowedToCross;
 
     Road *curRoad;
     Cross *curCross;

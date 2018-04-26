@@ -19,6 +19,7 @@ Vehicle::Vehicle(Road *spawnRoad)
     gameEngine = spawnRoad->gameEngine;
 
     curRoad = spawnRoad;
+    curCross = NULL;
 
     if (curRoad->vehiclesBeg.size() > 0)
     {
@@ -80,6 +81,8 @@ void Vehicle::update(float delta)
     if (curRoad->length - xPos < 2 && curCross == NULL)
     {
         //Cross *newCross;
+        allowedToCross = false;
+
         if(direction)
         {
             curCross = curRoad->crossEnd;
@@ -94,10 +97,10 @@ void Vehicle::update(float delta)
         {
             if (curCross->streets[i].street == curRoad)
             {
-                desiredTurn = randInt(0, curCross->streets.size()-2);
-                if (desiredTurn >= i) desiredTurn++;
+                desiredTurn = randInt(0, curCross->streets.size()-1);
+                if (desiredTurn == i) desiredTurn = (desiredTurn+1) % curCross->streets.size();
 
-                curCross->streets[i].vehicles.push(this);
+                curCross->streets[i].vehicles.push_back(this);
 
                 break;
             }
@@ -131,6 +134,10 @@ void Car::draw()
     if (isBraking)
     {
         setColor(1,0,0);
+    }
+    if (curCross != NULL && allowedToCross)
+    {
+        setColor(0,0,1);
     }
 
     drawCube(0.2,4,0.2);

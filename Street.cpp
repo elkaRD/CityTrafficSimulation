@@ -11,7 +11,41 @@ Cross::Cross(Vec3 position)// : GameObject(engine)
 
 void Cross::update(float delta)
 {
+    int priority = -1;
+    for(int i=0;i<streets.size();i++)
+    {
+        if (streets[i].vehicles.size() == 0)
+        {
+            int j = (i+1) % streets.size();
+            while (streets[j].vehicles.size() == 0)
+            {
+                if (i == j)
+                {
+                    priority = -1;
+                    break;
+                }
+                j = (j+1)%streets.size();
+            }
+            if (i == j) break;
+            priority = (i+1) % streets.size();
+            break;
+        }
+    }
 
+    if (priority > 0)
+    {
+        //cout<<streets[priority].vehicles.size()<<endl;
+        streets[priority].vehicles[0]->allowedToCross = true;
+
+        for(int i=1;i<streets[priority].vehicles.size();i++)
+        {
+            if (streets[priority].vehicles[i]->desiredTurn == streets[priority].vehicles[0]->desiredTurn)
+            {
+                streets[priority].vehicles[i]->allowedToCross = true;
+            }
+            else break;
+        }
+    }
 }
 
 void Cross::draw()
@@ -60,6 +94,7 @@ Garage::Garage(Simulator *engine, Vec3 p, Cross *c)
     length = Vec3::dst(begPos, endPos);
 
     Cross::OneStreet temp;
+    temp.street = this;
     temp.enabled = false;
 
     gameEngine = engine;
