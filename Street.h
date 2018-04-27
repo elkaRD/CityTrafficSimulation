@@ -75,8 +75,12 @@ public:
         std::vector<Vehicle*> vehicles;
         bool enabled = true;
         bool direction;
+
+        std::vector<std::vector<int> > yield;
     };
     std::vector<OneStreet> streets;
+
+    void setDefaultPriority(Road *s0, Road *s1, Road *s2, Road *s3);
 
     int allowedVeh;
 

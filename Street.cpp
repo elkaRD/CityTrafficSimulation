@@ -19,11 +19,22 @@ Cross::Cross(Vec3 position)// : GameObject(engine)
     pos = position;
     allowedVeh = 0;
 
+    //cout<<(streets[0]==NULL)<<endl<<(streets[1]==NULL)<<endl;
+    //cout<<streets[0].street<<endl;
+
 }
+
+bool isSet = false;
 
 void Cross::update(float delta)
 {
-    cout<<"allowed vehs "<<id<<": " << allowedVeh<<endl;
+    if(!isSet && id.compare("SK2") == 0)
+    {
+        isSet = true;
+        setDefaultPriority(streets[0].street, streets[1].street, streets[1].street, streets[1].street);
+    }
+
+    /*cout<<"allowed vehs "<<id<<": " << allowedVeh<<endl;
     if (allowedVeh == 0)
     {
         int priority = -1;
@@ -67,7 +78,109 @@ void Cross::update(float delta)
                 else break;
             }
         }
+    }*/
+
+    bool didAllow = false;
+
+    if (allowedVeh == 0)
+    {
+        for (int i=0;i<streets.size();i++)
+        {
+            if (streets[i].vehicles.size() > 0)
+            {
+                int which = streets[i].vehicles[0]->desiredTurn;
+                //int which2 = streets[i].yield[which];
+                bool isOK = true;
+
+                for (int j=0;j<streets[i].yield[which].size();j++)
+                {
+                    if (streets[streets[i].yield[which][j]].vehicles.size() > 0)
+                    {
+                        isOK = false;
+                        break;
+                    }
+                }
+
+                if (isOK)
+                {
+                    streets[i].vehicles[0]->allowedToCross = true;
+                    allowedVeh = 1;
+
+                    for (int j=1;j<streets[i].vehicles.size();j++)
+                    {
+                        if (streets[i].vehicles[j]->desiredTurn == streets[i].vehicles[0]->desiredTurn)
+                        {
+                            streets[i].vehicles[j]->allowedToCross = true;
+                            allowedVeh++;
+                        }
+                        else break;
+                    }
+                }
+            }
+        }
     }
+}
+
+void Cross::setDefaultPriority(Road *s0, Road *s1, Road *s2, Road *s3)
+{
+    for(int i=0;i<streets.size();i++)
+    {
+        streets[i].yield.clear();
+    }
+
+    cout<<id<<"   number of streets: "<<streets.size()<<endl;
+    if (streets.size() == 4)
+    {
+        vector<int> yield[4];
+
+        yield[0].push_back(1);
+        yield[0].push_back(2);
+
+        yield[1].push_back(1);
+        yield[2].push_back(1);
+
+        yield[3].push_back(1);
+        yield[3].push_back(2);
+
+        vector<vector<int> > finalVec;
+        finalVec.push_back(yield[0]);
+        finalVec.push_back(yield[1]);
+        finalVec.push_back(yield[2]);
+        finalVec.push_back(yield[3]);
+
+        for (int i=0;i<4;i++)
+        {
+            //streets[i].yield.push_back()
+
+            streets[i].yield = finalVec;
+
+            for(int j=0;j<4;j++)
+            {
+                for(int k=0;k<finalVec[j].size();k++)
+                {
+                    //cout<<"DEbug: "<<finalVec[j][k]<<endl;
+                    finalVec[j][k] = (finalVec[j][k]+1) % 4;
+                }
+            }
+        }
+
+        //debug
+        /*for(int i=0;i<4;i++)
+        {
+            for(int j=0;j<4;j++)
+            {
+                cout<<i<<" -> "<<j<<": ";
+                for(int k=0;k<streets[i].yield[j].size();k++)
+                {
+                    cout<<streets[i].yield[j][k]<<" ";
+
+                }
+                cout<<endl;
+            }
+        }*/
+    }
+
+
 }
 
 void glP(Vec3 x)
