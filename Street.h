@@ -24,6 +24,9 @@ public:
 
     float length;
     Vec3 direction;
+
+    Vec3 normal;
+
     virtual float freeSpace(bool dir);
 
     Cross* crossBeg;

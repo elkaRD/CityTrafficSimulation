@@ -27,6 +27,11 @@ Vec3 Vec3::lerp(Vec3 b, Vec3 e, float s)
     return b+(e-b)*s;
 }
 
+Vec3 Vec3::cross(Vec3 u, Vec3 v)
+{
+    return Vec3(u.y*v.z - u.z*v.y, u.z*v.x - u.x*v.z, u.x*v.y - u.y*v.x);
+}
+
 void Vec3::normalize()
 {
     float dst = sqrt(x*x+y*y+z*z);

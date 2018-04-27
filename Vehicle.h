@@ -21,6 +21,7 @@ public:
     float acceleration;
     float xPos;
     float vehicleLength;
+    float remainDst;
     bool isBraking;
     //Vec3 direction;
     void update(float delta);

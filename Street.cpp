@@ -70,10 +70,16 @@ void Cross::update(float delta)
     }
 }
 
+void glP(Vec3 x)
+{
+    glVertex3f(x.x,x.y,x.z);
+}
+
 void Cross::draw()
 {
     setColor(1,0,0);
-    drawCube(2, 0.1, 2);
+    drawCube(0.6, 0.1, 0.6);
+
 }
 
 Street::Street(Cross *begCross, Cross *endCross)
@@ -97,11 +103,34 @@ Street::Street(Cross *begCross, Cross *endCross)
     length = Vec3::dst(crossBeg->getPos(), crossEnd->getPos());
     direction = crossEnd->getPos() - crossBeg->getPos();
     direction.normalize();
+
+    normal = Vec3::cross(Vec3(0,1,0), direction);
+    normal.normalize();
 }
 
 void Street::draw()
 {
+    setColor(0.3,0.3,0.3);
     drawLine(crossBeg->getPos(), crossEnd->getPos());
+
+    Vec3 szer = Vec3::cross(Vec3(0,1,0), direction);
+    szer.normalize();
+    szer *= 0.3;
+
+    Vec3 a = endPos + szer;
+    Vec3 b = endPos - szer;
+    Vec3 c = begPos + szer;
+    Vec3 d = begPos - szer;
+
+    cout<<direction<<endl;
+
+    glBegin(GL_POLYGON);
+    glP(a);
+    glP(b);
+    glP(d);
+    glP(c);
+    //glP(a);
+    glEnd();
 }
 
 Garage::Garage(Simulator *engine, Vec3 p, Cross *c)
@@ -122,6 +151,12 @@ Garage::Garage(Simulator *engine, Vec3 p, Cross *c)
     gameEngine = engine;
 
     crossEnd->streets.push_back(temp);
+
+    direction = endPos - begPos;
+    direction.normalize();
+
+    normal = Vec3::cross(Vec3(0,1,0), direction);
+    normal.normalize();
 
     curTime = 0;
     frec = 3;

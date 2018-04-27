@@ -17,6 +17,7 @@ Vehicle::Vehicle(Road *spawnRoad)
     stopTime = randFloat(0.5, 0.8);
     acceleration = randFloat(0.1,0.2);
     vehicleLength = 0.2;
+    remainDst = randFloat(0.1, 0.2);
 
     xPos = 0;
 
@@ -50,7 +51,7 @@ void Vehicle::update(float delta)
 
         xPos += velocity * delta;
 
-        float posDiff = getDst() - vehicleLength;
+        float posDiff = getDst() - vehicleLength / 2.0 - remainDst;
         float newDst = velocity * stopTime - acceleration * stopTime * stopTime / 2.0;
 
         if (newDst > posDiff)
@@ -93,6 +94,14 @@ void Vehicle::update(float delta)
         //cout<<xPos<<"   "<<getDst()<<endl;
         pos = Vec3::lerp(curRoad->begPos, curRoad->endPos, s);
 
+        if (direction)
+        {
+            pos += curRoad->normal * 0.1;
+        }
+        else
+        {
+            pos -= curRoad->normal * 0.1;
+        }
 
 
         //cout<<id<<endl;
@@ -129,7 +138,7 @@ void Vehicle::update(float delta)
 
     //changing street at cross
 
-    if (curCross != NULL && nextRoad != NULL && allowedToCross && nextRoad->freeSpace(direction) > 0)
+    if (curCross != NULL && nextRoad != NULL && allowedToCross && nextRoad->freeSpace(direction) > vehicleLength + remainDst)
     {
         if(backVeh != NULL)
         {
@@ -147,7 +156,7 @@ void Vehicle::update(float delta)
         //cout<<xPos<<"   "<<getDst()<<endl;
         pos = Vec3::lerp(curRoad->begPos, curRoad->endPos, s);
 
-        if (s>1.5)//DEBUG
+        /*if (s>1.5)//DEBUG
         {
             if (allowedToCross && curRoad != NULL && curCross != NULL)
             {
@@ -167,7 +176,7 @@ void Vehicle::update(float delta)
                 curCross = NULL;
                 curRoad = NULL;
             }
-        }
+        }*/
     }
 }
 
