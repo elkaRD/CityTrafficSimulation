@@ -7,6 +7,8 @@ int Vehicle::numVeh = 0;
 
 Vehicle::Vehicle(Road *spawnRoad)
 {
+    debugstop = false;
+
     numVeh++;
 
     maxV = randFloat(1, 1.5);
@@ -38,8 +40,11 @@ using namespace std;
 bool pierwszy = true;
 Vehicle *pie;
 int kla = 0;
+
 void Vehicle::update(float delta)
 {
+    if (debugstop) return;
+
     if (!isChanging)
     {
 
@@ -88,34 +93,36 @@ void Vehicle::update(float delta)
         //cout<<xPos<<"   "<<getDst()<<endl;
         pos = Vec3::lerp(curRoad->begPos, curRoad->endPos, s);
 
-    }
 
-    if (curRoad->length - xPos < 2 && curCross == NULL)
-    {
-        //Cross *newCross;
-        allowedToCross = false;
 
-        if(direction)
+        //cout<<id<<endl;
+        if (curRoad->length - xPos < 2 && curCross == NULL)
         {
-            curCross = curRoad->crossEnd;
-        }
-        else
-        {
-            curCross = curRoad->crossBeg;
-        }
+            //Cross *newCross;
+            allowedToCross = false;
 
-        if (curCross != NULL)
-        for (int i=0;i<curCross->streets.size();i++)
-        {
-            if (curCross->streets[i].street == curRoad)
+            if(direction)
             {
-                desiredTurn = randInt(0, curCross->streets.size()-1);
-                if (desiredTurn == i) desiredTurn = (desiredTurn+1) % curCross->streets.size();
-                nextRoad = curCross->streets[desiredTurn].street;
+                curCross = curRoad->crossEnd;
+            }
+            else
+            {
+                curCross = curRoad->crossBeg;
+            }
 
-                curCross->streets[i].vehicles.push_back(this);
+            if (curCross != NULL)
+            for (int i=0;i<curCross->streets.size();i++)
+            {
+                if (curCross->streets[i].street == curRoad)
+                {
+                    desiredTurn = randInt(0, curCross->streets.size()-1);
+                    if (desiredTurn == i) desiredTurn = (desiredTurn+1) % curCross->streets.size();
+                    nextRoad = curCross->streets[desiredTurn].street;
 
-                break;
+                    curCross->streets[i].vehicles.push_back(this);
+
+                    break;
+                }
             }
         }
     }
@@ -132,13 +139,35 @@ void Vehicle::update(float delta)
         isChanging = true;
     }
 
-    if (isChanging)
+    if (isChanging && curRoad != NULL)
     {
 
         xPos += velocity * delta;
          float s = xPos / curRoad->length;
         //cout<<xPos<<"   "<<getDst()<<endl;
         pos = Vec3::lerp(curRoad->begPos, curRoad->endPos, s);
+
+        if (s>1.5)//DEBUG
+        {
+            if (allowedToCross && curRoad != NULL && curCross != NULL)
+            {
+                debugstop = true;
+                allowedToCross = false;
+                cout<<"unregister&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"<<endl;
+
+                if (direction)
+                {
+                    curRoad->vehiclesBeg.pop();
+                }
+                else
+                {
+                    curRoad->vehiclesEnd.pop();
+                }
+                curCross->allowedVeh--;
+                curCross = NULL;
+                curRoad = NULL;
+            }
+        }
     }
 }
 

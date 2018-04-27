@@ -6,6 +6,7 @@ float Road::freeSpace(bool dir)
 {
     if (dir)
     {
+        //cout<<"test debug: "<<vehiclesBeg.size()<<endl;
         if (vehiclesBeg.size() == 0) return length;
         return length - vehiclesBeg.back()->xPos;
     }
@@ -16,45 +17,55 @@ float Road::freeSpace(bool dir)
 Cross::Cross(Vec3 position)// : GameObject(engine)
 {
     pos = position;
-
+    allowedVeh = 0;
 
 }
 
 void Cross::update(float delta)
 {
-    int priority = -1;
-    for(int i=0;i<streets.size();i++)
+    cout<<"allowed vehs "<<id<<": " << allowedVeh<<endl;
+    if (allowedVeh == 0)
     {
-        if (streets[i].vehicles.size() == 0)
+        int priority = -1;
+        for(int i=0;i<streets.size();i++)
         {
-            int j = (i+1) % streets.size();
-            while (streets[j].vehicles.size() == 0)
+            if (streets[i].vehicles.size() == 0)
             {
-                if (i == j)
+                int j = (i+1) % streets.size();
+                while (streets[j].vehicles.size() == 0)
                 {
-                    priority = -1;
-                    break;
+                    if (i == j)
+                    {
+                        priority = -1;
+                        break;
+                    }
+                    j = (j+1)%streets.size();
                 }
-                j = (j+1)%streets.size();
+                if (i == j) break;
+                priority = (j) % streets.size();
+                break;
             }
-            if (i == j) break;
-            priority = (j) % streets.size();
-            break;
         }
-    }
 
-    if (priority > 0)
-    {
-        cout<<streets[priority].vehicles.size()<<endl;
-        streets[priority].vehicles[0]->allowedToCross = true;
-
-        for(int i=1;i<streets[priority].vehicles.size();i++)
+        if (priority > 0)
         {
-            if (streets[priority].vehicles[i]->desiredTurn == streets[priority].vehicles[0]->desiredTurn)
+            //cout<<streets[priority].vehicles.size()<<endl;
+            streets[priority].vehicles[0]->allowedToCross = true;
+            streets[priority].vehicles.erase(streets[priority].vehicles.begin());
+            allowedVeh=1;
+
+            for(int i=0;i<streets[priority].vehicles.size();i++)
             {
-                streets[priority].vehicles[i]->allowedToCross = true;
+                if (streets[priority].vehicles[i]->desiredTurn == streets[priority].vehicles[0]->desiredTurn)
+                {
+                    streets[priority].vehicles[i]->allowedToCross = true;
+                    allowedVeh++;
+                    //cout<<streets[priority].vehicles[i]->id<<"################################"<<streets[priority].vehicles[0]->id<<endl;
+                    streets[priority].vehicles.erase(streets[priority].vehicles.begin()+i);
+                    i--;
+                }
+                else break;
             }
-            else break;
         }
     }
 }
@@ -125,8 +136,9 @@ void Garage::draw()
 void Garage::update(float delta)
 {
     //cout<<id<<"   "<<curTime<<" "<<delta<<endl;
-    if (vehiclesBeg.size() > 0)
-    cout<< vehiclesBeg.back()->xPos <<endl;
+
+    //if (vehiclesBeg.size() > 0)cout<< vehiclesBeg.back()->xPos <<endl;
+    cout<<"veh size: "<<vehiclesBeg.size()<<endl;
     if (vehiclesBeg.size() == 0 || (vehiclesBeg.size() > 0 && vehiclesBeg.back()->xPos > 1))
     curTime += delta;
     if (curTime > frec)
@@ -161,5 +173,5 @@ void Garage::spotCar()
 //    gameEngine->registerObject(temp);
     registerNewObject(gameEngine, temp);
 
-    cout<<"spotted car by "<<id<<endl;
+    cout<<"spotted " << temp->id << " by "<<id<<endl;
 }

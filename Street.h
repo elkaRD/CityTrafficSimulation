@@ -75,6 +75,8 @@ public:
     };
     std::vector<OneStreet> streets;
 
+    int allowedVeh;
+
     void update(float delta);
 
     void draw();
