@@ -290,7 +290,7 @@ void Garage::update(float delta)
     //cout<<id<<"   "<<curTime<<" "<<delta<<endl;
 
     //if (vehiclesBeg.size() > 0)cout<< vehiclesBeg.back()->xPos <<endl;
-    cout<<"veh size: "<<vehiclesBeg.size()<<endl;
+    //8cout<<"veh size: "<<vehiclesBeg.size()<<endl;
     if (vehiclesBeg.size() == 0 || (vehiclesBeg.size() > 0 && vehiclesBeg.back()->xPos > 1))
     curTime += delta;
     if (curTime > frec)

@@ -32,7 +32,7 @@ Vehicle::Vehicle(Road *spawnRoad)
     didReachCross = false;
     isLeavingRoad = false;
 
-    if (curRoad->vehiclesBeg.size() > 0)
+    if (curRoad->vehiclesBeg.size() > 0 && !curRoad->vehiclesBeg.back()->allowedToCross)
     {
         frontVeh = curRoad->vehiclesBeg.back();
         frontVeh->backVeh = this;
@@ -48,7 +48,7 @@ void Vehicle::update(float delta)
 {
     if (debugstop) return;
 
-    if (/*!isChanging && */!didReachCross)
+    if (!isChanging && !didReachCross)
     {
 
         xPos += velocity * delta;
@@ -92,12 +92,20 @@ void Vehicle::update(float delta)
             pie = NULL;
         }*/
 
-        if(xPos > curRoad->length) xPos = curRoad->length;
+        if(xPos > curRoad->length)
+        {
+            xPos = curRoad->length;
+            //didReachCross = true;
+        }
 
         float s = xPos / curRoad->length;
 
-        if (s>1)s=1;
-        //cout<<id<<"   "<<xPos<<"   "<<getDst()<<endl;
+        if (s>1)
+        {
+            s=1;
+        }
+
+        //if (frontVeh!=NULL) cout<<id<<"   "<<xPos<<"   "<<frontVeh->xPos<< " "<<curRoad->length<<"  "<<getDst()<<endl;
         pos = Vec3::lerp(curRoad->begPos, curRoad->endPos, s);
 
         if (direction)
@@ -152,12 +160,14 @@ void Vehicle::update(float delta)
         {
             backVeh->isFirstVeh = true;
             backVeh->frontVeh = NULL;
+            //cout<<"prev veh: "<<backVeh->id<<"  "<<backVeh->frontVeh<<endl;
+            int i;cin>>i;
         }
         isChanging = true;
         didReachCross = false;
 
-        cout<<"warunek"<<endl;
-        //xPos = 0;
+        cout<<id<<" warunek"<<endl;
+        xPos = 0;
     }
 
     /*if (isChanging && curRoad != NULL)
@@ -191,7 +201,7 @@ void Vehicle::update(float delta)
         }
     }*/
 
-    /*if (isChanging)
+    if (isChanging)
     {
         xPos += velocity * delta;
 
@@ -201,14 +211,14 @@ void Vehicle::update(float delta)
 
         if(s > 1)
         {
-            //xPos = 0;
-            didReachCross = true;
-            isChanging = false;
+            xPos = 0;
+            //didReachCross = true;
+            //isChanging = false;
 
         }
         cout<<"changing "<<s<<endl;
         didReachCross = true;
-    }*/
+    }
 
 
 
