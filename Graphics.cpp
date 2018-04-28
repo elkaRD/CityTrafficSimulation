@@ -22,6 +22,11 @@ float Vec3::dst(Vec3 b, Vec3 e)
     return sqrt(dx*dx + dy*dy + dz*dz);
 }
 
+float Vec3::length(Vec3 a)
+{
+    return sqrt(a.x*a.x + a.y*a.y + a.z*a.z);
+}
+
 Vec3 Vec3::lerp(Vec3 b, Vec3 e, float s)
 {
     return b+(e-b)*s;

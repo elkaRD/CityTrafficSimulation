@@ -276,6 +276,7 @@ void Simulator::run()
         float delta = secB - secE;
         delta /= 1000000.0;
         delta *= MULTIPLY_TIME;
+        if (delta > MAX_DELTA) delta = MAX_DELTA;
         //cout<<"                  "<<fixed<<newTime.tv_usec<<"  "<<timeE<<"  "<<timeB<<"   "<<delta<<endl;
         //cout<<delta<<endl;
         update(delta);

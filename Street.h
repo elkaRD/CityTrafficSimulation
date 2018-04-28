@@ -75,6 +75,7 @@ public:
         std::vector<Vehicle*> vehicles;
         bool enabled = true;
         bool direction;
+        Vec3 jointPos;
 
         std::vector<std::vector<int> > yield;
     };

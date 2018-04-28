@@ -22,6 +22,7 @@ public:
     float xPos;
     float vehicleLength;
     float remainDst;
+    //float timeCorner;
     bool isBraking;
     //Vec3 direction;
     void update(float delta);
@@ -35,6 +36,8 @@ public:
     bool allowedToCross;
 
     bool isChanging;
+    bool didReachCross;
+    bool isLeavingRoad;
 
     Road *curRoad;
     Cross *curCross;

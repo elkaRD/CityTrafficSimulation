@@ -200,22 +200,26 @@ Street::Street(Cross *begCross, Cross *endCross)
     crossBeg = begCross;
     crossEnd = endCross;
 
+    length = Vec3::dst(crossBeg->getPos(), crossEnd->getPos());
+    direction = crossEnd->getPos() - crossBeg->getPos();
+    direction.normalize();
+
     Cross::OneStreet temp;
     temp.street = this;
     temp.enabled = true;
     temp.direction = true;
+    temp.jointPos = crossBeg->getPos() + direction * 0.3;
 
     crossBeg->streets.push_back(temp);
 
     temp.direction = false;
+    temp.jointPos = crossEnd->getPos() - direction * 0.3;
     crossEnd->streets.push_back(temp);
 
     begPos = crossBeg->getPos();
     endPos = crossEnd->getPos();
 
-    length = Vec3::dst(crossBeg->getPos(), crossEnd->getPos());
-    direction = crossEnd->getPos() - crossBeg->getPos();
-    direction.normalize();
+
 
     normal = Vec3::cross(Vec3(0,1,0), direction);
     normal.normalize();
@@ -235,7 +239,7 @@ void Street::draw()
     Vec3 c = begPos + szer;
     Vec3 d = begPos - szer;
 
-    cout<<direction<<endl;
+    //cout<<direction<<endl;
 
     glBegin(GL_POLYGON);
     glP(a);

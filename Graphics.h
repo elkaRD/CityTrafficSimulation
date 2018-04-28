@@ -14,6 +14,7 @@ public:
 
     float x,y,z;
     static float dst(Vec3 b, Vec3 e);
+    static float length(Vec3 a);
     static Vec3 lerp(Vec3 b, Vec3 e, float s);
     static Vec3 cross(Vec3 u, Vec3 v);
 
