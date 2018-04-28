@@ -103,7 +103,7 @@ void Cross::update(float delta)
         {
             if (streets[i].vehicles.size() > 0)
             {
-                if (streets[i].vehicles[0]->dstToCross > 1) continue;
+                if (streets[i].vehicles[0]->dstToCross > 0.5) continue;
                 //if (streets[i].vehicles[0]->curCross == NULL) continue;
                 //cout<<streets[i].vehicles[0]->id << "    "<<streets[i].vehicles[0]->allowedToCross<<endl;
 
@@ -297,19 +297,23 @@ Garage::Garage(Simulator *engine, Vec3 p, Cross *c)
     begPos = pos;
     endPos = crossEnd->getPos();
 
+    direction = endPos - begPos;
+    direction.normalize();
+
     length = Vec3::dst(begPos, endPos);
 
     Cross::OneStreet temp;
     temp.street = this;
     temp.enabled = false;
+    temp.direction = false;
     temp.jointPos = crossEnd->getPos() - direction * 0.3;
+    cout<<"garage joint: "<<temp.jointPos<<endl;
 
     gameEngine = engine;
 
     crossEnd->streets.push_back(temp);
 
-    direction = endPos - begPos;
-    direction.normalize();
+
 
     normal = Vec3::cross(Vec3(0,1,0), direction);
     normal.normalize();

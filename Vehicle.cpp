@@ -33,6 +33,8 @@ Vehicle::Vehicle(Road *spawnRoad)
     didReachCross = false;
     isLeavingRoad = false;
 
+    frontVeh = NULL;
+
     if (curRoad->vehiclesBeg.size() > 0 && !curRoad->vehiclesBeg.back()->allowedToCross)
     {
         frontVeh = curRoad->vehiclesBeg.back();
@@ -107,7 +109,7 @@ void Vehicle::update(float delta)
         }
 
         //if (frontVeh!=NULL) cout<<id<<"   "<<xPos<<"   "<<frontVeh->xPos<< " "<<curRoad->length<<"  "<<getDst()<<endl;
-
+        //cout<<id<<"   "<<curRoad->id<<"  "<<xPos<<"  "<<pos<< "   "<<curRoad->length<<"  "<<getDst()<<endl;
 
         if (direction)
         {
@@ -148,7 +150,7 @@ void Vehicle::update(float delta)
 
                     nextRoad = curCross->streets[desiredTurn].street;
 
-                    cout<<id<<"  desired road: "<<nextRoad->id<<endl;
+                    //cout<<id<<"  desired road: "<<nextRoad->id<<endl;
 
                     curCross->streets[i].vehicles.push_back(this);
 
@@ -174,7 +176,7 @@ void Vehicle::update(float delta)
         isChanging = true;
         didReachCross = false;
 
-        cout<<id<<" warunek"<<endl;
+        //cout<<id<<" warunek"<<endl;
         //xPos = 0;
     }
 
@@ -250,13 +252,13 @@ void Vehicle::update(float delta)
 
             if (direction)
             {
-                //cout<<"desired: "<<desiredTurn<<"   "<<curCross->streets.size()<<endl;
+                //cout<<"desired: "<<id<<"   "<<desiredTurn<<"   "<<curCross->streets.size()<<endl;
                 tempLength = Vec3::length(curRoad->endPos - curCross->streets[desiredTurn].jointPos);
                 s = xPos / tempLength;
 
                 if(s>1)s=1;
 
-                //cout<<"S: "<<tempLength<< " "<<curRoad->endPos << curCross->streets[desiredTurn].jointPos<<endl;
+                //cout<<"S: "<<id<<"   "<<s<<"   "<<tempLength<< " "<<curRoad->endPos << curCross->streets[desiredTurn].jointPos<<endl;
 
                 pos = Vec3::lerp(curRoad->endPos, curCross->streets[desiredTurn].jointPos, s);
             }
@@ -300,9 +302,9 @@ void Vehicle::update(float delta)
                 {
                     curRoad->vehiclesEnd.push(this);
                 }
-                cout<<id<<"    "<<curCross->id<<"    befroe "<<curCross->allowedVeh<<endl;
+                //cout<<id<<"    "<<curCross->id<<"    befroe "<<curCross->allowedVeh<<endl;
                 curCross->allowedVeh--;
-                cout<<id<<curCross->id<<"    after  "<<curCross->allowedVeh<<endl;
+                //cout<<id<<curCross->id<<"    after  "<<curCross->allowedVeh<<endl;
 
                 //curCross->streets[desiredTurn].vehicles.erase(curCross->streets[desiredTurn].vehicles.begin());
 
@@ -316,7 +318,7 @@ void Vehicle::update(float delta)
 
 float Vehicle::getDst()
 {
-    //cout<<"getdst  "<<id<<endl;
+    cout<<"getdst  "<<id<<"  "<<frontVeh<<endl;
     if (frontVeh != NULL)
         return frontVeh->xPos - xPos;
 
