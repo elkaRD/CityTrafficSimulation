@@ -5,7 +5,7 @@ int main(int argc, char** argv)
 {
     Simulator::init(argc, argv);
     Simulator simulator;
-    simulator.loadRoad("example.txt");
+    simulator.loadRoad("e.txt");
     simulator.run();
 
     return 0;

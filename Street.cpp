@@ -28,10 +28,10 @@ bool isSet = false;
 
 void Cross::update(float delta)
 {
-    if(!isSet && id.compare("SK2") == 0)
+    if(!isSet && /*id.compare("SK2") == 0*/ streets.size() == 4)
     {
         isSet = true;
-        setDefaultPriority(streets[0].street, streets[1].street, streets[1].street, streets[1].street);
+        setDefaultPriority(streets[0].street, streets[1].street, streets[2].street, streets[3].street);
     }
 
     /*cout<<"allowed vehs "<<id<<": " << allowedVeh<<endl;
@@ -82,15 +82,19 @@ void Cross::update(float delta)
 
     bool didAllow = false;
 
-    if (allowedVeh == 0)
+    if (allowedVeh == 0 && isSet)
     {
         for (int i=0;i<streets.size();i++)
         {
             if (streets[i].vehicles.size() > 0)
             {
+                if (streets[i].vehicles[0]->dstToCross > 1) continue;
+
                 int which = streets[i].vehicles[0]->desiredTurn;
                 //int which2 = streets[i].yield[which];
                 bool isOK = true;
+
+                cout<<"test "<<id<<": "<<which<< "    " << streets[i].yield.size()<<endl;
 
                 for (int j=0;j<streets[i].yield[which].size();j++)
                 {

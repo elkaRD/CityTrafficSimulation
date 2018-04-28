@@ -20,7 +20,7 @@ void registerNewObject(Simulator *engine, GameObject *go);
 #include "Street.h"
 #include "Vehicle.h"
 
-#define MULTIPLY_TIME   5
+#define MULTIPLY_TIME   1
 #define MAX_DELTA       0.15
 
 #include <vector>

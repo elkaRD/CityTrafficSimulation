@@ -29,6 +29,8 @@ public:
 
     float getDst();
 
+    float dstToCross;
+
     bool direction;
 
     int desiredTurn;
