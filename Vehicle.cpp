@@ -161,13 +161,13 @@ void Vehicle::update(float delta)
             backVeh->isFirstVeh = true;
             backVeh->frontVeh = NULL;
             //cout<<"prev veh: "<<backVeh->id<<"  "<<backVeh->frontVeh<<endl;
-            int i;cin>>i;
+            //int i;cin>>i;
         }
         isChanging = true;
         didReachCross = false;
 
         cout<<id<<" warunek"<<endl;
-        xPos = 0;
+        //xPos = 0;
     }
 
     /*if (isChanging && curRoad != NULL)
@@ -206,18 +206,21 @@ void Vehicle::update(float delta)
         xPos += velocity * delta;
 
         float s = xPos / curRoad->length;
-//        cout<<xPos<<"   "<<curRoad-><<endl;
+        cout<<xPos<<"   "<<s<<endl;
+        cout<<curRoad->begPos<<curRoad->endPos<<endl;
         pos = Vec3::lerp(curRoad->begPos, curRoad->endPos, s);
+
 
         if(s > 1)
         {
             xPos = 0;
-            //didReachCross = true;
-            //isChanging = false;
+            didReachCross = true;
+            isChanging = false;
 
         }
         cout<<"changing "<<s<<endl;
-        didReachCross = true;
+        //didReachCross = true;
+        //int i;cin>>i;
     }
 
 
