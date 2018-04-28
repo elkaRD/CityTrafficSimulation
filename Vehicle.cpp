@@ -14,6 +14,7 @@ Vehicle::Vehicle(Road *spawnRoad)
     maxV = randFloat(1, 1.5);
     minV = randFloat(0.02, 0.08);
     velocity = 0;
+    cornerVelocity = randFloat(0.5, 1);
     stopTime = randFloat(0.5, 0.8);
     acceleration = randFloat(0.1,0.2);
     vehicleLength = 0.2;
@@ -147,6 +148,8 @@ void Vehicle::update(float delta)
 
                     nextRoad = curCross->streets[desiredTurn].street;
 
+                    cout<<id<<"  desired road: "<<nextRoad->id<<endl;
+
                     curCross->streets[i].vehicles.push_back(this);
 
                     break;
@@ -208,12 +211,21 @@ void Vehicle::update(float delta)
 
     if (isChanging)
     {
-        xPos += velocity * delta;
+        xPos += cornerVelocity * delta;
 
         float s = xPos / curRoad->length;
-        cout<<xPos<<"   "<<s<<endl;
-        cout<<curRoad->begPos<<curRoad->endPos<<endl;
-        pos = Vec3::lerp(curRoad->begPos, curRoad->endPos, s);
+        //cout<<xPos<<"   "<<s<<endl;
+        //cout<<curRoad->begPos<<curRoad->endPos<<endl;
+
+        if (direction)
+        {
+            pos = Vec3::lerp(curRoad->begPos, curRoad->endPos, s);
+        }
+        else
+        {
+            pos = Vec3::lerp(curRoad->endPos, curRoad->begPos, s);
+        }
+
 
 
         if(s > 1)
@@ -223,7 +235,7 @@ void Vehicle::update(float delta)
             isChanging = false;
 
         }
-        cout<<"changing "<<s<<endl;
+        //cout<<"changing "<<s<<endl;
         //didReachCross = true;
         //int i;cin>>i;
     }
@@ -232,7 +244,7 @@ void Vehicle::update(float delta)
 
     if (didReachCross)
     {
-        xPos += velocity * delta;
+        xPos += cornerVelocity * delta;
         float tempLength;
         float s;
 
@@ -244,7 +256,7 @@ void Vehicle::update(float delta)
 
                 if(s>1)s=1;
 
-                cout<<"S: "<<tempLength<< " "<<curRoad->endPos << curCross->streets[desiredTurn].jointPos<<endl;
+                //cout<<"S: "<<tempLength<< " "<<curRoad->endPos << curCross->streets[desiredTurn].jointPos<<endl;
 
                 pos = Vec3::lerp(curRoad->endPos, curCross->streets[desiredTurn].jointPos, s);
             }
@@ -288,18 +300,22 @@ void Vehicle::update(float delta)
                 {
                     curRoad->vehiclesEnd.push(this);
                 }
+                cout<<id<<"    "<<curCross->id<<"    befroe "<<curCross->allowedVeh<<endl;
+                curCross->allowedVeh--;
+                cout<<id<<curCross->id<<"    after  "<<curCross->allowedVeh<<endl;
+
+                //curCross->streets[desiredTurn].vehicles.erase(curCross->streets[desiredTurn].vehicles.begin());
 
                 nextRoad = NULL;
                 curCross = NULL;
             }
 
-            cout<<"reachcross"<<endl;
+            //cout<<"reachcross"<<endl;
     }
 }
 
 float Vehicle::getDst()
 {
-    cout<<"debug: "<<id<<endl;
     if (frontVeh != NULL)
         return frontVeh->xPos - xPos;
 

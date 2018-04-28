@@ -17,6 +17,7 @@ public:
     float maxV;
     float minV;
     float velocity;
+    float cornerVelocity;
     float stopTime;
     float acceleration;
     float xPos;

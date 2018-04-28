@@ -88,6 +88,8 @@ void Cross::update(float delta)
 
     bool didAllow = false;
 
+    //cout << id<< "    "<<allowedVeh<<endl;
+
     if (allowedVeh == 0 && isSet)
     {
         for (int i=0;i<streets.size();i++)
@@ -95,12 +97,14 @@ void Cross::update(float delta)
             if (streets[i].vehicles.size() > 0)
             {
                 if (streets[i].vehicles[0]->dstToCross > 1) continue;
+                //if (streets[i].vehicles[0]->curCross == NULL) continue;
+                //cout<<streets[i].vehicles[0]->id << "    "<<streets[i].vehicles[0]->allowedToCross<<endl;
 
                 int which = streets[i].vehicles[0]->desiredTurn;
                 //int which2 = streets[i].yield[which];
                 bool isOK = true;
 
-                cout<<"test "<<id<<": "<<which<< "    " << streets[i].yield.size()<<endl;
+                cout<<"test "<<id<<"   "<<streets[i].vehicles[0]->id<<": "<<which<< "    " << streets[i].yield.size()<<endl;
 
                 if (which > 0)
                 for (int j=0;j<streets[i].yield[which].size();j++)
@@ -115,6 +119,7 @@ void Cross::update(float delta)
                 if (isOK)
                 {
                     streets[i].vehicles[0]->allowedToCross = true;
+                    streets[i].vehicles.erase(streets[i].vehicles.begin());
                     allowedVeh = 1;
 
                     for (int j=1;j<streets[i].vehicles.size();j++)
@@ -122,6 +127,7 @@ void Cross::update(float delta)
                         if (streets[i].vehicles[j]->desiredTurn == streets[i].vehicles[0]->desiredTurn)
                         {
                             streets[i].vehicles[j]->allowedToCross = true;
+                            streets[i].vehicles.erase(streets[i].vehicles.begin());
                             allowedVeh++;
                         }
                         else break;
@@ -284,6 +290,7 @@ Garage::Garage(Simulator *engine, Vec3 p, Cross *c)
     Cross::OneStreet temp;
     temp.street = this;
     temp.enabled = false;
+    temp.jointPos = crossEnd->getPos() - direction * 0.3;
 
     gameEngine = engine;
 
