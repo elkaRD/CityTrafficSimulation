@@ -316,6 +316,7 @@ void Vehicle::update(float delta)
 
 float Vehicle::getDst()
 {
+    //cout<<"getdst  "<<id<<endl;
     if (frontVeh != NULL)
         return frontVeh->xPos - xPos;
 

@@ -19,12 +19,12 @@ Cross::Cross(Vec3 position)// : GameObject(engine)
     pos = position;
     allowedVeh = 0;
 
+    isSet = false;
+
     //cout<<(streets[0]==NULL)<<endl<<(streets[1]==NULL)<<endl;
     //cout<<streets[0].street<<endl;
 
 }
-
-bool isSet = false;
 
 void Cross::update(float delta)
 {
@@ -32,12 +32,19 @@ void Cross::update(float delta)
     {
         isSet = true;
         setDefaultPriority(streets[0].street, streets[1].street, streets[2].street, streets[3].street);
+        cout<<id<<"   did happen?"<<endl;
     }
 
     if (!isSet && streets.size() == 2)
     {
         isSet = true;
         setDefaultPriority();
+        cout<<"should happen"<<endl;
+    }
+
+    if (!isSet)
+    {
+        cout<<id<<"   "<<streets.size()<<endl;
     }
 
     /*cout<<"allowed vehs "<<id<<": " << allowedVeh<<endl;
@@ -153,6 +160,11 @@ void Cross::setDefaultPriority(Road *s0, Road *s1, Road *s2, Road *s3)
         vector<vector<int> > finalVec;
         finalVec.push_back(yield);
         finalVec.push_back(yield);
+
+        streets[0].yield = finalVec;
+        streets[1].yield = finalVec;
+
+        cout<<id<<"   "<<streets[0].yield.size();
     }
 
     if (streets.size() == 4)
@@ -303,7 +315,7 @@ Garage::Garage(Simulator *engine, Vec3 p, Cross *c)
     normal.normalize();
 
     curTime = 0;
-    frec = 3;
+    frec = 5;
 }
 
 void Garage::draw()
