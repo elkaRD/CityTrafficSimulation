@@ -81,7 +81,7 @@ public:
     };
     std::vector<OneStreet> streets;
 
-    void setDefaultPriority(Road *s0, Road *s1, Road *s2, Road *s3);
+    void setDefaultPriority(Road *s0 = NULL, Road *s1 = NULL, Road *s2 = NULL, Road *s3 = NULL);
 
     int allowedVeh;
 

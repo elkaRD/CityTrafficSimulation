@@ -142,6 +142,9 @@ void Vehicle::update(float delta)
                 {
                     desiredTurn = randInt(0, curCross->streets.size()-1);
                     if (desiredTurn == i) desiredTurn = (desiredTurn+1) % curCross->streets.size();
+
+                    if (curCross->streets.size() == 2) desiredTurn = (i+1) % 2;
+
                     nextRoad = curCross->streets[desiredTurn].street;
 
                     curCross->streets[i].vehicles.push_back(this);

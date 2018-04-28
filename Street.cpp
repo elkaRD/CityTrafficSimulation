@@ -34,6 +34,12 @@ void Cross::update(float delta)
         setDefaultPriority(streets[0].street, streets[1].street, streets[2].street, streets[3].street);
     }
 
+    if (!isSet && streets.size() == 2)
+    {
+        isSet = true;
+        setDefaultPriority();
+    }
+
     /*cout<<"allowed vehs "<<id<<": " << allowedVeh<<endl;
     if (allowedVeh == 0)
     {
@@ -96,6 +102,7 @@ void Cross::update(float delta)
 
                 cout<<"test "<<id<<": "<<which<< "    " << streets[i].yield.size()<<endl;
 
+                if (which > 0)
                 for (int j=0;j<streets[i].yield[which].size();j++)
                 {
                     if (streets[streets[i].yield[which][j]].vehicles.size() > 0)
@@ -133,6 +140,15 @@ void Cross::setDefaultPriority(Road *s0, Road *s1, Road *s2, Road *s3)
     }
 
     cout<<id<<"   number of streets: "<<streets.size()<<endl;
+
+    if (streets.size() == 2)
+    {
+        vector<int> yield;
+        vector<vector<int> > finalVec;
+        finalVec.push_back(yield);
+        finalVec.push_back(yield);
+    }
+
     if (streets.size() == 4)
     {
         vector<int> yield[4];
