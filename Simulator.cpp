@@ -276,10 +276,14 @@ void Simulator::run()
         float delta = secB - secE;
         delta /= 1000000.0;
         delta *= MULTIPLY_TIME;
-        if (delta > MAX_DELTA) delta = MAX_DELTA;
+        if (delta > MAX_DELTA * MULTIPLY_TIME) delta = MAX_DELTA * MULTIPLY_TIME;
+        if (delta > 0.4) delta = 0.4;
         //cout<<"                  "<<fixed<<newTime.tv_usec<<"  "<<timeE<<"  "<<timeB<<"   "<<delta<<endl;
         //cout<<delta<<endl;
-        update(delta);
+        for(int i=0;i<REAL_INT_MULTIPLY;i++ )
+        {
+            update(delta);
+        }
         lastTime = newTime;
       redraw();
       needRedraw = GL_FALSE;

@@ -46,7 +46,7 @@ Vehicle::Vehicle(Road *spawnRoad)
     frontVeh = NULL;
     isFirstVeh = true;
 
-    if (curRoad->vehiclesBeg.size() > 0 && !curRoad->vehiclesBeg.back()->allowedToCross)
+    if (curRoad->vehiclesBeg.size() > 0 && !curRoad->vehiclesBeg.back()->isChanging)
     {
         isFirstVeh = false;
         frontVeh = curRoad->vehiclesBeg.back();
@@ -316,12 +316,53 @@ void Vehicle::update(float delta)
                 velocity = cornerVelocity;
 
                 curRoad = curCross->streets[desiredTurn].street;
+
+                //bool prevDir = direction;
                 direction = curCross->streets[desiredTurn].direction;
 
                 dstToCross = curCross->length;
 
 
-                if (curCross->streets[desiredTurn].direction)
+                /*if (curCross->streets[desiredTurn].direction)
+                {
+                    curRoad->vehiclesBeg.push(this);
+                }
+                else
+                {
+                    curRoad->vehiclesEnd.push(this);
+                }*/
+                //cout<<id<<"    "<<curCross->id<<"    befroe "<<curCross->allowedVeh<<endl;
+                curCross->allowedVeh--;
+                desiredTurn = 0;
+                //cout<<id<<curCross->id<<"    after  "<<curCross->allowedVeh<<endl;
+
+                //curCross->streets[desiredTurn].vehicles.erase(curCross->streets[desiredTurn].vehicles.begin());
+
+                backVeh = NULL;
+
+                frontVeh = NULL;
+                isFirstVeh = true;
+
+                if (direction)
+                {
+                    if (curRoad->vehiclesBeg.size() > 0 && !curRoad->vehiclesBeg.back()->isChanging)
+                    {
+                        isFirstVeh = false;
+                        frontVeh = curRoad->vehiclesBeg.back();
+                        frontVeh->backVeh = this;
+                    }
+                }
+                else
+                {
+                    if (curRoad->vehiclesEnd.size() > 0 && !curRoad->vehiclesEnd.back()->isChanging)
+                    {
+                        isFirstVeh = false;
+                        frontVeh = curRoad->vehiclesEnd.back();
+                        frontVeh->backVeh = this;
+                    }
+                }
+
+                if (direction)
                 {
                     curRoad->vehiclesBeg.push(this);
                 }
@@ -329,12 +370,6 @@ void Vehicle::update(float delta)
                 {
                     curRoad->vehiclesEnd.push(this);
                 }
-                //cout<<id<<"    "<<curCross->id<<"    befroe "<<curCross->allowedVeh<<endl;
-                curCross->allowedVeh--;
-                desiredTurn = 0;
-                //cout<<id<<curCross->id<<"    after  "<<curCross->allowedVeh<<endl;
-
-                //curCross->streets[desiredTurn].vehicles.erase(curCross->streets[desiredTurn].vehicles.begin());
 
                 nextRoad = NULL;
                 curCross = NULL;
