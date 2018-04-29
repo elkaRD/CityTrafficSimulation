@@ -318,7 +318,7 @@ void Vehicle::update(float delta)
 
 float Vehicle::getDst()
 {
-    cout<<"getdst  "<<id<<"  "<<frontVeh<<endl;
+    //cout<<"getdst  "<<id<<"  "<<frontVeh<<endl;
     if (frontVeh != NULL)
         return frontVeh->xPos - xPos;
 

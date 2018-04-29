@@ -97,13 +97,13 @@ void Cross::update(float delta)
 
     //cout << id<< "    "<<allowedVeh<<endl;
 
-    if (allowedVeh == 0 && isSet)
+    if ((allowedVeh == 0 || streets.size() <= 2) && isSet)
     {
         for (int i=0;i<streets.size();i++)
         {
             if (streets[i].vehicles.size() > 0)
             {
-                if (streets[i].vehicles[0]->dstToCross > 0.5) continue;
+                if (streets[i].vehicles[0]->dstToCross > 0.8) continue;
                 //if (streets[i].vehicles[0]->curCross == NULL) continue;
                 //cout<<streets[i].vehicles[0]->id << "    "<<streets[i].vehicles[0]->allowedToCross<<endl;
 
@@ -113,9 +113,11 @@ void Cross::update(float delta)
 
                 cout<<"test "<<id<<"   "<<streets[i].vehicles[0]->id<<": "<<which<< "    " << streets[i].yield.size()<<endl;
 
-                if (which > 0)
+                //if (which > 0)
                 for (int j=0;j<streets[i].yield[which].size();j++)
                 {
+                    cout<<id<<"   "<<streets[i].vehicles[0]->id<<"   "<<j<<"    "<<streets[streets[i].yield[which][j]].vehicles.size()<<endl;
+
                     if (streets[streets[i].yield[which][j]].vehicles.size() > 0)
                     {
                         isOK = false;
