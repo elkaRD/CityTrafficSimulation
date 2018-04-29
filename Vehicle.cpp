@@ -28,6 +28,7 @@ Vehicle::Vehicle(Road *spawnRoad)
 
     curRoad = spawnRoad;
     curCross = NULL;
+    nextRoad = NULL;
 
     allowedToCross = false;
     isChanging = false;
@@ -163,7 +164,13 @@ void Vehicle::update(float delta)
 
     //changing street at cross
 
-    if (id.compare("CAR_8GA1A") == 0 &&nextRoad!=NULL)cout<<id<<" "<<isLeavingRoad<< " "<<(curCross!=NULL)<<" "<<(nextRoad!= NULL)<< " "<<allowedToCross<< " "<<nextRoad->freeSpace(direction)<<endl;
+    if (id.compare("CAR_5GA1A") == 0 &&nextRoad!=NULL)
+    {
+        cout<<id<<" "<<isLeavingRoad<< " ";
+        cout<<(curCross!=NULL)<<" "<<(nextRoad!= NULL)<< " "<<allowedToCross<<"  "<<desiredTurn;
+        //cout<<"adress: "<<nextRoad<<endl;
+        cout<< " "<<nextRoad->freeSpace(direction)<<endl;
+    }
 
     if (!isLeavingRoad && curCross != NULL && nextRoad != NULL && allowedToCross && nextRoad->freeSpace(direction) > vehicleLength + remainDst)
     {
@@ -358,6 +365,10 @@ void Car::draw()
     if (isLeavingRoad)
     {
         setColor(0,1,1);
+    }
+    if (id.compare("CAR_10GA1B")==0)
+    {
+        setColor(1,0,1);
     }
 
     drawCube(0.2,4,0.2);

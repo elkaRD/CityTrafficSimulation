@@ -28,7 +28,7 @@ public:
     void drawObject();
 
 protected:
-    Vec3 pos;
+public:    Vec3 pos;        //debug
     Vec3 rot;
 
     virtual void update(float delta);

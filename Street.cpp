@@ -4,14 +4,27 @@ using namespace std;
 
 float Road::freeSpace(bool dir)
 {
+    //if ()
+
     if (dir)
     {
-        //cout<<"test debug: "<<vehiclesBeg.size()<<endl;
+        cout<<"freespace1"<<endl;
         if (vehiclesBeg.size() == 0) return length;
-        return length - vehiclesBeg.back()->xPos;
+
+        cout<<"freespace2 :"<<vehiclesBeg.back()->id<<"  "<<vehiclesBeg.back()->xPos<<"  "<<vehiclesBeg.back()->pos<<endl;
+
+        return vehiclesBeg.back()->xPos;
     }
+
+    cout<<"freespace3"<<endl;
+
     if (vehiclesEnd.size() == 0) return length;
-    return length - vehiclesEnd.back()->xPos;
+
+    cout<<"freespace4: "<<vehiclesEnd.back()->id<<"  "<<vehiclesEnd.back()->xPos<< "  "<<vehiclesEnd.back()->pos<<endl;
+
+    //cout<<"debug: "<<id<<"  "<<vehiclesEnd.back()->id<<"  "<<vehiclesEnd.back()->xPos <<endl;
+
+    return vehiclesEnd.back()->xPos;
 }
 
 Cross::Cross(Vec3 position)// : GameObject(engine)
