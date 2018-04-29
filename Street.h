@@ -25,6 +25,9 @@ public:
     Vec3 begJoint;
     Vec3 endJoint;
 
+    Vec3 getBegJoint(bool dir);
+    Vec3 getEndJoint(bool dir);
+
     float length;
     Vec3 direction;
 

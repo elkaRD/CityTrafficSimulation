@@ -27,6 +27,26 @@ float Road::freeSpace(bool dir)
     return vehiclesEnd.back()->xPos;
 }
 
+Vec3 Road::getBegJoint(bool dir)
+{
+    if (dir)
+    {
+        return begJoint + normal * 0.1;
+    }
+
+    return begJoint - normal * 0.1;
+}
+
+Vec3 Road::getEndJoint(bool dir)
+{
+    if (dir)
+    {
+        return endJoint + normal * 0.1;
+    }
+
+    return endJoint - normal * 0.1;
+}
+
 Cross::Cross(Vec3 position)// : GameObject(engine)
 {
     pos = position;
