@@ -14,7 +14,8 @@ Vehicle::Vehicle(Road *spawnRoad)
     maxV = randFloat(1, 1.5);
     minV = randFloat(0.02, 0.08);
     velocity = 0;
-    cornerVelocity = randFloat(0.5, 1);
+    //cornerVelocity = randFloat(0.5, 1);
+    cornerVelocity = 1;
     stopTime = randFloat(0.5, 0.8);
     acceleration = randFloat(0.1,0.2);
     vehicleLength = 0.2;
@@ -23,6 +24,11 @@ Vehicle::Vehicle(Road *spawnRoad)
     xPos = 0;
 
     isBraking = false;
+
+    dstToCross = 1000;
+    direction = true;
+    desiredTurn = 0;
+
 
     gameEngine = spawnRoad->gameEngine;
 
@@ -38,9 +44,11 @@ Vehicle::Vehicle(Road *spawnRoad)
     isLeavingRoad = false;
 
     frontVeh = NULL;
+    isFirstVeh = true;
 
     if (curRoad->vehiclesBeg.size() > 0 && !curRoad->vehiclesBeg.back()->allowedToCross)
     {
+        isFirstVeh = false;
         frontVeh = curRoad->vehiclesBeg.back();
         frontVeh->backVeh = this;
     }
@@ -295,16 +303,23 @@ void Vehicle::update(float delta)
                     curRoad->vehiclesEnd.pop();
                 }
 
+                xPos = 0;
+                isBraking = false;
+
+
                 allowedToCross = false;
 
                 isChanging = false;
                 didReachCross = false;
                 isLeavingRoad = false;
 
-
+                velocity = cornerVelocity;
 
                 curRoad = curCross->streets[desiredTurn].street;
                 direction = curCross->streets[desiredTurn].direction;
+
+                dstToCross = curCross->length;
+
 
                 if (curCross->streets[desiredTurn].direction)
                 {
@@ -316,6 +331,7 @@ void Vehicle::update(float delta)
                 }
                 //cout<<id<<"    "<<curCross->id<<"    befroe "<<curCross->allowedVeh<<endl;
                 curCross->allowedVeh--;
+                desiredTurn = 0;
                 //cout<<id<<curCross->id<<"    after  "<<curCross->allowedVeh<<endl;
 
                 //curCross->streets[desiredTurn].vehicles.erase(curCross->streets[desiredTurn].vehicles.begin());
