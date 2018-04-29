@@ -30,6 +30,8 @@ Vehicle::Vehicle(Road *spawnRoad)
     curCross = NULL;
     nextRoad = NULL;
 
+    backVeh = NULL;
+
     allowedToCross = false;
     isChanging = false;
     didReachCross = false;
@@ -164,13 +166,13 @@ void Vehicle::update(float delta)
 
     //changing street at cross
 
-    if (id.compare("CAR_5GA1A") == 0 &&nextRoad!=NULL)
+    /*if (id.compare("CAR_5GA1A") == 0 &&nextRoad!=NULL)
     {
         cout<<id<<" "<<isLeavingRoad<< " ";
         cout<<(curCross!=NULL)<<" "<<(nextRoad!= NULL)<< " "<<allowedToCross<<"  "<<desiredTurn;
         //cout<<"adress: "<<nextRoad<<endl;
         cout<< " "<<nextRoad->freeSpace(direction)<<endl;
-    }
+    }*/
 
     if (!isLeavingRoad && curCross != NULL && nextRoad != NULL && allowedToCross && nextRoad->freeSpace(direction) > vehicleLength + remainDst)
     {
@@ -366,14 +368,10 @@ void Car::draw()
     {
         setColor(0,1,1);
     }
-    if (id.compare("CAR_10GA1B")==0)
-    {
-        setColor(1,0,1);
-    }
 
     drawCube(0.2,4,0.2);
 
-    glPushMatrix();
+    /*glPushMatrix();
     glTranslatef(0.25,0,0);
     setColor(0,0,0);
     for(int i=0;i<idnumber;i++)
@@ -381,5 +379,5 @@ void Car::draw()
         glTranslatef(0.2,0,0);
         drawCube(0.1);
     }
-    glPopMatrix();
+    glPopMatrix();*/
 }

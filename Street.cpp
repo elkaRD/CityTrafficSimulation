@@ -8,19 +8,19 @@ float Road::freeSpace(bool dir)
 
     if (dir)
     {
-        cout<<"freespace1"<<endl;
+        //cout<<"freespace1"<<endl;
         if (vehiclesBeg.size() == 0) return length;
 
-        cout<<"freespace2 :"<<vehiclesBeg.back()->id<<"  "<<vehiclesBeg.back()->xPos<<"  "<<vehiclesBeg.back()->pos<<endl;
+        //cout<<"freespace2 :"<<vehiclesBeg.back()->id<<"  "<<vehiclesBeg.back()->xPos<<"  "<<vehiclesBeg.back()->pos<<endl;
 
         return vehiclesBeg.back()->xPos;
     }
 
-    cout<<"freespace3"<<endl;
+    //cout<<"freespace3"<<endl;
 
     if (vehiclesEnd.size() == 0) return length;
 
-    cout<<"freespace4: "<<vehiclesEnd.back()->id<<"  "<<vehiclesEnd.back()->xPos<< "  "<<vehiclesEnd.back()->pos<<endl;
+    //cout<<"freespace4: "<<vehiclesEnd.back()->id<<"  "<<vehiclesEnd.back()->xPos<< "  "<<vehiclesEnd.back()->pos<<endl;
 
     //cout<<"debug: "<<id<<"  "<<vehiclesEnd.back()->id<<"  "<<vehiclesEnd.back()->xPos <<endl;
 
@@ -107,6 +107,8 @@ void Cross::update(float delta)
     }*/
 
     bool didAllow = false;
+    int smallestDstIndex = -1;
+    float smallestDstValue;
 
     //cout << id<< "    "<<allowedVeh<<endl;
 
@@ -119,6 +121,11 @@ void Cross::update(float delta)
                 if (streets[i].vehicles[0]->dstToCross > 0.8) continue;
                 //if (streets[i].vehicles[0]->curCross == NULL) continue;
                 //cout<<streets[i].vehicles[0]->id << "    "<<streets[i].vehicles[0]->allowedToCross<<endl;
+                if (streets[i].vehicles[0]->dstToCross < smallestDstValue || smallestDstIndex < 0)
+                {
+                    smallestDstIndex = i;
+                    smallestDstValue = streets[i].vehicles[0]->dstToCross;
+                }
 
                 int which = streets[i].vehicles[0]->desiredTurn;
                 //int which2 = streets[i].yield[which];
@@ -141,6 +148,8 @@ void Cross::update(float delta)
 
                 if (isOK)
                 {
+                    didAllow = true;
+
                     streets[i].vehicles[0]->allowedToCross = true;
                     streets[i].vehicles.erase(streets[i].vehicles.begin());
                     allowedVeh++;
@@ -156,6 +165,24 @@ void Cross::update(float delta)
                         else break;
                     }
                 }
+            }
+        }
+
+        if (!didAllow && smallestDstIndex >= 0)
+        {
+            streets[smallestDstIndex].vehicles[0]->allowedToCross = true;
+            streets[smallestDstIndex].vehicles.erase(streets[smallestDstIndex].vehicles.begin());
+            allowedVeh++;
+
+            for (int j=1;j<streets[smallestDstIndex].vehicles.size();j++)
+            {
+                if (streets[smallestDstIndex].vehicles[j]->desiredTurn == streets[smallestDstIndex].vehicles[0]->desiredTurn)
+                {
+                    streets[smallestDstIndex].vehicles[j]->allowedToCross = true;
+                    streets[smallestDstIndex].vehicles.erase(streets[smallestDstIndex].vehicles.begin());
+                    allowedVeh++;
+                }
+                else break;
             }
         }
     }
