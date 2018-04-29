@@ -111,12 +111,12 @@ void Cross::update(float delta)
                 //int which2 = streets[i].yield[which];
                 bool isOK = true;
 
-                cout<<"test "<<id<<"   "<<streets[i].vehicles[0]->id<<": "<<which<< "    " << streets[i].yield.size()<<endl;
+                //cout<<"test "<<id<<"   "<<streets[i].vehicles[0]->id<<": "<<which<< "    " << streets[i].yield.size()<<endl;
 
                 //if (which > 0)
                 for (int j=0;j<streets[i].yield[which].size();j++)
                 {
-                    cout<<id<<"   "<<streets[i].vehicles[0]->id<<"   "<<j<<"    "<<streets[streets[i].yield[which][j]].vehicles.size()<<endl;
+                    //cout<<id<<"   "<<streets[i].vehicles[0]->id<<"   "<<j<<"    "<<streets[streets[i].yield[which][j]].vehicles.size()<<endl;
 
                     if (streets[streets[i].yield[which][j]].vehicles.size() > 0)
                     {
@@ -124,12 +124,13 @@ void Cross::update(float delta)
                         break;
                     }
                 }
+                //cout<<endl;
 
                 if (isOK)
                 {
                     streets[i].vehicles[0]->allowedToCross = true;
                     streets[i].vehicles.erase(streets[i].vehicles.begin());
-                    allowedVeh = 1;
+                    allowedVeh++;
 
                     for (int j=1;j<streets[i].vehicles.size();j++)
                     {
@@ -183,10 +184,18 @@ void Cross::setDefaultPriority(Road *s0, Road *s1, Road *s2, Road *s3)
         yield[3].push_back(2);
 
         vector<vector<int> > finalVec;
-        finalVec.push_back(yield[0]);
-        finalVec.push_back(yield[1]);
-        finalVec.push_back(yield[2]);
-        finalVec.push_back(yield[3]);
+        //finalVec.push_back(yield[0]);
+        //finalVec.push_back(yield[1]);
+        //finalVec.push_back(yield[2]);
+        //finalVec.push_back(yield[3]);
+
+        for (int i=0;i<4;i++)
+        {
+            if (streets[i].street == s0) finalVec.push_back(yield[0]);
+            if (streets[i].street == s1) finalVec.push_back(yield[1]);
+            if (streets[i].street == s2) finalVec.push_back(yield[2]);
+            if (streets[i].street == s3) finalVec.push_back(yield[3]);
+        }
 
         for (int i=0;i<4;i++)
         {
@@ -366,6 +375,7 @@ void Garage::spotCar()
     temp->direction = true;
     temp->id = "CAR_" + itos(Vehicle::numVeh) + id;
     temp->isFirstVeh = vehiclesBeg.size() == 0;
+    temp->idnumber = Vehicle::numVeh;
     vehiclesBeg.push(temp);
 //    gameEngine->registerObject(temp);
     registerNewObject(gameEngine, temp);

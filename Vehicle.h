@@ -48,6 +48,7 @@ public:
     Vehicle *backVeh;
     bool isFirstVeh;
 
+    int idnumber;
     bool debugstop;
     //int idnum;
     static int numVeh;
