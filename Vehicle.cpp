@@ -125,12 +125,12 @@ void Vehicle::update(float delta)
 
         if (direction)
         {
-            pos = Vec3::lerp(curRoad->begPos, curRoad->endPos, s);
+            pos = Vec3::lerp(curRoad->begJoint, curRoad->endJoint, s);
             pos += curRoad->normal * 0.1;
         }
         else
         {
-            pos = Vec3::lerp(curRoad->endPos, curRoad->begPos, s);
+            pos = Vec3::lerp(curRoad->endJoint, curRoad->begJoint, s);
             pos -= curRoad->normal * 0.1;
         }
 
@@ -241,11 +241,11 @@ void Vehicle::update(float delta)
 
         if (direction)
         {
-            pos = Vec3::lerp(curRoad->begPos, curRoad->endPos, s);
+            pos = Vec3::lerp(curRoad->begJoint, curRoad->endJoint, s);
         }
         else
         {
-            pos = Vec3::lerp(curRoad->endPos, curRoad->begPos, s);
+            pos = Vec3::lerp(curRoad->endJoint, curRoad->begJoint, s);
         }
 
 
@@ -256,6 +256,14 @@ void Vehicle::update(float delta)
             didReachCross = true;
             isChanging = false;
 
+            if (curCross->streets[desiredTurn].direction)
+            {
+                nextRoadJoint = nextRoad->begJoint;
+            }
+            else
+            {
+                nextRoadJoint = nextRoad->endJoint;
+            }
         }
         //cout<<"changing "<<s<<endl;
         //didReachCross = true;
@@ -273,23 +281,27 @@ void Vehicle::update(float delta)
             if (direction)
             {
                 //cout<<"desired: "<<id<<"   "<<desiredTurn<<"   "<<curCross->streets.size()<<endl;
-                tempLength = Vec3::length(curRoad->endPos - curCross->streets[desiredTurn].jointPos);
+                //tempLength = Vec3::length(curRoad->endPos - curCross->streets[desiredTurn].jointPos);
+                tempLength = Vec3::length(curRoad->endJoint - nextRoadJoint);
                 s = xPos / tempLength;
 
                 if(s>1)s=1;
 
                 //cout<<"S: "<<id<<"   "<<s<<"   "<<tempLength<< " "<<curRoad->endPos << curCross->streets[desiredTurn].jointPos<<endl;
 
-                pos = Vec3::lerp(curRoad->endPos, curCross->streets[desiredTurn].jointPos, s);
+                //pos = Vec3::lerp(curRoad->endPos, curCross->streets[desiredTurn].jointPos, s);
+                pos  = Vec3::lerp(curRoad->endJoint, nextRoadJoint, s);
             }
             else
             {
-                tempLength = Vec3::length(curRoad->begPos - curCross->streets[desiredTurn].jointPos);
+                //tempLength = Vec3::length(curRoad->begPos - curCross->streets[desiredTurn].jointPos);
+                tempLength = Vec3::length(curRoad->begJoint - nextRoadJoint);
                 s = xPos / tempLength;
 
                 if(s>1)s=1;
 
-                pos = Vec3::lerp(curRoad->begPos, curCross->streets[desiredTurn].jointPos, s);
+                //pos = Vec3::lerp(curRoad->begPos, curCross->streets[desiredTurn].jointPos, s);
+                pos  = Vec3::lerp(curRoad->begJoint, nextRoadJoint, s);
             }
 
             if (s>=1)

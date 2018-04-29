@@ -297,12 +297,14 @@ Street::Street(Cross *begCross, Cross *endCross)
     temp.street = this;
     temp.enabled = true;
     temp.direction = true;
-    temp.jointPos = crossBeg->getPos() + direction * 0.3;
+    //temp.jointPos = crossBeg->getPos() + direction * 0.3;
+    begJoint = crossBeg->getPos() + direction * 0.3;;
 
     crossBeg->streets.push_back(temp);
 
     temp.direction = false;
-    temp.jointPos = crossEnd->getPos() - direction * 0.3;
+    //temp.jointPos = crossEnd->getPos() - direction * 0.3;
+    endJoint = crossEnd->getPos() - direction * 0.3;
     crossEnd->streets.push_back(temp);
 
     begPos = crossBeg->getPos();
@@ -357,8 +359,12 @@ Garage::Garage(Simulator *engine, Vec3 p, Cross *c)
     temp.street = this;
     temp.enabled = false;
     temp.direction = false;
-    temp.jointPos = crossEnd->getPos() - direction * 0.3;
-    cout<<"garage joint: "<<temp.jointPos<<endl;
+    //temp.jointPos = crossEnd->getPos() - direction * 0.3;
+
+    begJoint = begPos;
+    endJoint = crossEnd->getPos() - direction * 0.3;
+
+    //cout<<"garage joint: "<<temp.jointPos<<endl;
 
     gameEngine = engine;
 

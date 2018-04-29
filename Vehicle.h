@@ -42,6 +42,8 @@ public:
     bool didReachCross;
     bool isLeavingRoad;
 
+    Vec3 nextRoadJoint;
+
     Road *curRoad;
     Cross *curCross;
     Vehicle *frontVeh;

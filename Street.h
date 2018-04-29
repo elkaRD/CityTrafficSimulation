@@ -22,6 +22,9 @@ public:
     Vec3 begPos;
     Vec3 endPos;
 
+    Vec3 begJoint;
+    Vec3 endJoint;
+
     float length;
     Vec3 direction;
 
@@ -75,7 +78,7 @@ public:
         std::vector<Vehicle*> vehicles;
         bool enabled = true;
         bool direction;
-        Vec3 jointPos;
+        //Vec3 jointPos;
 
         std::vector<std::vector<int> > yield;
     };
