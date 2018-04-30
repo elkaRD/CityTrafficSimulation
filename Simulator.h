@@ -22,7 +22,7 @@ void registerNewObject(Simulator *engine, GameObject *go);
 
 #define MULTIPLY_TIME       1
 #define MAX_DELTA           0.15
-#define REAL_INT_MULTIPLY   1
+#define REAL_INT_MULTIPLY   5
 
 #include <vector>
 #include <fstream>
@@ -42,11 +42,14 @@ public:
 
     Simulator();
     void loadRoad(std::string fileName);
+    void loadPriority(std::string fileName);
     void run();
 private:
     void update(float delta);
     void registerObject(GameObject *go);
     void destroyObject(GameObject *go);
+
+    GameObject* findObjectByName(std::string on);
 
     std::vector<GameObject*> objects;
 

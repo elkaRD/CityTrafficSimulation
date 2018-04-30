@@ -416,6 +416,41 @@ void Simulator::loadRoad(string fileName)
     file.close();
 }
 
+void Simulator::loadPriority(string fileName)
+{
+    fstream file;
+    file.open(fileName.c_str(), ios::app | ios::in);
+    if (file.good())
+    {
+        while (!file.eof())
+        {
+            string name, mode;
+            int number; //of streets in the cross
+
+            file >> name >> mode;
+
+            if (mode.compare("DEFAULT") == 0)
+            {
+                file >> number;
+
+                string ids[4];
+
+                for(int i=0;i<number;i++)
+                {
+                    file >> ids[i];
+                }
+
+                Cross *cross = dynamic_cast<Cross*>(findObjectByName(name));
+                cross->setDefaultPriority(dynamic_cast<Road*>(findObjectByName(ids[0])),
+                                          dynamic_cast<Road*>(findObjectByName(ids[1])),
+                                          dynamic_cast<Road*>(findObjectByName(ids[2])),
+                                          dynamic_cast<Road*>(findObjectByName(ids[3])));
+            }
+        }
+    }
+    file.close();
+}
+
 void Simulator::update(float delta)
 {
     for(int i=0;i<objects.size();i++)
@@ -432,4 +467,17 @@ void Simulator::registerObject(GameObject *go)
 void registerNewObject(Simulator *engine, GameObject *go)
 {
     engine->registerObject(go);
+}
+
+GameObject* Simulator::findObjectByName(string no)
+{
+    for(int i=0;i<objects.size();i++)
+    {
+        if (objects[i]->id.compare(no) == 0)
+        {
+            return objects[i];
+        }
+    }
+
+    return NULL;
 }

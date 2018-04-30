@@ -63,16 +63,22 @@ void Cross::update(float delta)
 {
     if(!isSet && /*id.compare("SK2") == 0*/ streets.size() == 4)
     {
-        isSet = true;
+        //isSet = true;
         setDefaultPriority(streets[0].street, streets[1].street, streets[2].street, streets[3].street);
         cout<<id<<"   did happen?"<<endl;
     }
 
     if (!isSet && streets.size() == 2)
     {
-        isSet = true;
+        //isSet = true;
         setDefaultPriority();
         cout<<"should happen"<<endl;
+    }
+
+    if (!isSet && streets.size() == 3)
+    {
+        //isSet = true;
+        setDefaultPriority(streets[0].street, streets[1].street, streets[2].street);
     }
 
     if (!isSet)
@@ -156,7 +162,7 @@ void Cross::update(float delta)
                 //if (which > 0)
                 for (int j=0;j<streets[i].yield[which].size();j++)
                 {
-                    //cout<<id<<"   "<<streets[i].vehicles[0]->id<<"   "<<j<<"    "<<streets[streets[i].yield[which][j]].vehicles.size()<<endl;
+                    cout<<id<<"   "<<streets[i].vehicles[0]->id<<"   "<<j<<"    "<<streets[streets[i].yield[which][j]].vehicles.size()<<endl;
 
                     if (streets[streets[i].yield[which][j]].vehicles.size() > 0)
                     {
@@ -210,6 +216,8 @@ void Cross::update(float delta)
 
 void Cross::setDefaultPriority(Road *s0, Road *s1, Road *s2, Road *s3)
 {
+    isSet = true;
+
     for(int i=0;i<streets.size();i++)
     {
         streets[i].yield.clear();
@@ -228,6 +236,39 @@ void Cross::setDefaultPriority(Road *s0, Road *s1, Road *s2, Road *s3)
         streets[1].yield = finalVec;
 
         cout<<id<<"   "<<streets[0].yield.size();
+    }
+
+    if (streets.size() == 3)
+    {
+        vector<int> yield0;
+        yield0.push_back(1);
+        vector<vector<int> > finalVec0;
+        finalVec0.push_back(yield0);
+        finalVec0.push_back(yield0);
+        finalVec0.push_back(yield0);
+
+        vector<int> yield1;
+        vector<int> yield1empty;
+        yield1.push_back(2);
+        vector<vector<int> > finalVec1;
+        finalVec1.push_back(yield1);
+        finalVec1.push_back(yield1);
+        finalVec1.push_back(yield1empty);
+
+        vector<int> yield2;
+        yield2.push_back(0);
+        vector<vector<int> >finalVec2;
+        finalVec2.push_back(yield2);
+        finalVec2.push_back(yield2);
+        yield2.push_back(1);
+        finalVec2.push_back(yield2);
+
+        for(int i=0;i<3;i++)
+        {
+            if (streets[i].street == s0) streets[i].yield = finalVec0;
+            if (streets[i].street == s1) streets[i].yield = finalVec1;
+            if (streets[i].street == s2) streets[i].yield = finalVec2;
+        }
     }
 
     if (streets.size() == 4)
@@ -299,7 +340,7 @@ void glP(Vec3 x)
 
 void Cross::draw()
 {
-    setColor(1,0,0);
+    setColor(0.1,0.1,0.1);
     drawCube(0.6, 0.1, 0.6);
 
 }
