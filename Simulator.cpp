@@ -15,6 +15,8 @@ int Simulator::dblBuf[]  = {GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None
 Display   *Simulator::dpy = NULL;
 Window    Simulator::win = (Window) NULL;
 GLboolean Simulator::doubleBuffer = GL_TRUE;
+//XSetWindowAttributes Simulator::swa = NULL;
+long Simulator::eventMask = 0;
 
 void fatalError(char *message)
 {
@@ -24,7 +26,7 @@ void fatalError(char *message)
 
 void Simulator::redraw()
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glPushMatrix();
 
@@ -125,8 +127,9 @@ int Simulator::init(int argc, char **argv)
   cmap = XCreateColormap(dpy, RootWindow(dpy, vi->screen), vi->visual, AllocNone);
   swa.colormap = cmap;
   swa.border_pixel = 0;
-  swa.event_mask = KeyPressMask    | ExposureMask
-                 | ButtonPressMask | StructureNotifyMask;
+  swa.event_mask = KeyPressMask    | ExposureMask | KeyReleaseMask
+                 | ButtonPressMask | StructureNotifyMask | Button1MotionMask;
+    eventMask = swa.event_mask;
   win = XCreateWindow(dpy, RootWindow(dpy, vi->screen), 0, 0,
                       1280, 720, 0, vi->depth, InputOutput, vi->visual,
                       CWBorderPixel | CWColormap | CWEventMask, &swa);
@@ -160,7 +163,7 @@ int Simulator::init(int argc, char **argv)
   glFrustum(-1.0 * screenRatio, 1.0 * screenRatio, -1.0, 1.0, 20.0, 1000.0);
   /* establish initial viewport */
   /* pedantic, full window size is default viewport */
-  glViewport(0, 0, 1280, 720);
+  //glViewport(0, 0, 1280, 720);
 
   printf( "Press left mouse button to rotate around X axis\n" );
   printf( "Press middle mouse button to rotate around Y axis\n" );
@@ -180,6 +183,9 @@ Simulator::Simulator()
     {
         //todo throw
     }
+
+    cameraPos = Vec3(0,0,0);
+    cameraRot = Vec3(90,0,0);
 }
 
 void Simulator::run()
@@ -194,9 +200,16 @@ void Simulator::run()
 
     while (1)
   {
-    /*do
+
+      if (XCheckWindowEvent(dpy, win, eventMask, &event))
+      {
+       //   cout<<"event"<<endl;
+      }
+       // else cout<<"not"<<endl;
+    //do
     {
-      /*XNextEvent(dpy, &event);
+      //XNextEvent(dpy, &event);
+
       switch (event.type)
       {
         case KeyPress:
@@ -206,12 +219,50 @@ void Simulator::run()
           char       buffer[1];
           /* It is necessary to convert the keycode to a
            * keysym before checking if it is an escape */
-          /*kevent = (XKeyEvent *) &event;
+          kevent = (XKeyEvent *) &event;
           if (   (XLookupString((XKeyEvent *)&event,buffer,1,&keysym,NULL) == 1)
               && (keysym == (KeySym)XK_Escape) )
             exit(0);
+
+            if (buffer[0] < 256)
+            pressedKey[buffer[0]]=true;
+
+            if (keysym == (KeySym)XK_Shift_L) pressedShift = true;
+
+            //cout<<buffer[0]<<"   "<<keysym<<endl;
           break;
         }
+
+        case KeyRelease:
+            {
+                KeySym     keysym;
+          XKeyEvent *kevent;
+          char       buffer[1];
+          /* It is necessary to convert the keycode to a
+           * keysym before checking if it is an escape */
+          kevent = (XKeyEvent *) &event;
+          if (   (XLookupString((XKeyEvent *)&event,buffer,1,&keysym,NULL) == 1)
+              && (keysym == (KeySym)XK_Escape) )
+            exit(0);
+
+            if (buffer[0] < 256) pressedKey[buffer[0]]=false;
+
+            if (keysym == (KeySym)XK_Shift_L) pressedShift = false;
+
+            //cout<<buffer[0]<<"   "<<keysym<<endl;
+
+            switch(buffer[0])
+            {
+                case 'w':case 'W': buffer['W']=true; break;
+            }
+
+            moveCamera2(buffer[0]);
+
+            for(int i=0;i<256;i++) buffer[i]=false;
+
+                break;
+            }
+
         case ButtonPress:
           recalcModelView = GL_TRUE;
           switch (event.xbutton.button)
@@ -224,36 +275,82 @@ void Simulator::run()
               break;
           }
           break;
+
+            case MotionNotify:
+                {
+
+
+                    break;
+                }
+
         case ConfigureNotify:
-          glViewport(0, 0, event.xconfigure.width,
-                     event.xconfigure.height);
+
+            updateRatio = true;
+            width = event.xconfigure.width;
+            height = event.xconfigure.height;
+          //glViewport(0, 0, event.xconfigure.width, event.xconfigure.height);
           /* fall through... */
-        /*case Expose:
+        case Expose:
           needRedraw = GL_TRUE;
           break;
       }
-    } while(XPending(dpy)); /* loop to compress events */
+    }// while(XPending(dpy)); /* loop to compress events */
+
 
     recalcModelView = GL_TRUE;
     //if (recalcModelView)
     {
+    //if (updateRatio)
+      {
+          glMatrixMode(GL_PROJECTION);
+          glLoadIdentity();
+          updateRatio = false;
+          float screenRatio = width / height * 2.0;
+          glViewport(0,0,width,height);
+          glFrustum(-1.0 * screenRatio, 1.0 * screenRatio, -1.0, 1.0, 20.0, 1000.0);
+          glTranslatef(0,0,-20);
+      }
+
+
+
       glMatrixMode(GL_MODELVIEW);
 
       /* reset modelview matrix to the identity matrix */
       glLoadIdentity();
+
+
+
         glClearColor(1,1,1,1);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
       /* move the camera back three units */
-      glTranslatef(0,0,-20);
-      glRotatef(-90,1,0,0);
-      glTranslatef(0.0, 100.0, 0.0);
-      //glRotatef(90,0,0,1);
+
+
+      //glTranslatef(cameraPos.x, cameraPos.y, cameraPos.z);
+        //glRotatef(cameraRot.y, 1,0,0);
+        //glRotatef(cameraRot.x, 0,1,0);
+
+        //glTranslatef(-cameraPos.x,-cameraPos.y,-cameraPos.z);
+        //glTranslatef(0,-xAngle,0);
+      //glTranslatef(0.0, -xAngle, 0.0);
+    //glRotatef(xAngle*10,1,0,0);
+        //cout<<xAngle<<endl;
+        glRotatef(90,1,0,0);
+        glRotatef(cameraRot.y, 1,0,0);
+        glRotatef(cameraRot.x, 0,1,0);
+        glTranslatef(0,-100,0);
+
+      glTranslatef(cameraPos.x, cameraPos.y, cameraPos.z);
+
+      glScalef(1,1,-1);
+      //glRotatef(cameraRot.x, 0,1,0);
+      //glRotatef(camer11aRot.y, 1,0,0);
 
 
       /* rotate by X, Y, and Z angles */
-      //glRotatef(xAngle, 0.1, 0.1, 0.0);
-      /*glRotatef(yAngle, 0.0, 0.1, 0.0);
+      /*glRotatef(xAngle, 0.1, 0.1, 0.0);
+      glRotatef(yAngle, 0.0, 0.1, 0.0);
       glRotatef(zAngle, 0.0, 0.0, 1.0);*/
-      //xAngle +=0.1;
+      xAngle +=0.1;
 
       recalcModelView = GL_FALSE;
       needRedraw = GL_TRUE;
@@ -275,6 +372,9 @@ void Simulator::run()
         int secE = lastTime.tv_sec * 1000000 + lastTime.tv_usec;
         float delta = secB - secE;
         delta /= 1000000.0;
+
+        //moveCamera(delta);
+
         delta *= MULTIPLY_TIME;
         if (delta > MAX_DELTA * MULTIPLY_TIME) delta = MAX_DELTA * MULTIPLY_TIME;
         if (delta > 0.4) delta = 0.4;
@@ -289,6 +389,80 @@ void Simulator::run()
       needRedraw = GL_FALSE;
     }
   }
+}
+
+void Simulator::moveCamera(float delta)
+{
+    float multiplyMove=CAMERA_VELOCITY;
+    if(isKeyPressed(XK_Shift_L))multiplyMove *= 5;
+
+    multiplyMove *= delta;
+
+    if(isKeyPressed('W'))
+    {
+        cameraPos.z+=cos( cameraRot.x * M_PI / 180 )/10*multiplyMove;
+        cameraPos.x-=sin( cameraRot.x * M_PI / 180 )/10*multiplyMove;
+        cameraPos.y+=atan(cameraRot.y*M_PI/180)/10*multiplyMove;
+    }
+    if(isKeyPressed('S'))
+    {
+        cameraPos.z+=cos( cameraRot.x * M_PI / 180 )/10*multiplyMove*-1;
+        cameraPos.x-=sin( cameraRot.x * M_PI / 180 )/10*multiplyMove*-1;
+        cameraPos.y-=atan(cameraRot.y*M_PI/180)/10*multiplyMove;
+    }
+    if(isKeyPressed('A'))
+    {
+        cameraPos.z+=cos( (cameraRot.x+270) * M_PI / 180 )/10*multiplyMove;
+        cameraPos.x-=sin( (cameraRot.x+270) * M_PI / 180 )/10*multiplyMove;
+    }
+    if(isKeyPressed('D'))
+    {
+        cameraPos.z+=cos( (cameraRot.x+90) * M_PI / 180 )/10*multiplyMove;
+        cameraPos.x-=sin( (cameraRot.x+90) * M_PI / 180 )/10*multiplyMove;
+    }
+}
+
+void Simulator::moveCamera2(char c)
+{
+    float multiplyMove=100;
+    //if(isKeyPressed(XK_Shift_L))multiplyMove *= 5;
+
+    //multiplyMove *= delta;
+
+    if(c=='W' || c=='w')
+    {
+        cameraPos.z+=cos( cameraRot.x * M_PI / 180 )/10*multiplyMove;
+        cameraPos.x-=sin( cameraRot.x * M_PI / 180 )/10*multiplyMove;
+        cameraPos.y+=atan(cameraRot.y*M_PI/180)/10*multiplyMove;
+    }
+    if(c=='S'||c=='s')
+    {
+        cameraPos.z+=cos( cameraRot.x * M_PI / 180 )/10*multiplyMove*-1;
+        cameraPos.x-=sin( cameraRot.x * M_PI / 180 )/10*multiplyMove*-1;
+        cameraPos.y-=atan(cameraRot.y*M_PI/180)/10*multiplyMove;
+    }
+    if(c=='A'||c=='a')
+    {
+        cameraPos.z+=cos( (cameraRot.x+270) * M_PI / 180 )/10*multiplyMove;
+        cameraPos.x-=sin( (cameraRot.x+270) * M_PI / 180 )/10*multiplyMove;
+    }
+    if(c=='D'||c=='d')
+    {
+        cameraPos.z+=cos( (cameraRot.x+90) * M_PI / 180 )/10*multiplyMove;
+        cameraPos.x-=sin( (cameraRot.x+90) * M_PI / 180 )/10*multiplyMove;
+    }
+}
+
+bool Simulator::isKeyPressed(long k)
+{
+    if (k<256)
+    {
+        return pressedKey[k];
+    }
+
+    if (k == XK_Shift_L) return pressedShift;
+
+    return false;
 }
 
 void Simulator::initLight()

@@ -144,7 +144,7 @@ void Cross::update(float delta)
         {
             if (streets[i].vehicles.size() > 0)
             {
-                if (streets[i].vehicles[0]->dstToCross > 0.8) continue;
+                //if (streets[i].vehicles[0]->dstToCross > 0.7) continue;
                 //if (streets[i].vehicles[0]->curCross == NULL) continue;
                 //cout<<streets[i].vehicles[0]->id << "    "<<streets[i].vehicles[0]->allowedToCross<<endl;
                 if (streets[i].vehicles[0]->dstToCross < smallestDstValue || smallestDstIndex < 0)
@@ -162,10 +162,11 @@ void Cross::update(float delta)
                 //if (which > 0)
                 for (int j=0;j<streets[i].yield[which].size();j++)
                 {
-                    cout<<id<<"   "<<streets[i].vehicles[0]->id<<"   "<<j<<"    "<<streets[streets[i].yield[which][j]].vehicles.size()<<endl;
+                    cout<<"YIELD:  "<<id<<"   "<<streets[i].vehicles[0]->id<<"   "<<j<<"    "<<streets[streets[i].yield[which][j]].vehicles.size()<<endl;
 
                     if (streets[streets[i].yield[which][j]].vehicles.size() > 0)
                     {
+                        cout<<"STOP"<<endl;//int i;cin>>i;
                         isOK = false;
                         break;
                     }
@@ -174,7 +175,10 @@ void Cross::update(float delta)
 
                 if (isOK)
                 {
+                    cout<<"ALLOWED:  "<<streets[i].vehicles[0]->id<<endl;
                     didAllow = true;
+
+                    if (streets[i].vehicles[0]->dstToCross > 0.7) continue;
 
                     streets[i].vehicles[0]->allowedToCross = true;
                     streets[i].vehicles.erase(streets[i].vehicles.begin());

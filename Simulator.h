@@ -22,7 +22,8 @@ void registerNewObject(Simulator *engine, GameObject *go);
 
 #define MULTIPLY_TIME       1
 #define MAX_DELTA           0.15
-#define REAL_INT_MULTIPLY   5
+#define REAL_INT_MULTIPLY   2
+#define CAMERA_VELOCITY     10
 
 #include <vector>
 #include <fstream>
@@ -44,12 +45,22 @@ public:
     void loadRoad(std::string fileName);
     void loadPriority(std::string fileName);
     void run();
+
+    Vec3 cameraPos;
+    Vec3 cameraRot;
 private:
     void update(float delta);
     void registerObject(GameObject *go);
     void destroyObject(GameObject *go);
 
+    void moveCamera(float delta);
+    void moveCamera2(char c);
+    bool isKeyPressed(long k);
+
     GameObject* findObjectByName(std::string on);
+
+    bool pressedKey[256];
+    bool pressedShift;
 
     std::vector<GameObject*> objects;
 
@@ -65,11 +76,14 @@ private:
 
     static int width;
     static int height;
+    bool updateRatio;
 
     static Display   *dpy;
     static Window     win;
-    GLfloat    xAngle = 42.0, yAngle = 82.0, zAngle = 112.0;
+    GLfloat    xAngle = 0.0, yAngle = 82.0, zAngle = 112.0;
     static GLboolean  doubleBuffer;// = GL_TRUE;
+    //static XSetWindowAttributes swa;
+    static long eventMask;
 
     static void initLight();
 

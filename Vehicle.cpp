@@ -147,6 +147,7 @@ void Vehicle::update(float delta)
         if (curRoad->length - xPos < 2 && curCross == NULL)
         {
             //Cross *newCross
+            //cout<<"CHECK  "<<id<<endl;
 
             allowedToCross = false;
 
@@ -183,13 +184,13 @@ void Vehicle::update(float delta)
 
     //changing street at cross
 
-    /*if (id.compare("CAR_5GA1A") == 0 &&nextRoad!=NULL)
+    if (/*id.compare("CAR_5GA1A") == 0 &&*/nextRoad!=NULL)
     {
         cout<<id<<" "<<isLeavingRoad<< " ";
         cout<<(curCross!=NULL)<<" "<<(nextRoad!= NULL)<< " "<<allowedToCross<<"  "<<desiredTurn;
         //cout<<"adress: "<<nextRoad<<endl;
         cout<< " "<<nextRoad->freeSpace(direction)<<endl;
-    }*/
+    }
 
     if (!isLeavingRoad && curCross != NULL && nextRoad != NULL && allowedToCross && nextRoad->freeSpace(direction) > vehicleLength + remainDst)
     {
@@ -205,7 +206,7 @@ void Vehicle::update(float delta)
         isChanging = true;
         didReachCross = false;
 
-        //cout<<id<<" warunek"<<endl;
+        cout<<id<<" warunek"<<endl;
         //xPos = 0;
     }
 
@@ -272,6 +273,14 @@ void Vehicle::update(float delta)
             else
             {
                 nextRoadJoint = nextRoad->getEndJoint(curCross->streets[desiredTurn].direction);
+            }
+
+            if(backVeh != NULL)
+            {
+                backVeh->isFirstVeh = true;
+                backVeh->frontVeh = NULL;
+                //cout<<"prev veh: "<<backVeh->id<<"  "<<backVeh->frontVeh<<endl;
+                //int i;cin>>i;
             }
         }
         //cout<<"changing "<<s<<endl;
@@ -450,7 +459,16 @@ void Car::draw()
         setColor(0,1,1);
     }
 
-    drawCube(0.2,4,0.2);
+    /*if (curCross != NULL)
+    {
+        setColor(0,0,0);
+    }*/
+
+    //drawCube(0.2,4,0.2);
+    //glPushMatrix();
+    //glTranslatef(0,-1,0);
+    drawCube(0.2);
+    //glPopMatrix();
 
     /*glPushMatrix();
     glTranslatef(0.25,0,0);
