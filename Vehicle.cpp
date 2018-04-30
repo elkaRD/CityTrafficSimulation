@@ -7,7 +7,7 @@ int Vehicle::numVeh = 0;
 
 Vehicle::Vehicle(Road *spawnRoad)
 {
-    debugstop = false;
+    //debugstop = false;
 
     numVeh++;
 
@@ -46,7 +46,7 @@ Vehicle::Vehicle(Road *spawnRoad)
     frontVeh = NULL;
     isFirstVeh = true;
 
-    if (curRoad->vehiclesBeg.size() > 0 && !curRoad->vehiclesBeg.back()->isChanging)
+    if (curRoad->vehiclesBeg.size() > 0 /*&& !curRoad->vehiclesBeg.back()->isChanging*/)
     {
         isFirstVeh = false;
         frontVeh = curRoad->vehiclesBeg.back();
@@ -61,10 +61,11 @@ int kla = 0;
 
 void Vehicle::update(float delta)
 {
-    if (debugstop) return;
+    //if (debugstop) return;
 
     if (!isChanging && !didReachCross)
     {
+        //if (id.compare("CAR_3GA1A")==0)cout<<"             "<<id<<endl;
 
         xPos += velocity * delta;
 
@@ -84,6 +85,9 @@ void Vehicle::update(float delta)
             //velocity += acceleration * delta;
             isBraking = false;
         }
+
+        //if (id.compare("CAR_3GA1A")==0)cout<<"           "<<getDst()<<endl;
+        //if (id.compare("CAR_3GA1A")==0)cout<<"             "<<velocity<<endl;
 
         if (velocity < minV)
         {
@@ -142,7 +146,8 @@ void Vehicle::update(float delta)
         //cout<<id<<endl;
         if (curRoad->length - xPos < 2 && curCross == NULL)
         {
-            //Cross *newCross;
+            //Cross *newCross
+
             allowedToCross = false;
 
             if(direction)
@@ -310,6 +315,14 @@ void Vehicle::update(float delta)
 
             if (s>=1)
             {
+                if(backVeh != NULL)
+                {
+                    backVeh->isFirstVeh = true;
+                    backVeh->frontVeh = NULL;
+                    //cout<<"prev veh: "<<backVeh->id<<"  "<<backVeh->frontVeh<<endl;
+                    //int i;cin>>i;
+                }
+
                 if (direction)
                 {
                     curRoad->vehiclesBeg.pop();
@@ -361,7 +374,7 @@ void Vehicle::update(float delta)
 
                 if (direction)
                 {
-                    if (curRoad->vehiclesBeg.size() > 0 && !curRoad->vehiclesBeg.back()->isChanging)
+                    if (curRoad->vehiclesBeg.size() > 0 /*&& !curRoad->vehiclesBeg.back()->isChanging*/)
                     {
                         isFirstVeh = false;
                         frontVeh = curRoad->vehiclesBeg.back();
@@ -370,7 +383,7 @@ void Vehicle::update(float delta)
                 }
                 else
                 {
-                    if (curRoad->vehiclesEnd.size() > 0 && !curRoad->vehiclesEnd.back()->isChanging)
+                    if (curRoad->vehiclesEnd.size() > 0 /*&& !curRoad->vehiclesEnd.back()->isChanging*/)
                     {
                         isFirstVeh = false;
                         frontVeh = curRoad->vehiclesEnd.back();
@@ -398,6 +411,7 @@ void Vehicle::update(float delta)
 float Vehicle::getDst()
 {
     //cout<<"getdst  "<<id<<"  "<<frontVeh<<endl;
+    //if (id.compare("CAR_3GA1A")==0 && frontVeh != NULL)cout<<"          "<<curRoad->length<<"   "<<frontVeh->xPos<<frontVeh->id<<endl;
     if (frontVeh != NULL)
         return frontVeh->xPos - xPos;
 
