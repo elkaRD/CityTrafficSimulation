@@ -184,8 +184,8 @@ Simulator::Simulator()
         //todo throw
     }
 
-    cameraPos = Vec3(0,0,0);
-    cameraRot = Vec3(90,0,0);
+    cameraPos = Vec3(0,100,0);
+    cameraRot = Vec3(0,90,0);
 }
 
 void Simulator::run()
@@ -334,12 +334,12 @@ void Simulator::run()
       //glTranslatef(0.0, -xAngle, 0.0);
     //glRotatef(xAngle*10,1,0,0);
         //cout<<xAngle<<endl;
-        glRotatef(90,1,0,0);
+        //glRotatef(90,1,0,0);
         glRotatef(cameraRot.y, 1,0,0);
         glRotatef(cameraRot.x, 0,1,0);
-        glTranslatef(0,-100,0);
+        //glTranslatef(0,-100,0);
 
-      glTranslatef(cameraPos.x, cameraPos.y, cameraPos.z);
+      glTranslatef(-cameraPos.x, -cameraPos.y, -cameraPos.z);
 
       glScalef(1,1,-1);
       //glRotatef(cameraRot.x, 0,1,0);
