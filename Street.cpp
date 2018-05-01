@@ -168,7 +168,7 @@ void Cross::update(float delta)
 
                     if (streets[streets[i].yield[which][j]].vehicles.size() > 0)
                     {
-                        cout<<id<<"  "<<streets[i].vehicles[0]->id<<"  STOP  "<<streets[streets[i].yield[which][j]].vehicles[0]->id<<endl;//int i;cin>>i;
+                        //cout<<id<<"  "<<streets[i].vehicles[0]->id<<"  STOP  "<<streets[streets[i].yield[which][j]].vehicles[0]->id<<endl;//int i;cin>>i;
                         isOK = false;
                         break;
                     }

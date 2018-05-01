@@ -23,7 +23,7 @@ void registerNewObject(Simulator *engine, GameObject *go);
 #define MULTIPLY_TIME       1
 #define MAX_DELTA           0.15
 #define REAL_INT_MULTIPLY   3
-#define CAMERA_VELOCITY     10
+#define CAMERA_VELOCITY     1
 
 #include <vector>
 #include <fstream>
@@ -61,6 +61,9 @@ private:
 
     bool pressedKey[256];
     bool pressedShift;
+
+    int prevMouseX;
+    int prevMouseY;
 
     std::vector<GameObject*> objects;
 

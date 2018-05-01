@@ -187,6 +187,7 @@ void Vehicle::update(float delta)
 
                         //blinker = rotateDirection(curRoad->direction.angleXZ(), nextRoad->direction.angleXZ());
                         blinker = rotateDirection(begRot, endRot);
+                        if (curCross->streets.size() == 2) blinker = 0;
 
                         //cout<<id<<"  desired road: "<<nextRoad->id<<endl;
 
@@ -224,7 +225,7 @@ void Vehicle::update(float delta)
         isChanging = true;
         didReachCross = false;
 
-        cout<<curCross->id<<"  "<<id<<" warunek"<<endl;
+        //cout<<curCross->id<<"  "<<id<<" warunek"<<endl;
         //xPos = 0;
     }
 

@@ -184,7 +184,7 @@ Simulator::Simulator()
         //todo throw
     }
 
-    cameraPos = Vec3(0,100,0);
+    cameraPos = Vec3(0,20,0);
     cameraRot = Vec3(0,90,0);
 }
 
@@ -225,7 +225,11 @@ void Simulator::run()
             exit(0);
 
             if (buffer[0] < 256)
-            pressedKey[buffer[0]]=true;
+                pressedKey[buffer[0]]=true;
+
+                cout<<"key pressed           sdfdsf"<<endl;
+
+                moveCamera(0.016);
 
             if (keysym == (KeySym)XK_Shift_L) pressedShift = true;
 
@@ -251,19 +255,35 @@ void Simulator::run()
 
             //cout<<buffer[0]<<"   "<<keysym<<endl;
 
-            switch(buffer[0])
+            /*switch(buffer[0])
             {
-                case 'w':case 'W': buffer['W']=true; break;
-            }
+                case 'w':case 'W': pressedKey['W']=true; break;
+            }*/
 
-            moveCamera2(buffer[0]);
+            cout<<"before: "<<cameraPos<<endl;
 
-            for(int i=0;i<256;i++) buffer[i]=false;
+            //moveCamera(0.016);
 
+            cout<<"after: "<<cameraPos<<endl;
+            cout<<"after all: "<<cameraPos<<endl;
+            cout<<"after all: "<<cameraPos<<endl;
+
+            for(int i=0;i<256;i++) pressedKey[i]=false;
+
+
+            cout<<"after all: "<<cameraPos<<endl;
                 break;
             }
 
+
         case ButtonPress:
+
+            XButtonEvent *bevent;
+            bevent = (XButtonEvent*) &event;
+
+            prevMouseX = bevent->x;
+            prevMouseY = bevent->y;
+
           recalcModelView = GL_TRUE;
           switch (event.xbutton.button)
           {
@@ -278,7 +298,22 @@ void Simulator::run()
 
             case MotionNotify:
                 {
+                    //KeySym     keysym;
+                      XMotionEvent *mevent;
+                      //char       buffer[1];
 
+                      mevent = (XMotionEvent *) &event;
+
+                      cout<<mevent->x<<"     "<<mevent->y<<endl;
+
+                      int dx = mevent->x - prevMouseX;
+                      int dy = mevent->y - prevMouseY;
+
+                      cameraRot.x += dx * 0.2;
+                      cameraRot.y += dy * 0.2;
+
+                      prevMouseX = mevent->x;
+                      prevMouseY = mevent->y;
 
                     break;
                 }
@@ -295,7 +330,7 @@ void Simulator::run()
           break;
       }
     }// while(XPending(dpy)); /* loop to compress events */
-
+cout<<"after all: "<<cameraPos<<endl;
 
     recalcModelView = GL_TRUE;
     //if (recalcModelView)
@@ -307,10 +342,10 @@ void Simulator::run()
           updateRatio = false;
           float screenRatio = width / height * 2.0;
           glViewport(0,0,width,height);
-          glFrustum(-1.0 * screenRatio, 1.0 * screenRatio, -1.0, 1.0, 20.0, 1000.0);
-          glTranslatef(0,0,-20);
+          glFrustum(-1.0 * screenRatio, 1.0 * screenRatio, -1.0, 1.0, 5.0, 1000.0);
+          glTranslatef(0,0,-5);
       }
-
+cout<<"after all: "<<cameraPos<<endl;
 
 
       glMatrixMode(GL_MODELVIEW);
@@ -387,6 +422,8 @@ void Simulator::run()
         lastTime = newTime;
       redraw();
       needRedraw = GL_FALSE;
+
+
     }
   }
 }
@@ -400,25 +437,29 @@ void Simulator::moveCamera(float delta)
 
     if(isKeyPressed('W'))
     {
-        cameraPos.z+=cos( cameraRot.x * M_PI / 180 )/10*multiplyMove;
-        cameraPos.x-=sin( cameraRot.x * M_PI / 180 )/10*multiplyMove;
-        cameraPos.y+=atan(cameraRot.y*M_PI/180)/10*multiplyMove;
+        cout<<"UP:  "<<cos( cameraRot.x * M_PI / 180 )<<"    "<<sin( cameraRot.x * M_PI / 180 )<<endl;
+        cameraPos.z+=cos( cameraRot.x * M_PI / 180 )*multiplyMove;
+        cameraPos.x-=sin( cameraRot.x * M_PI / 180 )*multiplyMove;
+        cameraPos.y+=atan(cameraRot.y*M_PI/180)*multiplyMove;
     }
     if(isKeyPressed('S'))
     {
-        cameraPos.z+=cos( cameraRot.x * M_PI / 180 )/10*multiplyMove*-1;
-        cameraPos.x-=sin( cameraRot.x * M_PI / 180 )/10*multiplyMove*-1;
-        cameraPos.y-=atan(cameraRot.y*M_PI/180)/10*multiplyMove;
+        cout<<"DOWN"<<endl;
+        cameraPos.z+=cos( cameraRot.x * M_PI / 180 )*multiplyMove*-1;
+        cameraPos.x-=sin( cameraRot.x * M_PI / 180 )*multiplyMove*-1;
+        cameraPos.y-=atan(cameraRot.y*M_PI/180)*multiplyMove;
     }
     if(isKeyPressed('A'))
     {
-        cameraPos.z+=cos( (cameraRot.x+270) * M_PI / 180 )/10*multiplyMove;
-        cameraPos.x-=sin( (cameraRot.x+270) * M_PI / 180 )/10*multiplyMove;
+        cout<<"LEFT"<<endl;
+        cameraPos.z+=cos( (cameraRot.x+270) * M_PI / 180 )*multiplyMove;
+        cameraPos.x-=sin( (cameraRot.x+270) * M_PI / 180 )*multiplyMove;
     }
     if(isKeyPressed('D'))
     {
-        cameraPos.z+=cos( (cameraRot.x+90) * M_PI / 180 )/10*multiplyMove;
-        cameraPos.x-=sin( (cameraRot.x+90) * M_PI / 180 )/10*multiplyMove;
+        cout<<"RIGHT"<<endl;
+        cameraPos.z+=cos( (cameraRot.x+90) * M_PI / 180 )*multiplyMove;
+        cameraPos.x-=sin( (cameraRot.x+90) * M_PI / 180 )*multiplyMove;
     }
 }
 
@@ -429,11 +470,16 @@ void Simulator::moveCamera2(char c)
 
     //multiplyMove *= delta;
 
+    cout<<cameraPos<<endl;
+
     if(c=='W' || c=='w')
     {
+        cout<<"UP  "<<cos( cameraRot.x * M_PI / 180 )<<endl;
         cameraPos.z+=cos( cameraRot.x * M_PI / 180 )/10*multiplyMove;
         cameraPos.x-=sin( cameraRot.x * M_PI / 180 )/10*multiplyMove;
         cameraPos.y+=atan(cameraRot.y*M_PI/180)/10*multiplyMove;
+
+        cout<<cameraPos<<endl;
     }
     if(c=='S'||c=='s')
     {
