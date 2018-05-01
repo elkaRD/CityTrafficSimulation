@@ -140,6 +140,8 @@ void Cross::update(float delta)
 
     if ((allowedVeh == 0 || streets.size() <= 2) && isSet)
     {
+        vector<int> indexesToPass;
+
         for (int i=0;i<streets.size();i++)
         {
             if (streets[i].vehicles.size() > 0)
@@ -166,7 +168,7 @@ void Cross::update(float delta)
 
                     if (streets[streets[i].yield[which][j]].vehicles.size() > 0)
                     {
-                        //cout<<"STOP"<<endl;//int i;cin>>i;
+                        cout<<id<<"  "<<streets[i].vehicles[0]->id<<"  STOP  "<<streets[streets[i].yield[which][j]].vehicles[0]->id<<endl;//int i;cin>>i;
                         isOK = false;
                         break;
                     }
@@ -176,11 +178,15 @@ void Cross::update(float delta)
                 if (isOK)
                 {
                     //cout<<"ALLOWED:  "<<streets[i].vehicles[0]->id<<endl;
+
+
                     didAllow = true;
 
                     if (streets[i].vehicles[0]->dstToCross > 0.7) continue;
 
-                    streets[i].vehicles[0]->allowedToCross = true;
+                    indexesToPass.push_back(i);
+
+                    /*streets[i].vehicles[0]->allowedToCross = true;
                     streets[i].vehicles.erase(streets[i].vehicles.begin());
                     allowedVeh++;
 
@@ -193,8 +199,26 @@ void Cross::update(float delta)
                             allowedVeh++;
                         }
                         else break;
-                    }
+                    }*/
                 }
+            }
+        }
+
+        for (int i=0;i<indexesToPass.size();i++)
+        {
+            streets[indexesToPass[i]].vehicles[0]->allowedToCross = true;
+            streets[indexesToPass[i]].vehicles.erase(streets[indexesToPass[i]].vehicles.begin());
+            allowedVeh++;
+
+            for (int j=1;j<streets[indexesToPass[i]].vehicles.size();j++)
+            {
+                if (streets[indexesToPass[i]].vehicles[j]->desiredTurn == streets[indexesToPass[i]].vehicles[0]->desiredTurn && streets[indexesToPass[i]].vehicles[j]->desiredTurn < 1)
+                {
+                    streets[indexesToPass[i]].vehicles[j]->allowedToCross = true;
+                    streets[indexesToPass[i]].vehicles.erase(streets[indexesToPass[i]].vehicles.begin());
+                    allowedVeh++;
+                }
+                else break;
             }
         }
 

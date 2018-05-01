@@ -208,7 +208,7 @@ void Vehicle::update(float delta)
         isChanging = true;
         didReachCross = false;
 
-        cout<<id<<" warunek"<<endl;
+        cout<<curCross->id<<"  "<<id<<" warunek"<<endl;
         //xPos = 0;
     }
 
@@ -243,7 +243,7 @@ void Vehicle::update(float delta)
         }
     }*/
 
-    if (id.compare("CAR_6GA1B") == 0) cout<<rot<<endl;
+    //if (id.compare("CAR_6GA1B") == 0) cout<<rot<<endl;
 
     if (isChanging)
     {
@@ -337,7 +337,7 @@ void Vehicle::update(float delta)
 
             rot = Vec3(0, lerpAngle(begRot, endRot, s), 0);
 
-            if (id.compare("CAR_6GA1B") == 0) cout<<begRot<<"   "<<endRot<<"  "<<lerpAngle(begRot, endRot, s)<<endl;
+            //if (id.compare("CAR_6GA1B") == 0) cout<<begRot<<"   "<<endRot<<"  "<<lerpAngle(begRot, endRot, s)<<endl;
 
             if (s>=1)
             {

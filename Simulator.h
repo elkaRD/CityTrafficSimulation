@@ -22,7 +22,7 @@ void registerNewObject(Simulator *engine, GameObject *go);
 
 #define MULTIPLY_TIME       1
 #define MAX_DELTA           0.15
-#define REAL_INT_MULTIPLY   2
+#define REAL_INT_MULTIPLY   3
 #define CAMERA_VELOCITY     10
 
 #include <vector>
