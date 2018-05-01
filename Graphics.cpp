@@ -37,6 +37,13 @@ Vec3 Vec3::cross(Vec3 u, Vec3 v)
     return Vec3(u.y*v.z - u.z*v.y, u.z*v.x - u.x*v.z, u.x*v.y - u.y*v.x);
 }
 
+float Vec3::angleXZ()
+{
+    float t = atan2(z, x) * 180 / M_PI;
+    if (t >= 360) t -= 360;
+    return -t;
+}
+
 void Vec3::normalize()
 {
     float dst = sqrt(x*x+y*y+z*z);
@@ -184,4 +191,57 @@ void Graphics::drawLine(Vec3 b, Vec3 e)
 void Graphics::setColor(float r, float g, float b)
 {
     glColor3f(r,g,b);
+}
+
+float Graphics::lerp(float a, float b, float s)
+{
+    float d = b - a;
+    return a + d * s;
+}
+
+float Graphics::lerpAngle(float a, float b, float s)
+{
+    /*while (a<0) a+=360;
+    while (b<0) b+=360;
+
+    if (a > b)
+    {
+        float t = a;
+        a = b;
+        b = t;
+    }
+
+
+
+    while (a>360) a-=360;
+    while (b>360) b-=360;
+    float temp = 360 - b + a;
+    float diff = b - a;
+
+    if (diff < temp) return lerp(a, b, s);
+
+    return lerp(b-360, a, s);*/
+
+    while (a<0) a+=360;
+    while (b<0) b+=360;
+    while (a>=360) a-=360;
+    while (b>=360) b-=360;
+
+    //if (a == 0 && signbit(a)) a *= -1;
+    //if (b == 0 && signbit(b)) b *= -1;
+
+    float diff = abs(b - a);
+    float temp = 360 - diff;
+
+    if (diff < temp)
+    {
+        //float d = abs(a-b);
+        if (a<b)
+            return a + diff * s;
+        return a - diff * s;
+    }
+
+    if (a<b)
+        return a - temp * s;
+    return a + temp * s;
 }

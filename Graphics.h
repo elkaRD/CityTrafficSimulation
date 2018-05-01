@@ -18,6 +18,8 @@ public:
     static Vec3 lerp(Vec3 b, Vec3 e, float s);
     static Vec3 cross(Vec3 u, Vec3 v);
 
+    float angleXZ();
+
     void normalize();
 
     Vec3& operator += (const Vec3& right);
@@ -45,6 +47,9 @@ protected: public:
     void drawCube(float x, float y, float z);
     void drawLine(Vec3 begP, Vec3 endP);
     void setColor(float r, float g, float b);
+
+    float lerp(float a, float b, float s);
+    float lerpAngle(float a, float b, float s);
 };
 
 #endif // GRAPHICS_H

@@ -46,6 +46,8 @@ Vehicle::Vehicle(Road *spawnRoad)
     frontVeh = NULL;
     isFirstVeh = true;
 
+    rot = Vec3(0, curRoad->direction.angleXZ(), 0);
+
     if (curRoad->vehiclesBeg.size() > 0 /*&& !curRoad->vehiclesBeg.back()->isChanging*/)
     {
         isFirstVeh = false;
@@ -184,13 +186,13 @@ void Vehicle::update(float delta)
 
     //changing street at cross
 
-    if (/*id.compare("CAR_5GA1A") == 0 &&*/nextRoad!=NULL)
+    /*if (nextRoad!=NULL)
     {
         cout<<id<<" "<<isLeavingRoad<< " ";
         cout<<(curCross!=NULL)<<" "<<(nextRoad!= NULL)<< " "<<allowedToCross<<"  "<<desiredTurn;
         //cout<<"adress: "<<nextRoad<<endl;
         cout<< " "<<nextRoad->freeSpace(direction)<<endl;
-    }
+    }*/
 
     if (!isLeavingRoad && curCross != NULL && nextRoad != NULL && allowedToCross && nextRoad->freeSpace(direction) > vehicleLength + remainDst)
     {
@@ -241,6 +243,8 @@ void Vehicle::update(float delta)
         }
     }*/
 
+    if (id.compare("CAR_6GA1B") == 0) cout<<rot<<endl;
+
     if (isChanging)
     {
         xPos += cornerVelocity * delta;
@@ -282,6 +286,15 @@ void Vehicle::update(float delta)
                 //cout<<"prev veh: "<<backVeh->id<<"  "<<backVeh->frontVeh<<endl;
                 //int i;cin>>i;
             }
+
+            begRot = curRoad->direction.angleXZ();
+            endRot = nextRoad->direction.angleXZ();
+
+            if (!direction) begRot += 180;
+            if (!curCross->streets[desiredTurn].direction) endRot += 180;
+
+            //cout<<begRot<<"    "<<endRot<<endl;
+            //int r;cin>>r;
         }
         //cout<<"changing "<<s<<endl;
         //didReachCross = true;
@@ -321,6 +334,10 @@ void Vehicle::update(float delta)
                 //pos = Vec3::lerp(curRoad->begPos, curCross->streets[desiredTurn].jointPos, s);
                 pos  = Vec3::lerp(curRoad->getBegJoint(direction), nextRoadJoint, s);
             }
+
+            rot = Vec3(0, lerpAngle(begRot, endRot, s), 0);
+
+            if (id.compare("CAR_6GA1B") == 0) cout<<begRot<<"   "<<endRot<<"  "<<lerpAngle(begRot, endRot, s)<<endl;
 
             if (s>=1)
             {
@@ -465,10 +482,13 @@ void Car::draw()
     }*/
 
     //drawCube(0.2,4,0.2);
-    //glPushMatrix();
-    //glTranslatef(0,-1,0);
-    drawCube(0.2);
-    //glPopMatrix();
+    glPushMatrix();
+
+    drawCube(0.2,0.2,0.15);
+    glTranslatef(0.2,0,0);
+    setColor(0,0,0);
+    drawCube(0.1);
+    glPopMatrix();
 
     /*glPushMatrix();
     glTranslatef(0.25,0,0);

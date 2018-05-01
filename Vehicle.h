@@ -44,6 +44,9 @@ public:
 
     Vec3 nextRoadJoint;
 
+    float begRot;
+    float endRot;
+
     Road *curRoad;
     Cross *curCross;
     Vehicle *frontVeh;
