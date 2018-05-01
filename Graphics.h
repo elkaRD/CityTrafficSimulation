@@ -50,6 +50,7 @@ protected: public:
 
     float lerp(float a, float b, float s);
     float lerpAngle(float a, float b, float s);
+    int rotateDirection(float a, float b);
 };
 
 #endif // GRAPHICS_H

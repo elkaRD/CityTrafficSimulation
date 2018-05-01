@@ -29,6 +29,8 @@ Vehicle::Vehicle(Road *spawnRoad)
     direction = true;
     desiredTurn = 0;
 
+    blinker = 0;
+
 
     gameEngine = spawnRoad->gameEngine;
 
@@ -162,25 +164,39 @@ void Vehicle::update(float delta)
                 curCross = curRoad->crossBeg;
             }
 
+            blinker = 0;
+
             if (curCross != NULL)
-            for (int i=0;i<curCross->streets.size();i++)
             {
-                if (curCross->streets[i].street == curRoad)
+                for (int i=0;i<curCross->streets.size();i++)
                 {
-                    desiredTurn = randInt(0, curCross->streets.size()-1);
-                    if (desiredTurn == i) desiredTurn = (desiredTurn+1) % curCross->streets.size();
+                    if (curCross->streets[i].street == curRoad)
+                    {
+                        desiredTurn = randInt(0, curCross->streets.size()-1);
+                        if (desiredTurn == i) desiredTurn = (desiredTurn+1) % curCross->streets.size();
 
-                    if (curCross->streets.size() == 2) desiredTurn = (i+1) % 2;
+                        if (curCross->streets.size() == 2) desiredTurn = (i+1) % 2;
 
-                    nextRoad = curCross->streets[desiredTurn].street;
+                        nextRoad = curCross->streets[desiredTurn].street;
 
-                    //cout<<id<<"  desired road: "<<nextRoad->id<<endl;
+                        begRot = curRoad->direction.angleXZ();
+                        endRot = nextRoad->direction.angleXZ();
 
-                    curCross->streets[i].vehicles.push_back(this);
+                        if (!direction) begRot += 180;
+                        if (!curCross->streets[desiredTurn].direction) endRot += 180;
 
-                    break;
+                        //blinker = rotateDirection(curRoad->direction.angleXZ(), nextRoad->direction.angleXZ());
+                        blinker = rotateDirection(begRot, endRot);
+
+                        //cout<<id<<"  desired road: "<<nextRoad->id<<endl;
+
+                        curCross->streets[i].vehicles.push_back(this);
+
+                        break;
+                    }
                 }
             }
+
         }
     }
 
@@ -293,7 +309,7 @@ void Vehicle::update(float delta)
             if (!direction) begRot += 180;
             if (!curCross->streets[desiredTurn].direction) endRot += 180;
 
-            //cout<<begRot<<"    "<<endRot<<endl;
+            //cout<<begRot<<"    "<<endRot<<"   "<<blinker<<endl;
             //int r;cin>>r;
         }
         //cout<<"changing "<<s<<endl;
@@ -341,6 +357,8 @@ void Vehicle::update(float delta)
 
             if (s>=1)
             {
+                blinker = 0;
+
                 if(backVeh != NULL)
                 {
                     backVeh->isFirstVeh = true;
@@ -457,6 +475,24 @@ void Car::update(float delta)
 
 void Car::draw()
 {
+
+    if (blinker < 0)
+    {
+        glPushMatrix();
+        glTranslatef(0,0,-0.1);
+        setColor(1,0.647,0);
+        drawCube(0.1);
+        glPopMatrix();
+    }
+    if (blinker > 0)
+    {
+        glPushMatrix();
+        glTranslatef(0,0,0.1);
+        setColor(1,0.647,0);
+        drawCube(0.1);
+        glPopMatrix();
+    }
+
     setColor(0,1,0);
 
     if (isBraking)
@@ -475,6 +511,8 @@ void Car::draw()
     {
         setColor(0,1,1);
     }
+
+
 
     /*if (curCross != NULL)
     {

@@ -245,3 +245,29 @@ float Graphics::lerpAngle(float a, float b, float s)
         return a - temp * s;
     return a + temp * s;
 }
+
+int Graphics::rotateDirection(float a, float b)
+{
+    while (a<0) a+=360;
+    while (b<0) b+=360;
+    while (a>=360) a-=360;
+    while (b>=360) b-=360;
+
+    float diff = abs(b - a);
+    float temp = 360 - diff;
+
+    //cout<<a<<"  "<<b<<"  diff:  "<<diff<<"   temp: "<<temp<<endl;
+    if (diff < 45 || temp < 45) return 0;
+
+    if (diff < temp)
+    {
+        //float d = abs(a-b);
+        if (a<b)
+            return -1;
+        return 1;
+    }
+
+    if (a<b)
+        return 1;
+    return -1;
+}

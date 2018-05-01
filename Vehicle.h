@@ -47,6 +47,8 @@ public:
     float begRot;
     float endRot;
 
+    int blinker;
+
     Road *curRoad;
     Cross *curCross;
     Vehicle *frontVeh;
