@@ -2,6 +2,8 @@
 #include<iostream>
 using namespace std;
 
+class Simulator;
+
 float Road::freeSpace(bool dir)
 {
     //if ()
@@ -136,7 +138,7 @@ void Cross::update(float delta)
     int smallestDstIndex = -1;
     float smallestDstValue;
 
-    //cout << id<< "    "<<allowedVeh<<endl;
+    //if(id.compare("SK4")==0) cout << id<< "    "<<allowedVeh<<endl;
 
     if ((allowedVeh == 0 || streets.size() <= 2) && isSet)
     {
@@ -159,7 +161,7 @@ void Cross::update(float delta)
                 //int which2 = streets[i].yield[which];
                 bool isOK = true;
 
-                //cout<<"test "<<id<<"   "<<streets[i].vehicles[0]->id<<": "<<which<< "    " << streets[i].yield.size()<<endl;
+                if (id.compare("SK4")==0) cout<<"test "<<allowedVeh<<"  "<<id<<"   "<<streets[i].vehicles[0]->id<<": "<<which<< "    " << streets[i].yield.size()<<endl;
 
                 //if (which > 0)
                 for (int j=0;j<streets[i].yield[which].size();j++)
@@ -464,8 +466,11 @@ Garage::Garage(Simulator *engine, Vec3 p, Cross *c)
     normal = Vec3::cross(Vec3(0,1,0), direction);
     normal.normalize();
 
-    curTime = 0;
-    frec = 5;
+    curTimeSpot = 0;
+    frecSpot = 5;
+
+    curTimeDelete = 0;
+    frecDelete = 5;
 }
 
 void Garage::draw()
@@ -481,16 +486,27 @@ void Garage::update(float delta)
     //if (vehiclesBeg.size() > 0)cout<< vehiclesBeg.back()->xPos <<endl;
     //8cout<<"veh size: "<<vehiclesBeg.size()<<endl;
     if (vehiclesBeg.size() == 0 || (vehiclesBeg.size() > 0 && vehiclesBeg.back()->xPos > 1))
-    curTime += delta;
-    if (curTime > frec)
+        curTimeSpot += delta;
+
+    if (curTimeSpot > frecSpot)
     {
         //cout<<"%%%%%%%"<<endl;
-        curTime = 0;
+        curTimeSpot = 0;
         spotCar();
+    }
+
+    if (vehiclesEnd.size() > 0)
+        curTimeDelete += delta;
+
+    if (curTimeDelete > frecDelete)
+    {
+        curTimeDelete = 0;
+        deleteCar();
     }
 }
 
 void registerNewObject(Simulator *engine, GameObject *go);
+void destroyNextObject(Simulator *engine, GameObject *go);
 
 string Garage::itos(int x)
 {
@@ -516,4 +532,21 @@ void Garage::spotCar()
     registerNewObject(gameEngine, temp);
 
     cout<<"spotted " << temp->id << " by "<<id<<endl;
+}
+
+void Garage::deleteCar()
+{
+    if (vehiclesEnd.size() > 0)
+    {
+        Vehicle *temp = vehiclesEnd.front();
+        vehiclesEnd.pop();
+
+        if(temp->backVeh != NULL)
+        {
+            temp->backVeh->isFirstVeh = true;
+            temp->backVeh->frontVeh = NULL;
+        }
+
+        destroyNextObject(gameEngine, temp);
+    }
 }

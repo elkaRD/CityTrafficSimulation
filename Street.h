@@ -106,13 +106,17 @@ public:
     //std::queue<Vehicle*> vehicles;
     //std::queue<Vehicle*> toDelete;
 
-    float frec;
-    float curTime;
+    float frecSpot;
+    float curTimeSpot;
+
+    float frecDelete;
+    float curTimeDelete;
 
     void draw();
     void update(float delta);
     std::string itos(int x);
     void spotCar();
+    void deleteCar();
 };
 
 #endif // STREET_H

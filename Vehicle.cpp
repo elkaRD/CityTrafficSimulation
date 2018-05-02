@@ -203,25 +203,27 @@ void Vehicle::update(float delta)
 
     //changing street at cross
 
-    /*if (nextRoad!=NULL)
+    if (nextRoad!=NULL && nextRoad->id.compare("GA1A") == 0)
     {
         cout<<id<<" "<<isLeavingRoad<< " ";
         cout<<(curCross!=NULL)<<" "<<(nextRoad!= NULL)<< " "<<allowedToCross<<"  "<<desiredTurn;
         //cout<<"adress: "<<nextRoad<<endl;
         cout<< " "<<nextRoad->freeSpace(direction)<<endl;
-    }*/
+
+        //int i;cin>>i;
+    }
 
     if (!isLeavingRoad && curCross != NULL && nextRoad != NULL && allowedToCross && nextRoad->freeSpace(direction) > vehicleLength + remainDst)
     {
         isLeavingRoad = true;
 
-        if(backVeh != NULL)
+        /*if(backVeh != NULL)
         {
             backVeh->isFirstVeh = true;
             backVeh->frontVeh = NULL;
             //cout<<"prev veh: "<<backVeh->id<<"  "<<backVeh->frontVeh<<endl;
             //int i;cin>>i;
-        }
+        }*/
         isChanging = true;
         didReachCross = false;
 

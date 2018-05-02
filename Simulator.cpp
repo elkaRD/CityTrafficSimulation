@@ -231,6 +231,12 @@ void Simulator::run()
 
                 moveCamera(0.016);
 
+                if(buffer[0] >= 'a' && buffer[0] <= 'z')
+                    pressedKey[buffer[0] - 32] = true;
+
+                if(buffer[0] >= 'A' && buffer[0] <= 'Z')
+                    pressedKey[buffer[0] + 32] = true;
+
             if (keysym == (KeySym)XK_Shift_L) pressedShift = true;
 
             //cout<<buffer[0]<<"   "<<keysym<<endl;
@@ -260,18 +266,18 @@ void Simulator::run()
                 case 'w':case 'W': pressedKey['W']=true; break;
             }*/
 
-            cout<<"before: "<<cameraPos<<endl;
+            //cout<<"before: "<<cameraPos<<endl;
 
             //moveCamera(0.016);
 
-            cout<<"after: "<<cameraPos<<endl;
-            cout<<"after all: "<<cameraPos<<endl;
-            cout<<"after all: "<<cameraPos<<endl;
+            //cout<<"after: "<<cameraPos<<endl;
+            //cout<<"after all: "<<cameraPos<<endl;
+            //cout<<"after all: "<<cameraPos<<endl;
 
             for(int i=0;i<256;i++) pressedKey[i]=false;
 
 
-            cout<<"after all: "<<cameraPos<<endl;
+            //cout<<"after all: "<<cameraPos<<endl;
                 break;
             }
 
@@ -304,7 +310,7 @@ void Simulator::run()
 
                       mevent = (XMotionEvent *) &event;
 
-                      cout<<mevent->x<<"     "<<mevent->y<<endl;
+                      //cout<<mevent->x<<"     "<<mevent->y<<endl;
 
                       int dx = mevent->x - prevMouseX;
                       int dy = mevent->y - prevMouseY;
@@ -330,7 +336,7 @@ void Simulator::run()
           break;
       }
     }// while(XPending(dpy)); /* loop to compress events */
-cout<<"after all: "<<cameraPos<<endl;
+//cout<<"after all: "<<cameraPos<<endl;
 
     recalcModelView = GL_TRUE;
     //if (recalcModelView)
@@ -345,7 +351,7 @@ cout<<"after all: "<<cameraPos<<endl;
           glFrustum(-1.0 * screenRatio, 1.0 * screenRatio, -1.0, 1.0, 5.0, 1000.0);
           glTranslatef(0,0,-5);
       }
-cout<<"after all: "<<cameraPos<<endl;
+//cout<<"after all: "<<cameraPos<<endl;
 
 
       glMatrixMode(GL_MODELVIEW);
@@ -460,6 +466,14 @@ void Simulator::moveCamera(float delta)
         cout<<"RIGHT"<<endl;
         cameraPos.z+=cos( (cameraRot.x+90) * M_PI / 180 )*multiplyMove;
         cameraPos.x-=sin( (cameraRot.x+90) * M_PI / 180 )*multiplyMove;
+    }
+    if(isKeyPressed('Q'))
+    {
+
+    }
+    if(isKeyPressed('E'))
+    {
+
     }
 }
 
@@ -684,9 +698,27 @@ void Simulator::registerObject(GameObject *go)
     objects.push_back(go);
 }
 
+void Simulator::destroyObject(GameObject *go)
+{
+    for(int i=0;i<objects.size();i++)
+    {
+        if (objects[i] == go)
+        {
+            delete go;
+            objects.erase(objects.begin() + i);
+            break;
+        }
+    }
+}
+
 void registerNewObject(Simulator *engine, GameObject *go)
 {
     engine->registerObject(go);
+}
+
+void destroyNextObject(Simulator *engine, GameObject *go)
+{
+    engine->destroyObject(go);
 }
 
 GameObject* Simulator::findObjectByName(string no)
