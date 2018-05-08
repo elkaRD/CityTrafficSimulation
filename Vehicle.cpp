@@ -30,7 +30,9 @@ Vehicle::Vehicle(Road *spawnRoad)
     desiredTurn = 0;
 
     blinker = 0;
-
+    blinkerTime = 0;
+    blinkerDuration  = randFloat(0.45,0.55);
+    blinkerLight = true;
 
     gameEngine = spawnRoad->gameEngine;
 
@@ -203,6 +205,9 @@ void Vehicle::update(float delta)
                         //blinker = rotateDirection(curRoad->direction.angleXZ(), nextRoad->direction.angleXZ());
                         blinker = rotateDirection(begRot, endRot);
                         if (curCross->streets.size() == 2) blinker = 0;
+
+                        blinkerTime = 0;
+                        blinkerLight = true;
 
                         //cout<<id<<"  desired road: "<<nextRoad->id<<endl;
 
@@ -480,6 +485,14 @@ void Vehicle::update(float delta)
 
             //cout<<"reachcross"<<endl;
     }
+
+    blinkerTime += delta;
+
+    if (blinkerTime > blinkerDuration)
+    {
+        blinkerTime = 0;
+        blinkerLight = !blinkerLight;
+    }
 }
 
 float Vehicle::getDst()
@@ -506,7 +519,7 @@ void Car::update(float delta)
 void Car::draw()
 {
 
-    if (blinker < 0)
+    if (blinker < 0 && blinkerLight)
     {
         glPushMatrix();
         glTranslatef(0,0.05,-0.038);
@@ -514,7 +527,7 @@ void Car::draw()
         drawCube(0.22,0.02,0.01);
         glPopMatrix();
     }
-    if (blinker > 0)
+    if (blinker > 0 && blinkerLight)
     {
         glPushMatrix();
         glTranslatef(0,0.05,0.038);

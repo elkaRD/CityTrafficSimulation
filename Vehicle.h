@@ -48,6 +48,9 @@ public:
     float endRot;
 
     int blinker;
+    float blinkerTime;
+    float blinkerDuration;
+    bool blinkerLight;
 
     Road *curRoad;
     Cross *curCross;
