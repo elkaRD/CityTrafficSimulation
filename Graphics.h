@@ -48,6 +48,10 @@ protected: public:
     void drawLine(Vec3 begP, Vec3 endP);
     void setColor(float r, float g, float b);
 
+    void drawVertex(Vec3 a);
+    void drawQuad(Vec3 a1, Vec3 a2, Vec3 a3, Vec3 a4);
+    void drawRoof();
+
     float lerp(float a, float b, float s);
     float lerpAngle(float a, float b, float s);
     int rotateDirection(float a, float b);

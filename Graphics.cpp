@@ -193,6 +193,48 @@ void Graphics::setColor(float r, float g, float b)
     glColor3f(r,g,b);
 }
 
+void Graphics::drawVertex(Vec3 a)
+{
+    glVertex3f(a.x,a.y,a.z);
+}
+
+void Graphics::drawQuad(Vec3 a1, Vec3 a2, Vec3 a3, Vec3 a4)
+{
+    drawVertex(a1);
+    drawVertex(a2);
+    drawVertex(a3);
+    drawVertex(a4);
+}
+
+void Graphics::drawRoof()
+{
+    Vec3 a1(0,0,-0.05);
+    Vec3 a2(0.025,0.05,-0.0375);
+    Vec3 a3(0.075,0.05,-0.0375);
+    Vec3 a4(0.1125,0,-0.05);
+    Vec3 a5(0,0,0.05);
+    Vec3 a6(0.025,0.05,0.0375);
+    Vec3 a7(0.075,0.05,0.0375);
+    Vec3 a8(0.1125,0,0.05);
+
+    glPushMatrix();
+    glTranslatef(-0.075, 0.025, 0);
+    glBegin(GL_QUADS);
+
+    drawQuad(a2,a6,a7,a3);
+
+    glColor3f(0,1,1);
+
+    drawQuad(a1,a2,a3,a4);
+    drawQuad(a1,a5,a6,a2);
+    drawQuad(a5,a8,a7,a6);
+    drawQuad(a8,a4,a3,a7);
+
+
+    glEnd();
+    glPopMatrix();
+}
+
 float Graphics::lerp(float a, float b, float s)
 {
     float d = b - a;

@@ -10,20 +10,20 @@ float Road::freeSpace(bool dir)
 
     if (dir)
     {
-        cout<<"freespace1"<<endl;
+        //cout<<"freespace1"<<endl;
         if (vehiclesBeg.size() == 0) return length;
 
-        cout<<"freespace2"<<endl;
-        cout<<"freespace2 :"<<vehiclesBeg.back()->idnumber<<"  "<<vehiclesBeg.back()->xPos<<"  "<<vehiclesBeg.back()->pos<<endl;
+        //cout<<"freespace2"<<endl;
+        //cout<<"freespace2 :"<<vehiclesBeg.back()->idnumber<<"  "<<vehiclesBeg.back()->xPos<<"  "<<vehiclesBeg.back()->pos<<endl;
 
         return vehiclesBeg.back()->xPos;
     }
 
-    cout<<"freespace3"<<endl;
+    //cout<<"freespace3"<<endl;
 
     if (vehiclesEnd.size() == 0) return length;
 
-    cout<<"freespace4"<<endl;
+    //cout<<"freespace4"<<endl;
     //cout<<"freespace4: "<<vehiclesEnd.back()->id<<"  "<<vehiclesEnd.back()->xPos<< "  "<<vehiclesEnd.back()->pos<<endl;
 
     //cout<<"debug: "<<id<<"  "<<vehiclesEnd.back()->id<<"  "<<vehiclesEnd.back()->xPos <<endl;
@@ -521,7 +521,7 @@ int number = 0;
 void Garage::spotCar()
 {
     number ++;
-    //if (number > 70) return;
+    if (number > 1) return;
     Vehicle *temp;
     temp = new Car(this);
     temp->curRoad = this;

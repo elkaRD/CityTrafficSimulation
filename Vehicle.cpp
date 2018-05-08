@@ -71,6 +71,8 @@ void Vehicle::update(float delta)
     {
         //if (id.compare("CAR_3GA1A")==0)cout<<"             "<<id<<endl;
 
+        float prevVelocity = velocity;
+
         xPos += velocity * delta;
 
         float posDiff = getDst() - vehicleLength / 2.0 - remainDst;
@@ -80,18 +82,29 @@ void Vehicle::update(float delta)
         {
             velocity = posDiff - acceleration * stopTime * stopTime / 2.0;
             velocity /= stopTime;
-            isBraking = true;
+            //isBraking = true;
         }
         else if (posDiff > newDst)
         {
             velocity = posDiff - acceleration * stopTime * stopTime / 2.0;
             velocity /= stopTime;
             //velocity += acceleration * delta;
-            isBraking = false;
+            //isBraking = false;
         }
 
         //if (id.compare("CAR_3GA1A")==0)cout<<"           "<<getDst()<<endl;
         //if (id.compare("CAR_3GA1A")==0)cout<<"             "<<velocity<<endl;
+
+        float braking = (velocity - prevVelocity) / delta;
+        //cout<<"BRAKE:  "<<braking<<endl;
+        if (braking < -0.3)
+        {
+            isBraking = true;
+        }
+        else
+        {
+            isBraking = false;
+        }
 
         if (velocity < minV)
         {
@@ -103,6 +116,8 @@ void Vehicle::update(float delta)
         {
             velocity = maxV;
         }
+
+
 
         //cout << "         "<<velocity<<endl;
 
@@ -494,17 +509,17 @@ void Car::draw()
     if (blinker < 0)
     {
         glPushMatrix();
-        glTranslatef(0,0,-0.1);
+        glTranslatef(0,0.05,-0.038);
         setColor(1,0.647,0);
-        drawCube(0.1);
+        drawCube(0.22,0.02,0.01);
         glPopMatrix();
     }
     if (blinker > 0)
     {
         glPushMatrix();
-        glTranslatef(0,0,0.1);
+        glTranslatef(0,0.05,0.038);
         setColor(1,0.647,0);
-        drawCube(0.1);
+        drawCube(0.22,0.02,0.01);
         glPopMatrix();
     }
 
@@ -545,11 +560,13 @@ void Car::draw()
 
     //drawCube(0.2,4,0.2);
     glPushMatrix();
+    glTranslatef(0,0.05,0);
+    drawCube(0.2,0.05,0.1);
+    drawRoof();
 
-    drawCube(0.2,0.2,0.15);
-    glTranslatef(0.2,0,0);
-    setColor(0,0,0);
-    drawCube(0.1);
+    //glTranslatef(0.2,0,0);
+    //setColor(0,0,0);
+    //drawCube(0.1);
     glPopMatrix();
 
     /*glPushMatrix();
