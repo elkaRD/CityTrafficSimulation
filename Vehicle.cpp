@@ -213,22 +213,34 @@ void Vehicle::update(float delta)
         //int i;cin>>i;
     }
 
-    if (!isLeavingRoad && curCross != NULL && nextRoad != NULL && allowedToCross && nextRoad->freeSpace(direction) > vehicleLength + remainDst)
+    if (!isLeavingRoad && curCross != NULL && nextRoad != NULL && allowedToCross/* && nextRoad->freeSpace(direction) > vehicleLength + remainDst*/)
     {
-        isLeavingRoad = true;
-
-        /*if(backVeh != NULL)
+        for(int i=0;i<curCross->streets.size();i++)
         {
-            backVeh->isFirstVeh = true;
-            backVeh->frontVeh = NULL;
-            //cout<<"prev veh: "<<backVeh->id<<"  "<<backVeh->frontVeh<<endl;
-            //int i;cin>>i;
-        }*/
-        isChanging = true;
-        didReachCross = false;
+            if (curCross->streets[i].street == nextRoad)
+            {
+                if (nextRoad->freeSpace(curCross->streets[i].direction) > vehicleLength + remainDst)
+                {
 
-        //cout<<curCross->id<<"  "<<id<<" warunek"<<endl;
-        //xPos = 0;
+                    isLeavingRoad = true;
+
+                    /*if(backVeh != NULL)
+                    {
+                        backVeh->isFirstVeh = true;
+                        backVeh->frontVeh = NULL;
+                        //cout<<"prev veh: "<<backVeh->id<<"  "<<backVeh->frontVeh<<endl;
+                        //int i;cin>>i;
+                    }*/
+                    isChanging = true;
+                    didReachCross = false;
+                }
+
+                //cout<<curCross->id<<"  "<<id<<" warunek"<<endl;
+                //xPos = 0;
+
+                break;
+            }
+        }
     }
 
     /*if (isChanging && curRoad != NULL)
@@ -513,6 +525,15 @@ void Car::draw()
     if (isLeavingRoad)
     {
         setColor(0,1,1);
+    }
+
+    if (idnumber == 64)
+    {
+        setColor(1,0.667,0);
+    }
+    if (idnumber == 41)
+    {
+        setColor(0.7,0.5,0);
     }
 
 
