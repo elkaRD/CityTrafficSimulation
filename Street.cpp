@@ -11,24 +11,24 @@ float Road::freeSpace(bool dir)
     if (dir)
     {
         //cout<<"freespace1"<<endl;
-        if (vehiclesBeg.size() == 0) return length;
+        if (vehiclesBeg.size() == 0) return length - reservedSpaceBeg;
 
         //cout<<"freespace2"<<endl;
         //cout<<"freespace2 :"<<vehiclesBeg.back()->idnumber<<"  "<<vehiclesBeg.back()->xPos<<"  "<<vehiclesBeg.back()->pos<<endl;
 
-        return vehiclesBeg.back()->xPos;
+        return vehiclesBeg.back()->xPos - reservedSpaceBeg;
     }
 
     //cout<<"freespace3"<<endl;
 
-    if (vehiclesEnd.size() == 0) return length;
+    if (vehiclesEnd.size() == 0) return length - reservedSpaceEnd;
 
     //cout<<"freespace4"<<endl;
     //cout<<"freespace4: "<<vehiclesEnd.back()->id<<"  "<<vehiclesEnd.back()->xPos<< "  "<<vehiclesEnd.back()->pos<<endl;
 
     //cout<<"debug: "<<id<<"  "<<vehiclesEnd.back()->id<<"  "<<vehiclesEnd.back()->xPos <<endl;
 
-    return vehiclesEnd.back()->xPos;
+    return vehiclesEnd.back()->xPos - reservedSpaceEnd;
 }
 
 Vec3 Road::getBegJoint(bool dir)
@@ -138,7 +138,7 @@ void Cross::update(float delta)
 
     bool didAllow = false;
     int smallestDstIndex = -1;
-    float smallestDstValue;
+    float smallestDstValue = -1;
 
     //if(id.compare("SK4")==0) cout << id<< "    "<<allowedVeh<<endl;
 
@@ -163,7 +163,7 @@ void Cross::update(float delta)
                 //int which2 = streets[i].yield[which];
                 bool isOK = true;
 
-                if (id.compare("SK4")==0) cout<<"test "<<allowedVeh<<"  "<<id<<"   "<<streets[i].vehicles[0]->id<<": "<<which<< "    " << streets[i].yield.size()<<endl;
+                //if (id.compare("SK4")==0) cout<<"test "<<allowedVeh<<"  "<<id<<"   "<<streets[i].vehicles[0]->id<<": "<<which<< "    " << streets[i].yield.size()<<endl;
 
                 //if (which > 0)
                 for (int j=0;j<streets[i].yield[which].size();j++)
@@ -188,7 +188,10 @@ void Cross::update(float delta)
 
                     if (streets[i].vehicles[0]->dstToCross > 0.7) continue;
 
+                    //if (streets[i].vehicles[0]->isEnoughSpace())
+
                     indexesToPass.push_back(i);
+
 
                     /*streets[i].vehicles[0]->allowedToCross = true;
                     streets[i].vehicles.erase(streets[i].vehicles.begin());
@@ -210,9 +213,12 @@ void Cross::update(float delta)
 
         for (int i=0;i<indexesToPass.size();i++)
         {
-            streets[indexesToPass[i]].vehicles[0]->allowedToCross = true;
-            streets[indexesToPass[i]].vehicles.erase(streets[indexesToPass[i]].vehicles.begin());
-            allowedVeh++;
+            //if (streets[indexesToPass[i]].vehicles[0]->isEnoughSpace())
+            {
+                streets[indexesToPass[i]].vehicles[0]->allowedToCross = true;
+                streets[indexesToPass[i]].vehicles.erase(streets[indexesToPass[i]].vehicles.begin());
+                allowedVeh++;
+            }
 
             /*for (int j=1;j<streets[indexesToPass[i]].vehicles.size();j++)
             {
@@ -226,9 +232,9 @@ void Cross::update(float delta)
             }*/
         }
 
-        if (!didAllow && smallestDstIndex >= 0)
+        if (allowedVeh == 0)
         {
-            if (streets[smallestDstIndex].vehicles[0]->isEnoughSpace())
+            if (smallestDstIndex >= 0 && streets[smallestDstIndex].vehicles[0]->isEnoughSpace())
             {
                 streets[smallestDstIndex].vehicles[0]->allowedToCross = true;
                 streets[smallestDstIndex].vehicles.erase(streets[smallestDstIndex].vehicles.begin());
@@ -236,7 +242,7 @@ void Cross::update(float delta)
                 didAllow = true;
             }
 
-            if (!didAllow)
+            if (allowedVeh == 0)
             {
                 for(int i=0;i<streets.size();i++)
                 {
@@ -255,7 +261,7 @@ void Cross::update(float delta)
             }
         }
 
-        if (!didAllow && smallestDstIndex >= 0)
+        if (allowedVeh == 0 && smallestDstIndex >= 0)
         {
             streets[smallestDstIndex].vehicles[0]->allowedToCross = true;
             streets[smallestDstIndex].vehicles.erase(streets[smallestDstIndex].vehicles.begin());
@@ -432,7 +438,8 @@ Street::Street(Cross *begCross, Cross *endCross)
     begPos = crossBeg->getPos();
     endPos = crossEnd->getPos();
 
-
+    reservedSpaceBeg = 0;
+    reservedSpaceEnd = 0;
 
     normal = Vec3::cross(Vec3(0,1,0), direction);
     normal.normalize();
@@ -492,7 +499,8 @@ Garage::Garage(Simulator *engine, Vec3 p, Cross *c)
 
     crossEnd->streets.push_back(temp);
 
-
+    reservedSpaceBeg = 0;
+    reservedSpaceEnd = 0;
 
     normal = Vec3::cross(Vec3(0,1,0), direction);
     normal.normalize();

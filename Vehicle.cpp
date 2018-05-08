@@ -244,6 +244,15 @@ void Vehicle::update(float delta)
 
                     isLeavingRoad = true;
 
+                    if (curCross->streets[i].direction)
+                    {
+                        nextRoad->reservedSpaceBeg += vehicleLength + remainDst;
+                    }
+                    else
+                    {
+                        nextRoad->reservedSpaceEnd += vehicleLength + remainDst;
+                    }
+
                     /*if(backVeh != NULL)
                     {
                         backVeh->isFirstVeh = true;
@@ -430,6 +439,15 @@ void Vehicle::update(float delta)
 
                 dstToCross = curCross->length;
 
+                if (direction)
+                {
+                    nextRoad->reservedSpaceBeg -= vehicleLength + remainDst;
+                }
+                else
+                {
+                    nextRoad->reservedSpaceEnd -= vehicleLength + remainDst;
+                }
+
 
                 /*if (curCross->streets[desiredTurn].direction)
                 {
@@ -565,7 +583,7 @@ void Car::draw()
         glPopMatrix();
     }
     setColor(0,1,0);
-    /*if (curCross != NULL && allowedToCross)
+    if (curCross != NULL && allowedToCross)
     {
         setColor(0,0,1);
     }
@@ -585,7 +603,7 @@ void Car::draw()
     if (idnumber == 41)
     {
         setColor(0.7,0.5,0);
-    }*/
+    }
 
 
 

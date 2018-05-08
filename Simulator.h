@@ -23,7 +23,7 @@ void destroyNextObject(Simulator *engine, GameObject *go);
 
 #define MULTIPLY_TIME       1
 #define MAX_DELTA           0.15
-#define REAL_INT_MULTIPLY   20
+#define REAL_INT_MULTIPLY   50
 #define CAMERA_VELOCITY     1
 
 #include <vector>

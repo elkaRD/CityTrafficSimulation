@@ -12,11 +12,14 @@
 
 GameObject::GameObject()
 {
-
+    pos = Vec3(0,0,0);
+    rot = Vec3(0,0,0);
 }
 
 GameObject::GameObject(Simulator *engine)
 {
+    pos = Vec3(0,0,0);
+    rot = Vec3(0,0,0);
     gameEngine = engine;
 }
 

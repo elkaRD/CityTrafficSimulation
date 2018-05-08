@@ -35,6 +35,9 @@ public:
 
     virtual float freeSpace(bool dir);
 
+    float reservedSpaceBeg;
+    float reservedSpaceEnd;
+
     Cross* crossBeg;
     Cross* crossEnd;
 };
