@@ -29,6 +29,7 @@ public:
     void update(float delta);
 
     float getDst();
+    bool isEnoughSpace();
 
     float dstToCross;
 

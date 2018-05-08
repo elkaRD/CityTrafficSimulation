@@ -505,6 +505,13 @@ float Vehicle::getDst()
     return curRoad->length - xPos;
 }
 
+bool Vehicle::isEnoughSpace()
+{
+    if (nextRoad == NULL || curCross == NULL || desiredTurn >= curCross->streets.size()) return false;
+
+    return nextRoad->freeSpace(curCross->streets[desiredTurn].direction) > vehicleLength + remainDst;
+}
+
 Car::Car(Road *spawnRoad) : Vehicle(spawnRoad)
 {
 //    Vehicle(spawnRoad);
