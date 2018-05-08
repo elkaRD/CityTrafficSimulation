@@ -261,7 +261,7 @@ void Cross::update(float delta)
             }
         }
 
-        if (allowedVeh == 0 && smallestDstIndex >= 0)
+        /*if (allowedVeh == 0 && smallestDstIndex >= 0)
         {
             streets[smallestDstIndex].vehicles[0]->allowedToCross = true;
             streets[smallestDstIndex].vehicles.erase(streets[smallestDstIndex].vehicles.begin());
@@ -277,7 +277,7 @@ void Cross::update(float delta)
                 }
                 else break;
             }*/
-        }
+        //}
     }
 }
 
