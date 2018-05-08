@@ -218,7 +218,7 @@ void Vehicle::update(float delta)
 
     //changing street at cross
 
-    if (nextRoad!=NULL && nextRoad->id.compare("GA1A") == 0)
+    /*if (nextRoad!=NULL && nextRoad->id.compare("GA1A") == 0)
     {
         cout<<id<<" "<<isLeavingRoad<< " ";
         cout<<(curCross!=NULL)<<" "<<(nextRoad!= NULL)<< " "<<allowedToCross<<"  "<<desiredTurn;
@@ -226,7 +226,7 @@ void Vehicle::update(float delta)
         cout<< " "<<nextRoad->freeSpace(direction)<<endl;
 
         //int i;cin>>i;
-    }
+    }*/
 
     if (!isLeavingRoad && curCross != NULL && nextRoad != NULL && allowedToCross/* && nextRoad->freeSpace(direction) > vehicleLength + remainDst*/)
     {
@@ -523,13 +523,29 @@ void Car::draw()
         glPopMatrix();
     }
 
-    setColor(0,1,0);
+    //setColor(0,1,0);
 
     if (isBraking)
     {
         setColor(1,0,0);
+
+        glPushMatrix();
+        glTranslatef(-0.05,0.067,0);
+        drawCube(0.12,0.01,0.04);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-0.05,0.05,0.033);
+        drawCube(0.12,0.01,0.01);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-0.05,0.05,-0.033);
+        drawCube(0.12,0.01,0.01);
+        glPopMatrix();
     }
-    if (curCross != NULL && allowedToCross)
+    setColor(0,1,0);
+    /*if (curCross != NULL && allowedToCross)
     {
         setColor(0,0,1);
     }
@@ -549,7 +565,7 @@ void Car::draw()
     if (idnumber == 41)
     {
         setColor(0.7,0.5,0);
-    }
+    }*/
 
 
 

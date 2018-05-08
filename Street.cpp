@@ -517,11 +517,11 @@ string Garage::itos(int x)
     return ss.str();
 }
 
-int number = 0;
+//int number = 0;
 void Garage::spotCar()
 {
-    number ++;
-    if (number > 1) return;
+    //number ++;
+    //if (number > 70) return;
     Vehicle *temp;
     temp = new Car(this);
     temp->curRoad = this;
