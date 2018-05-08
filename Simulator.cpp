@@ -418,6 +418,7 @@ void Simulator::run()
 
         delta *= MULTIPLY_TIME;
         if (delta > MAX_DELTA * MULTIPLY_TIME) delta = MAX_DELTA * MULTIPLY_TIME;
+        if (delta < MIN_DELTA * MULTIPLY_TIME) delta = MIN_DELTA * MULTIPLY_TIME;
         if (delta > 0.4) delta = 0.4;
         //cout<<"                  "<<fixed<<newTime.tv_usec<<"  "<<timeE<<"  "<<timeB<<"   "<<delta<<endl;
         //cout<<delta<<endl;

@@ -213,7 +213,7 @@ void Cross::update(float delta)
 
         for (int i=0;i<indexesToPass.size();i++)
         {
-            //if (streets[indexesToPass[i]].vehicles[0]->isEnoughSpace())
+            if (streets[indexesToPass[i]].vehicles[0]->isEnoughSpace())
             {
                 streets[indexesToPass[i]].vehicles[0]->allowedToCross = true;
                 streets[indexesToPass[i]].vehicles.erase(streets[indexesToPass[i]].vehicles.begin());
@@ -234,13 +234,13 @@ void Cross::update(float delta)
 
         if (allowedVeh == 0)
         {
-            if (smallestDstIndex >= 0 && streets[smallestDstIndex].vehicles[0]->isEnoughSpace())
+            /*if (smallestDstIndex >= 0 && streets[smallestDstIndex].vehicles[0]->isEnoughSpace())
             {
                 streets[smallestDstIndex].vehicles[0]->allowedToCross = true;
                 streets[smallestDstIndex].vehicles.erase(streets[smallestDstIndex].vehicles.begin());
                 allowedVeh++;
                 didAllow = true;
-            }
+            }*/
 
             if (allowedVeh == 0)
             {
