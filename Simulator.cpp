@@ -445,16 +445,16 @@ void Simulator::moveCamera(float delta)
     if(isKeyPressed('W'))
     {
         cout<<"UP:  "<<cos( cameraRot.x * M_PI / 180 )<<"    "<<sin( cameraRot.x * M_PI / 180 )<<endl;
-        cameraPos.z+=cos( cameraRot.x * M_PI / 180 )*multiplyMove;
-        cameraPos.x-=sin( cameraRot.x * M_PI / 180 )*multiplyMove;
-        cameraPos.y+=atan(cameraRot.y*M_PI/180)*multiplyMove;
+        cameraPos.z -=cos( cameraRot.x * M_PI / 180 )*multiplyMove;
+        cameraPos.x +=sin( cameraRot.x * M_PI / 180 )*multiplyMove;
+        cameraPos.y -=atan(cameraRot.y*M_PI/180)*multiplyMove;
     }
     if(isKeyPressed('S'))
     {
         cout<<"DOWN"<<endl;
-        cameraPos.z+=cos( cameraRot.x * M_PI / 180 )*multiplyMove*-1;
-        cameraPos.x-=sin( cameraRot.x * M_PI / 180 )*multiplyMove*-1;
-        cameraPos.y-=atan(cameraRot.y*M_PI/180)*multiplyMove;
+        cameraPos.z+=cos( cameraRot.x * M_PI / 180 )*multiplyMove;
+        cameraPos.x-=sin( cameraRot.x * M_PI / 180 )*multiplyMove;
+        cameraPos.y+=atan(cameraRot.y*M_PI/180)*multiplyMove;
     }
     if(isKeyPressed('A'))
     {
