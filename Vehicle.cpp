@@ -165,10 +165,10 @@ void Vehicle::update(float delta)
 
         dstToCross = curRoad->length - xPos;
         //cout<<id<<endl;
-        if (curRoad->length - xPos < 2 && curCross == NULL)
+        if (curRoad->length - xPos < 1.5 && curCross == NULL)
         {
             //Cross *newCross
-            //cout<<"CHECK  "<<id<<endl;
+            cout<<"CHECK  "<<id<<endl;
 
             allowedToCross = false;
 
@@ -550,6 +550,7 @@ void Car::draw()
         glTranslatef(0,0.05,-0.038);
         setColor(1,0.647,0);
         drawCube(0.22,0.02,0.01);
+        //drawCube(1,0.02,0.01);
         glPopMatrix();
     }
     if (blinker > 0 && blinkerLight)
@@ -568,8 +569,8 @@ void Car::draw()
         setColor(1,0,0);
 
         glPushMatrix();
-        glTranslatef(-0.05,0.067,0);
-        drawCube(0.12,0.01,0.04);
+        glTranslatef(-0.05,0.08,0);
+        drawCube(0.07,0.003,0.04);
         glPopMatrix();
 
         glPushMatrix();
@@ -583,7 +584,7 @@ void Car::draw()
         glPopMatrix();
     }
     setColor(0,1,0);
-    if (curCross != NULL && allowedToCross)
+    if (curCross != NULL/* && allowedToCross*/)
     {
         setColor(0,0,1);
     }

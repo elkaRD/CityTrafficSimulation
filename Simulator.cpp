@@ -222,7 +222,10 @@ void Simulator::run()
           kevent = (XKeyEvent *) &event;
           if (   (XLookupString((XKeyEvent *)&event,buffer,1,&keysym,NULL) == 1)
               && (keysym == (KeySym)XK_Escape) )
-            exit(0);
+            {
+                cleanSimulation();
+                exit(0);
+            }
 
             if (buffer[0] < 256)
                 pressedKey[buffer[0]]=true;
@@ -251,9 +254,14 @@ void Simulator::run()
           /* It is necessary to convert the keycode to a
            * keysym before checking if it is an escape */
           kevent = (XKeyEvent *) &event;
-          if (   (XLookupString((XKeyEvent *)&event,buffer,1,&keysym,NULL) == 1)
+          /*if (   (XLookupString((XKeyEvent *)&event,buffer,1,&keysym,NULL) == 1)
               && (keysym == (KeySym)XK_Escape) )
-            exit(0);
+            {
+                cleanSimulation();
+                cout<<"TEST DEST"<<endl;
+
+                exit(0);
+            }*/
 
             if (buffer[0] < 256) pressedKey[buffer[0]]=false;
 
@@ -318,6 +326,10 @@ void Simulator::run()
                       cameraRot.x += dx * 0.2;
                       cameraRot.y += dy * 0.2;
 
+                      if (cameraRot.y > 90) cameraRot.y = 90;
+                        cout<<"camera y: "<<cameraRot.y<<endl;
+                        if (cameraRot.y < -90) cameraRot.y = -90;
+
                       prevMouseX = mevent->x;
                       prevMouseY = mevent->y;
 
@@ -349,7 +361,7 @@ void Simulator::run()
           float screenRatio = width / height * 2.0;
           glViewport(0,0,width,height);
           glFrustum(-1.0 * screenRatio, 1.0 * screenRatio, -1.0, 1.0, 5.0, 1000.0);
-          glTranslatef(0,0,-5);
+          //glTranslatef(0,0,-5);
       }
 //cout<<"after all: "<<cameraPos<<endl;
 
@@ -364,7 +376,7 @@ void Simulator::run()
         glClearColor(1,1,1,1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
       /* move the camera back three units */
-
+        glTranslatef(0,0,5);
 
       //glTranslatef(cameraPos.x, cameraPos.y, cameraPos.z);
         //glRotatef(cameraRot.y, 1,0,0);
@@ -379,6 +391,7 @@ void Simulator::run()
         glRotatef(cameraRot.y, 1,0,0);
         glRotatef(cameraRot.x, 0,1,0);
         //glTranslatef(0,-100,0);
+        glScalef(10, 10, 10);
 
       glTranslatef(-cameraPos.x, -cameraPos.y, -cameraPos.z);
 
@@ -438,16 +451,19 @@ void Simulator::run()
 void Simulator::moveCamera(float delta)
 {
     float multiplyMove=CAMERA_VELOCITY;
+    float multiplyMoveHorizontal;
     if(isKeyPressed(XK_Shift_L))multiplyMove *= 5;
 
     multiplyMove *= delta;
+    multiplyMoveHorizontal = cos(-cameraRot.y * M_PI / 180) * multiplyMove;
 
     if(isKeyPressed('W'))
     {
         cout<<"UP:  "<<cos( cameraRot.x * M_PI / 180 )<<"    "<<sin( cameraRot.x * M_PI / 180 )<<endl;
-        cameraPos.z -=cos( cameraRot.x * M_PI / 180 )*multiplyMove;
-        cameraPos.x +=sin( cameraRot.x * M_PI / 180 )*multiplyMove;
-        cameraPos.y -=atan(cameraRot.y*M_PI/180)*multiplyMove;
+        //cout<<"DEBUG POS: "<<cameraPos<<"   "<<tan((-cameraRot.y)*M_PI/180)*multiplyMove;endl;
+        cameraPos.z -=cos( cameraRot.x * M_PI / 180 )*multiplyMoveHorizontal;
+        cameraPos.x +=sin( cameraRot.x * M_PI / 180 )*multiplyMoveHorizontal;
+        cameraPos.y +=sin((-cameraRot.y)*M_PI/180)*multiplyMove;
     }
     if(isKeyPressed('S'))
     {
@@ -705,11 +721,26 @@ void Simulator::destroyObject(GameObject *go)
     {
         if (objects[i] == go)
         {
+            //cout<<"TEST DEST   "<<go->id<<endl;
             delete go;
             objects.erase(objects.begin() + i);
             break;
         }
     }
+}
+
+void Simulator::cleanSimulation()
+{
+
+    int i = objects.size();
+
+    while (i > 0)
+    {
+        //objects.erase(objects.begin());
+        destroyObject(*objects.begin());
+        i--;
+    }
+
 }
 
 void registerNewObject(Simulator *engine, GameObject *go)

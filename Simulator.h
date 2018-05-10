@@ -55,6 +55,8 @@ private:
     void registerObject(GameObject *go);
     void destroyObject(GameObject *go);
 
+    void cleanSimulation();
+
     void moveCamera(float delta);
     void moveCamera2(char c);
     bool isKeyPressed(long k);

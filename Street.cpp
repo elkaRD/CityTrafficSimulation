@@ -150,7 +150,7 @@ void Cross::update(float delta)
         {
             if (streets[i].vehicles.size() > 0)
             {
-                //if (streets[i].vehicles[0]->dstToCross > 0.7) continue;
+                if (streets[i].vehicles[0]->dstToCross > 1.2) continue;
                 //if (streets[i].vehicles[0]->curCross == NULL) continue;
                 //cout<<streets[i].vehicles[0]->id << "    "<<streets[i].vehicles[0]->allowedToCross<<endl;
                 if (streets[i].vehicles[0]->dstToCross < smallestDstValue || smallestDstIndex < 0)
@@ -181,12 +181,12 @@ void Cross::update(float delta)
 
                 if (isOK)
                 {
-                    //cout<<"ALLOWED:  "<<streets[i].vehicles[0]->id<<endl;
+                    cout<<"ALLOWED:  "<<streets[i].vehicles[0]->id<<endl;
 
 
                     didAllow = true;
 
-                    if (streets[i].vehicles[0]->dstToCross > 0.7) continue;
+                    if (streets[i].vehicles[0]->dstToCross > 0.7) continue;//MAYBE
 
                     //if (streets[i].vehicles[0]->isEnoughSpace())
 
@@ -208,11 +208,17 @@ void Cross::update(float delta)
                         else break;
                     }*/
                 }
+                else
+                {
+
+                }
             }
         }
-
+if(indexesToPass.size()>0)
+cout<<"-----------------------------------"<<endl;
         for (int i=0;i<indexesToPass.size();i++)
         {
+            cout<<streets[indexesToPass[i]].vehicles[0]->id<<endl;
             if (streets[indexesToPass[i]].vehicles[0]->isEnoughSpace())
             {
                 streets[indexesToPass[i]].vehicles[0]->allowedToCross = true;
@@ -231,8 +237,10 @@ void Cross::update(float delta)
                 else break;
             }*/
         }
+        if(indexesToPass.size()>0)
+        cout<<"-----------------------"<<endl;
 
-        if (allowedVeh == 0)
+        if (allowedVeh == 0 && !didAllow)
         {
             /*if (smallestDstIndex >= 0 && streets[smallestDstIndex].vehicles[0]->isEnoughSpace())
             {
@@ -246,10 +254,17 @@ void Cross::update(float delta)
             {
                 for(int i=0;i<streets.size();i++)
                 {
-                    if (streets[i].vehicles.size() > 0)
+                    if (streets[i].vehicles.size() > 0 && streets[i].vehicles[0]->dstToCross < 0.7)
                     {
                         if (streets[i].vehicles[0]->isEnoughSpace())
                         {
+                            cout<<"ALLOWED2:   "<<streets[i].vehicles[0]->id<<"    "<<streets[i].vehicles[0]->dstToCross<<endl;
+                            //int t;cin>>t;
+                            for(int j=0;j<streets.size();j++)
+                            {
+                                cout<<streets[j].street->id<<"   "<<streets[j].vehicles.size()<<endl;
+                            }
+
                             streets[i].vehicles[0]->allowedToCross = true;
                             streets[i].vehicles.erase(streets[i].vehicles.begin());
                             allowedVeh++;
@@ -408,7 +423,7 @@ void glP(Vec3 x)
 void Cross::draw()
 {
     setColor(0.1,0.1,0.1);
-    drawCube(0.6, 0.1, 0.6);
+    drawCube(0.6, 0.01, 0.6);
 
 }
 
@@ -554,11 +569,11 @@ string Garage::itos(int x)
     return ss.str();
 }
 
-//int number = 0;
+int number = 0;
 void Garage::spotCar()
 {
-    //number ++;
-    //if (number > 70) return;
+    number ++;
+    //if (number > 2) return;
     Vehicle *temp;
     temp = new Car(this);
     temp->curRoad = this;
