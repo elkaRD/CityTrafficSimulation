@@ -181,12 +181,12 @@ void Cross::update(float delta)
 
                 if (isOK)
                 {
-                    cout<<"ALLOWED:  "<<streets[i].vehicles[0]->id<<endl;
+                    //cout<<"ALLOWED:  "<<streets[i].vehicles[0]->id<<endl;
 
 
                     didAllow = true;
 
-                    if (streets[i].vehicles[0]->dstToCross > 0.7) continue;//MAYBE
+                    //if (streets[i].vehicles[0]->dstToCross > 0.7) continue;//MAYBE
 
                     //if (streets[i].vehicles[0]->isEnoughSpace())
 
@@ -214,11 +214,10 @@ void Cross::update(float delta)
                 }
             }
         }
-if(indexesToPass.size()>0)
-cout<<"-----------------------------------"<<endl;
+
         for (int i=0;i<indexesToPass.size();i++)
         {
-            cout<<streets[indexesToPass[i]].vehicles[0]->id<<endl;
+            //cout<<streets[indexesToPass[i]].vehicles[0]->id<<endl;
             if (streets[indexesToPass[i]].vehicles[0]->isEnoughSpace())
             {
                 streets[indexesToPass[i]].vehicles[0]->allowedToCross = true;
@@ -237,8 +236,7 @@ cout<<"-----------------------------------"<<endl;
                 else break;
             }*/
         }
-        if(indexesToPass.size()>0)
-        cout<<"-----------------------"<<endl;
+
 
         if (allowedVeh == 0 && !didAllow)
         {
@@ -258,12 +256,12 @@ cout<<"-----------------------------------"<<endl;
                     {
                         if (streets[i].vehicles[0]->isEnoughSpace())
                         {
-                            cout<<"ALLOWED2:   "<<streets[i].vehicles[0]->id<<"    "<<streets[i].vehicles[0]->dstToCross<<endl;
+                            //cout<<"ALLOWED2:   "<<streets[i].vehicles[0]->id<<"    "<<streets[i].vehicles[0]->dstToCross<<endl;
                             //int t;cin>>t;
-                            for(int j=0;j<streets.size();j++)
+                            /*for(int j=0;j<streets.size();j++)
                             {
                                 cout<<streets[j].street->id<<"   "<<streets[j].vehicles.size()<<endl;
-                            }
+                            }*/
 
                             streets[i].vehicles[0]->allowedToCross = true;
                             streets[i].vehicles.erase(streets[i].vehicles.begin());
@@ -531,6 +529,28 @@ void Garage::draw()
 {
     setColor(0,0,1);
     drawCube(0.3);
+
+    setColor(0.3,0.3,0.3);
+    //drawLine(crossBeg->getPos(), crossEnd->getPos());
+
+    Vec3 szer = Vec3::cross(Vec3(0,1,0), direction);
+    szer.normalize();
+    szer *= 0.3;
+
+    Vec3 a = endPos + szer;
+    Vec3 b = endPos - szer;
+    Vec3 c = begPos + szer;
+    Vec3 d = begPos - szer;
+
+    //cout<<direction<<endl;
+
+    glBegin(GL_POLYGON);
+    glP(a);
+    glP(b);
+    glP(d);
+    glP(c);
+    //glP(a);
+    glEnd();
 }
 
 void Garage::update(float delta)

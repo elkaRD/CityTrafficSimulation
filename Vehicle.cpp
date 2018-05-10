@@ -168,7 +168,7 @@ void Vehicle::update(float delta)
         if (curRoad->length - xPos < 1.5 && curCross == NULL)
         {
             //Cross *newCross
-            cout<<"CHECK  "<<id<<endl;
+            //cout<<"CHECK  "<<id<<endl;
 
             allowedToCross = false;
 
