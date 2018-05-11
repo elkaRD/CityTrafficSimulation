@@ -57,5 +57,7 @@ ST D30 L7 S15
 
 GA G1 S1 -2 0 4
 GA G2 S1 -4 0 2
+GA G3 S7 2 0 -4
+GA G4 L5 6 0 -14
 
 

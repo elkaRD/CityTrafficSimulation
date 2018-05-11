@@ -48,6 +48,11 @@ Cross::Cross(Vec3 position)// : GameObject(engine)
 
 void Cross::update(float delta)
 {
+    updateCross(delta);
+}
+
+void Cross::updateCross(float delta)
+{
     if(!isSet && /*id.compare("SK2") == 0*/ streets.size() == 4)
     {
         //isSet = true;
@@ -383,6 +388,7 @@ void CrossLights::getNextState()
 void CrossLights::update(float delta)
 {
     //Cross:update(delta);
+    updateCross(delta);
 
     curTime -= delta;
     getNextState();
@@ -414,7 +420,7 @@ void CrossLights::draw()
 
 void CrossLights::setDefaultPriority(Road *s0, Road *s1, Road *s2, Road *s3)
 {
-    Cross:setDefaultPriority(s0,s1,s2,s3);
+    //Cross:setDefaultPriority(s0,s1,s2,s3);
 }
 
 Street::Street(Cross *begCross, Cross *endCross)

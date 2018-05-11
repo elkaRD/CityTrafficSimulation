@@ -90,12 +90,13 @@ public:
     };
     std::vector<OneStreet> streets;
 
-    virtual void setDefaultPriority(Road *s0 = NULL, Road *s1 = NULL, Road *s2 = NULL, Road *s3 = NULL);
+    void setDefaultPriority(Road *s0 = NULL, Road *s1 = NULL, Road *s2 = NULL, Road *s3 = NULL);
 
     int allowedVeh;
     bool isSet;
 
     void update(float delta);
+    virtual void updateCross(float delta);
 
     void draw();
 };
