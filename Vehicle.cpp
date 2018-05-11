@@ -189,6 +189,8 @@ void Vehicle::update(float delta)
                 {
                     if (curCross->streets[i].street == curRoad)
                     {
+                        if (curCross->id.compare("SK3") ==0) cout<< curCross->streets.size()-1<<endl;
+
                         desiredTurn = randInt(0, curCross->streets.size()-1);
                         if (desiredTurn == i) desiredTurn = (desiredTurn+1) % curCross->streets.size();
 

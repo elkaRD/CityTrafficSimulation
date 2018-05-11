@@ -6,27 +6,14 @@ class Simulator;
 
 float Road::freeSpace(bool dir)
 {
-    //if ()
-
     if (dir)
     {
-        //cout<<"freespace1"<<endl;
         if (vehiclesBeg.size() == 0) return length - reservedSpaceBeg;
-
-        //cout<<"freespace2"<<endl;
-        //cout<<"freespace2 :"<<vehiclesBeg.back()->idnumber<<"  "<<vehiclesBeg.back()->xPos<<"  "<<vehiclesBeg.back()->pos<<endl;
 
         return vehiclesBeg.back()->xPos - reservedSpaceBeg;
     }
 
-    //cout<<"freespace3"<<endl;
-
     if (vehiclesEnd.size() == 0) return length - reservedSpaceEnd;
-
-    //cout<<"freespace4"<<endl;
-    //cout<<"freespace4: "<<vehiclesEnd.back()->id<<"  "<<vehiclesEnd.back()->xPos<< "  "<<vehiclesEnd.back()->pos<<endl;
-
-    //cout<<"debug: "<<id<<"  "<<vehiclesEnd.back()->id<<"  "<<vehiclesEnd.back()->xPos <<endl;
 
     return vehiclesEnd.back()->xPos - reservedSpaceEnd;
 }
@@ -57,10 +44,6 @@ Cross::Cross(Vec3 position)// : GameObject(engine)
     allowedVeh = 0;
 
     isSet = false;
-
-    //cout<<(streets[0]==NULL)<<endl<<(streets[1]==NULL)<<endl;
-    //cout<<streets[0].street<<endl;
-
 }
 
 void Cross::update(float delta)
@@ -90,69 +73,34 @@ void Cross::update(float delta)
         //cout<<id<<"   "<<streets.size()<<endl;
     }
 
-    /*cout<<"allowed vehs "<<id<<": " << allowedVeh<<endl;
-    if (allowedVeh == 0)
-    {
-        int priority = -1;
-        for(int i=0;i<streets.size();i++)
-        {
-            if (streets[i].vehicles.size() == 0)
-            {
-                int j = (i+1) % streets.size();
-                while (streets[j].vehicles.size() == 0)
-                {
-                    if (i == j)
-                    {
-                        priority = -1;
-                        break;
-                    }
-                    j = (j+1)%streets.size();
-                }
-                if (i == j) break;
-                priority = (j) % streets.size();
-                break;
-            }
-        }
-
-        if (priority > 0)
-        {
-            //cout<<streets[priority].vehicles.size()<<endl;
-            streets[priority].vehicles[0]->allowedToCross = true;
-            streets[priority].vehicles.erase(streets[priority].vehicles.begin());
-            allowedVeh=1;
-
-            for(int i=0;i<streets[priority].vehicles.size();i++)
-            {
-                if (streets[priority].vehicles[i]->desiredTurn == streets[priority].vehicles[0]->desiredTurn)
-                {
-                    streets[priority].vehicles[i]->allowedToCross = true;
-                    allowedVeh++;
-                    //cout<<streets[priority].vehicles[i]->id<<"################################"<<streets[priority].vehicles[0]->id<<endl;
-                    streets[priority].vehicles.erase(streets[priority].vehicles.begin()+i);
-                    i--;
-                }
-                else break;
-            }
-        }
-    }*/
-
     bool didAllow = false;
     int smallestDstIndex = -1;
     float smallestDstValue = -1;
 
-    //if(id.compare("SK4")==0) cout << id<< "    "<<allowedVeh<<endl;
+    //if (allowedVeh) cout<<id<<"   "<<allowedVeh<<endl;
 
     if ((allowedVeh == 0 || streets.size() <= 2) && isSet)
     {
         vector<int> indexesToPass;
 
+        if (streets.size() == 2)
+        {
+            for(int i=0;i<streets.size();i++)
+            {
+                if (streets[i].vehicles.size() > 0)
+                {
+                    indexesToPass.push_back(i);
+                }
+            }
+        }
+
+        if (streets.size() > 2)
         for (int i=0;i<streets.size();i++)
         {
             if (streets[i].vehicles.size() > 0)
             {
                 if (streets[i].vehicles[0]->dstToCross > 1.2) continue;
-                //if (streets[i].vehicles[0]->curCross == NULL) continue;
-                //cout<<streets[i].vehicles[0]->id << "    "<<streets[i].vehicles[0]->allowedToCross<<endl;
+
                 if (streets[i].vehicles[0]->dstToCross < smallestDstValue || smallestDstIndex < 0)
                 {
                     smallestDstIndex = i;
@@ -160,19 +108,14 @@ void Cross::update(float delta)
                 }
 
                 int which = streets[i].vehicles[0]->desiredTurn;
-                //int which2 = streets[i].yield[which];
                 bool isOK = true;
 
-                //if (id.compare("SK4")==0) cout<<"test "<<allowedVeh<<"  "<<id<<"   "<<streets[i].vehicles[0]->id<<": "<<which<< "    " << streets[i].yield.size()<<endl;
-
-                //if (which > 0)
                 for (int j=0;j<streets[i].yield[which].size();j++)
                 {
                     //cout<<"YIELD:  "<<id<<"   "<<streets[i].vehicles[0]->id<<"   "<<j<<"    "<<streets[streets[i].yield[which][j]].vehicles.size()<<endl;
 
                     if (streets[streets[i].yield[which][j]].vehicles.size() > 0)
                     {
-                        //cout<<id<<"  "<<streets[i].vehicles[0]->id<<"  STOP  "<<streets[streets[i].yield[which][j]].vehicles[0]->id<<endl;//int i;cin>>i;
                         isOK = false;
                         break;
                     }
@@ -191,22 +134,6 @@ void Cross::update(float delta)
                     //if (streets[i].vehicles[0]->isEnoughSpace())
 
                     indexesToPass.push_back(i);
-
-
-                    /*streets[i].vehicles[0]->allowedToCross = true;
-                    streets[i].vehicles.erase(streets[i].vehicles.begin());
-                    allowedVeh++;
-
-                    for (int j=1;j<streets[i].vehicles.size();j++)
-                    {
-                        if (streets[i].vehicles[j]->desiredTurn == streets[i].vehicles[0]->desiredTurn)
-                        {
-                            streets[i].vehicles[j]->allowedToCross = true;
-                            streets[i].vehicles.erase(streets[i].vehicles.begin());
-                            allowedVeh++;
-                        }
-                        else break;
-                    }*/
                 }
                 else
                 {
@@ -224,17 +151,6 @@ void Cross::update(float delta)
                 streets[indexesToPass[i]].vehicles.erase(streets[indexesToPass[i]].vehicles.begin());
                 allowedVeh++;
             }
-
-            /*for (int j=1;j<streets[indexesToPass[i]].vehicles.size();j++)
-            {
-                if (streets[indexesToPass[i]].vehicles[j]->desiredTurn == streets[indexesToPass[i]].vehicles[0]->desiredTurn && streets[indexesToPass[i]].vehicles[j]->desiredTurn < 1)
-                {
-                    streets[indexesToPass[i]].vehicles[j]->allowedToCross = true;
-                    streets[indexesToPass[i]].vehicles.erase(streets[indexesToPass[i]].vehicles.begin());
-                    allowedVeh++;
-                }
-                else break;
-            }*/
         }
 
 
@@ -273,24 +189,6 @@ void Cross::update(float delta)
                 }
             }
         }
-
-        /*if (allowedVeh == 0 && smallestDstIndex >= 0)
-        {
-            streets[smallestDstIndex].vehicles[0]->allowedToCross = true;
-            streets[smallestDstIndex].vehicles.erase(streets[smallestDstIndex].vehicles.begin());
-            allowedVeh++;
-
-            /*for (int j=1;j<streets[smallestDstIndex].vehicles.size();j++)
-            {
-                if (streets[smallestDstIndex].vehicles[j]->desiredTurn == streets[smallestDstIndex].vehicles[0]->desiredTurn)
-                {
-                    streets[smallestDstIndex].vehicles[j]->allowedToCross = true;
-                    streets[smallestDstIndex].vehicles.erase(streets[smallestDstIndex].vehicles.begin());
-                    allowedVeh++;
-                }
-                else break;
-            }*/
-        //}
     }
 }
 
@@ -322,9 +220,10 @@ void Cross::setDefaultPriority(Road *s0, Road *s1, Road *s2, Road *s3)
     {
         vector<int> yield0;
         yield0.push_back(1);
+        vector<int> yield0empty;
         vector<vector<int> > finalVec0;
         finalVec0.push_back(yield0);
-        finalVec0.push_back(yield0);
+        finalVec0.push_back(yield0empty);
         finalVec0.push_back(yield0);
 
         vector<int> yield1;
@@ -336,11 +235,12 @@ void Cross::setDefaultPriority(Road *s0, Road *s1, Road *s2, Road *s3)
         finalVec1.push_back(yield1empty);
 
         vector<int> yield2;
+        vector<int> yield2empty;
         yield2.push_back(0);
         vector<vector<int> >finalVec2;
+        finalVec2.push_back(yield2empty);
         finalVec2.push_back(yield2);
-        finalVec2.push_back(yield2);
-        yield2.push_back(1);
+        //yield2.push_back(1);
         finalVec2.push_back(yield2);
 
         for(int i=0;i<3;i++)
@@ -358,7 +258,7 @@ void Cross::setDefaultPriority(Road *s0, Road *s1, Road *s2, Road *s3)
         yield[0].push_back(1);
         yield[0].push_back(2);
 
-        yield[1].push_back(1);
+        //yield[1].push_back(1);
         yield[2].push_back(1);
 
         yield[3].push_back(1);
@@ -423,6 +323,98 @@ void Cross::draw()
     setColor(0.1,0.1,0.1);
     drawCube(0.6, 0.01, 0.6);
 
+}
+
+CrossLights::CrossLights(Vec3 position) : Cross(position)
+{
+    durationGreen1 = randFloat(10, 20);
+    durationYellow1 = randFloat(2, 6);
+    durationGreen2 = randFloat(10, 20);
+    durationYellow2 = randFloat(2, 6);
+    durationBreak = randFloat(1, 6);
+
+    curState = G1;
+    curTime = durationGreen1;
+}
+
+void CrossLights::getNextState()
+{
+    if (curTime <= 0)
+    {
+        if (curState == G1)
+        {
+            curState = Y1;
+            curTime = durationYellow1;
+            return;
+        }
+        if (curState == Y1)
+        {
+            curState = B1;
+            curTime = durationBreak;
+            return;
+        }
+        if (curState == B1)
+        {
+            curState = G2;
+            curTime = durationGreen2;
+            return;
+        }
+        if (curState == G2)
+        {
+            curState = Y2;
+            curTime = durationYellow2;
+            return;
+        }
+        if (curState == Y2)
+        {
+            curState = B2;
+            curTime = durationBreak;
+            return;
+        }
+        if (curState == B2)
+        {
+            curState = G1;
+            curTime = durationGreen1;
+            return;
+        }
+    }
+}
+
+void CrossLights::update(float delta)
+{
+    Cross:update(delta);
+
+    curTime -= delta;
+    getNextState();
+    //cout<<"STATE:    "<<curState<<"   "<<curTime<<endl;
+}
+
+void CrossLights::draw()
+{
+    Cross::draw();
+
+    //cout<<".";
+
+    if (curState == G1)
+    {
+        setColor(0,1,0);
+        drawCube(0.5);
+    }
+    if (curState == G2)
+    {
+        setColor(1,0,0);
+        drawCube(0.5);
+    }
+    if (curState == B1 || curState == B2 || curState == Y1 || curState == Y2)
+    {
+        setColor(1,1,0);
+        drawCube(0.5);
+    }
+}
+
+void CrossLights::setDefaultPriority(Road *s0, Road *s1, Road *s2, Road *s3)
+{
+    Cross:setDefaultPriority(s0,s1,s2,s3);
 }
 
 Street::Street(Cross *begCross, Cross *endCross)
@@ -519,10 +511,10 @@ Garage::Garage(Simulator *engine, Vec3 p, Cross *c)
     normal.normalize();
 
     curTimeSpot = 0;
-    frecSpot = 5;
+    frecSpot = 0.2;
 
     curTimeDelete = 0;
-    frecDelete = 5;
+    frecDelete = 7;
 }
 
 void Garage::draw()

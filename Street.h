@@ -90,7 +90,7 @@ public:
     };
     std::vector<OneStreet> streets;
 
-    void setDefaultPriority(Road *s0 = NULL, Road *s1 = NULL, Road *s2 = NULL, Road *s3 = NULL);
+    virtual void setDefaultPriority(Road *s0 = NULL, Road *s1 = NULL, Road *s2 = NULL, Road *s3 = NULL);
 
     int allowedVeh;
     bool isSet;
@@ -98,6 +98,29 @@ public:
     void update(float delta);
 
     void draw();
+};
+
+class CrossLights : public Cross
+{
+public:
+    CrossLights(Vec3 position);
+
+    float durationGreen1;
+    float durationGreen2;
+    float durationYellow1;
+    float durationYellow2;
+    float durationBreak;
+
+    float curTime;
+
+    enum State{G1, Y1, B1, G2, Y2, B2};
+    State curState;
+    void getNextState();
+
+    void update(float delta);
+    void draw();
+
+    void setDefaultPriority(Road *s0 = NULL, Road *s1 = NULL, Road *s2 = NULL, Road *s3 = NULL);
 };
 
 class Garage : public Road

@@ -32,9 +32,9 @@ float GameObject::randFloat(float minV, float maxV)
 
 int GameObject::randInt(int minV, int maxV)
 {
-    int d = maxV - minV;
+    int d = maxV - minV + 1;
 
-    if (d == 0) return minV;
+    //if (d == 0) return minV;
 
     return minV + rand()%d;
     //return (minV + maxV)/2.0; //DEBUG   TODO

@@ -327,7 +327,7 @@ void Simulator::run()
                       cameraRot.y += dy * 0.2;
 
                       if (cameraRot.y > 90) cameraRot.y = 90;
-                        cout<<"camera y: "<<cameraRot.y<<endl;
+                        //cout<<"camera y: "<<cameraRot.y<<endl;
                         if (cameraRot.y < -90) cameraRot.y = -90;
 
                       prevMouseX = mevent->x;
@@ -661,6 +661,23 @@ void Simulator::loadRoad(string fileName)
                 objects.push_back(temp);
 
                 cout<<"dodano garage: "<<id<<endl;
+            }
+            if (type.compare("CL") == 0)
+            {
+                float x1,y1,z1;
+                float x2,y2,z2;
+                file >> x1 >> y1 >> z1;// >> x1 >> y2 >> z2;
+                Vec3 v1(x1,y1,z1);
+                //Vec3 v2(x2,y2,z2);
+
+                GameObject *temp;
+                temp = new CrossLights(v1);
+                temp->gameEngine = this;
+                temp->id = id;
+                objects.push_back(temp);
+                crosses.push_back(dynamic_cast<Cross*>(temp));
+
+                cout<<"dodano crossLights: "<<id<<endl;
             }
         }
     }
