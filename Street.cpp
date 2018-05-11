@@ -382,7 +382,7 @@ void CrossLights::getNextState()
 
 void CrossLights::update(float delta)
 {
-    Cross:update(delta);
+    //Cross:update(delta);
 
     curTime -= delta;
     getNextState();
