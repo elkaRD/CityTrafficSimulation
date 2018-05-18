@@ -85,6 +85,7 @@ public:
         bool enabled = true;
         bool direction;
         //Vec3 jointPos;
+        Vec3 getJointPos();
 
         std::vector<std::vector<int> > yield;
     };
@@ -94,9 +95,11 @@ public:
 
     int allowedVeh;
     bool isSet;
+    virtual void additionalSetup();
 
     void update(float delta);
     virtual void updateCross(float delta);
+    virtual bool dontCheckStreet(int which);
 
     void draw();
 };
@@ -112,16 +115,25 @@ public:
     float durationYellow2;
     float durationBreak;
 
+    std::vector<bool> defaultPriority;
+    std::vector<bool> curPriority;
+
+    void setDefaultLights();
+    void setLightsPriority();
+
     float curTime;
 
     enum State{G1, Y1, B1, G2, Y2, B2};
     State curState;
     void getNextState();
+    void additionalSetup();
+
+    bool dontCheckStreet(int which);
 
     void update(float delta);
     void draw();
 
-    void setDefaultPriority(Road *s0 = NULL, Road *s1 = NULL, Road *s2 = NULL, Road *s3 = NULL);
+    //void setDefaultPriority(Road *s0 = NULL, Road *s1 = NULL, Road *s2 = NULL, Road *s3 = NULL);
 };
 
 class Garage : public Road

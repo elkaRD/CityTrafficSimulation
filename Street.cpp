@@ -51,6 +51,11 @@ void Cross::update(float delta)
     updateCross(delta);
 }
 
+bool Cross::dontCheckStreet(int which)
+{
+    return false;
+}
+
 void Cross::updateCross(float delta)
 {
     if(!isSet && /*id.compare("SK2") == 0*/ streets.size() == 4)
@@ -104,6 +109,7 @@ void Cross::updateCross(float delta)
         {
             if (streets[i].vehicles.size() > 0)
             {
+                if (dontCheckStreet(i)) continue;
                 if (streets[i].vehicles[0]->dstToCross > 1.2) continue;
 
                 if (streets[i].vehicles[0]->dstToCross < smallestDstValue || smallestDstIndex < 0)
@@ -119,7 +125,7 @@ void Cross::updateCross(float delta)
                 {
                     //cout<<"YIELD:  "<<id<<"   "<<streets[i].vehicles[0]->id<<"   "<<j<<"    "<<streets[streets[i].yield[which][j]].vehicles.size()<<endl;
 
-                    if (streets[streets[i].yield[which][j]].vehicles.size() > 0)
+                    if (streets[streets[i].yield[which][j]].vehicles.size() > 0 && !dontCheckStreet(streets[i].yield[which][j]))
                     {
                         isOK = false;
                         break;
@@ -173,6 +179,7 @@ void Cross::updateCross(float delta)
             {
                 for(int i=0;i<streets.size();i++)
                 {
+                    if (dontCheckStreet(i)) continue;
                     if (streets[i].vehicles.size() > 0 && streets[i].vehicles[0]->dstToCross < 0.7)
                     {
                         if (streets[i].vehicles[0]->isEnoughSpace())
@@ -299,6 +306,8 @@ void Cross::setDefaultPriority(Road *s0, Road *s1, Road *s2, Road *s3)
             }
         }
 
+
+
         //debug
         /*for(int i=0;i<4;i++)
         {
@@ -314,8 +323,82 @@ void Cross::setDefaultPriority(Road *s0, Road *s1, Road *s2, Road *s3)
             }
         }*/
     }
+    additionalSetup();
 
+}
 
+Vec3 Cross::OneStreet::getJointPos()
+{
+    if (!direction) return street->endJoint;
+    return street->begJoint;
+}
+
+void Cross::additionalSetup()
+{
+
+}
+
+void CrossLights::additionalSetup()
+{
+    setDefaultLights();
+}
+
+bool CrossLights::dontCheckStreet(int which)
+{
+    //cout<<"DEBUG  SEGFAULT   "<<id<<"   "<<curPriority.size()<<"  "<<which<<endl;
+    return !curPriority[which];
+}
+
+void CrossLights::setDefaultLights()
+{
+    defaultPriority.clear();
+    curPriority.clear();
+
+    for (int i=0;i<streets.size();i++)
+    {
+        defaultPriority.push_back(false);
+        curPriority.push_back(false);
+    }
+
+    if (streets.size() == 3)
+    {
+        defaultPriority[0] = true;
+    }
+
+    if (streets.size() == 4)
+    {
+        defaultPriority[0] = true;
+        defaultPriority[2] = true;
+    }
+
+    cout<<id<<"  SET DEFAULT LIGHTS:   "<<curPriority.size()<<endl;
+}
+
+void CrossLights::setLightsPriority()
+{
+    if (curState == G1 || curState == Y1)
+    {
+        for(int i=0;i<streets.size();i++)
+        {
+            curPriority[i] = defaultPriority[i];
+        }
+    }
+
+    if (curState == B1 || curState == B2)
+    {
+        for(int i=0;i<streets.size();i++)
+        {
+            curPriority[i] = false;
+        }
+    }
+
+    if (curState == G2 || curState == Y2)
+    {
+        for(int i=0;i<streets.size();i++)
+        {
+            curPriority[i] = !defaultPriority[i];
+        }
+    }
 }
 
 void glP(Vec3 x)
@@ -350,36 +433,42 @@ void CrossLights::getNextState()
         {
             curState = Y1;
             curTime = durationYellow1;
+            setLightsPriority();
             return;
         }
         if (curState == Y1)
         {
             curState = B1;
             curTime = durationBreak;
+            setLightsPriority();
             return;
         }
         if (curState == B1)
         {
             curState = G2;
             curTime = durationGreen2;
+            setLightsPriority();
             return;
         }
         if (curState == G2)
         {
             curState = Y2;
             curTime = durationYellow2;
+            setLightsPriority();
             return;
         }
         if (curState == Y2)
         {
             curState = B2;
             curTime = durationBreak;
+            setLightsPriority();
             return;
         }
         if (curState == B2)
         {
             curState = G1;
             curTime = durationGreen1;
+            setLightsPriority();
             return;
         }
     }
@@ -389,6 +478,8 @@ void CrossLights::update(float delta)
 {
     //Cross:update(delta);
     updateCross(delta);
+
+
 
     curTime -= delta;
     getNextState();
@@ -400,28 +491,61 @@ void CrossLights::draw()
     Cross::draw();
 
     //cout<<".";
+    Vec3 color1;
+    Vec3 color2;
 
     if (curState == G1)
     {
-        setColor(0,1,0);
-        drawCube(0.5);
+        color1 = Vec3(0,1,0);
+        color2 = Vec3(1,0,0);
+        //setColor(0,1,0);
+        //drawCube(0.5);
     }
     if (curState == G2)
     {
-        setColor(1,0,0);
-        drawCube(0.5);
+        color1 = Vec3(1,0,0);
+        color2 = Vec3(0,1,0);
+        //setColor(1,0,0);
+        //drawCube(0.5);
     }
-    if (curState == B1 || curState == B2 || curState == Y1 || curState == Y2)
+    if (curState == Y1)
     {
-        setColor(1,1,0);
-        drawCube(0.5);
+        color1 = Vec3(1,1,0);
+        color2 = Vec3(1,0,0);
+    }
+
+    if (curState == Y2)
+    {
+        color1 = Vec3(1,0,0);
+        color2 = Vec3(1,1,0);
+    }
+    if (curState == B1 || curState == B2 )
+    {
+        color1 = Vec3(1,0,0);
+        color2 = Vec3(1,0,0);
+        //setColor(1,1,0);
+        //drawCube(0.5);
+    }
+
+    glTranslatef(-pos.x,-pos.y,-pos.z);
+
+    for(int i =0;i<streets.size();i++)
+    {
+        glPushMatrix();
+        glTranslatef(streets[i].getJointPos().x,streets[i].getJointPos().y,streets[i].getJointPos().z);
+        if (defaultPriority[i]) setColor(color1.x, color1.y, color1.z);
+        else setColor(color2.x, color2.y, color2.z);
+
+        drawCube(0.15,1,0.15);
+
+        glPopMatrix();
     }
 }
 
-void CrossLights::setDefaultPriority(Road *s0, Road *s1, Road *s2, Road *s3)
+/*void CrossLights::setDefaultPriority(Road *s0, Road *s1, Road *s2, Road *s3)
 {
     //Cross:setDefaultPriority(s0,s1,s2,s3);
-}
+}*/
 
 Street::Street(Cross *begCross, Cross *endCross)
 {
@@ -517,10 +641,10 @@ Garage::Garage(Simulator *engine, Vec3 p, Cross *c)
     normal.normalize();
 
     curTimeSpot = 0;
-    frecSpot = 0.2;
+    frecSpot = 4;
 
     curTimeDelete = 0;
-    frecDelete = 7;
+    frecDelete = 6;
 }
 
 void Garage::draw()
@@ -541,6 +665,8 @@ void Garage::draw()
     Vec3 d = begPos - szer;
 
     //cout<<direction<<endl;
+
+    glTranslatef(-pos.x,-pos.y,-pos.z);
 
     glBegin(GL_POLYGON);
     glP(a);
