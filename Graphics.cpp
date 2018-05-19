@@ -37,6 +37,20 @@ Vec3 Vec3::cross(Vec3 u, Vec3 v)
     return Vec3(u.y*v.z - u.z*v.y, u.z*v.x - u.x*v.z, u.x*v.y - u.y*v.x);
 }
 
+float Vec3::angleDiff(float b, float e)
+{
+    while (b<0) b+=360;
+    while (e<0) e+=360;
+    while (b>=360) b-=360;
+    while (e>=360) e-=360;
+
+    float d = e-b;
+    if (d>180) d = 180 - d;
+    if (d<-180) d = -180 - d;
+
+    return d;
+}
+
 float Vec3::angleXZ()
 {
     float t = atan2(z, x) * 180 / M_PI;

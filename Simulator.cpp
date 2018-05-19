@@ -643,8 +643,9 @@ void Simulator::loadRoad(string fileName)
             if (type.compare("GA") == 0)
             {
                 string jointCross;
+                string vehType;
                 float x,y,z;
-                file >> jointCross >> x >> y >> z;
+                file >> vehType >> jointCross >> x >> y >> z;
                 Vec3 v(x,y,z);
                 Cross *cross;
                 for(int i=0;i<objects.size();i++)
@@ -655,10 +656,16 @@ void Simulator::loadRoad(string fileName)
                         break;
                     }
                 }
-                GameObject *temp;
+                Garage *temp;
                 temp = new Garage(this, v, cross);
                 temp->id = id;
-                objects.push_back(temp);
+
+                if (vehType.compare("C") == 0) temp->vehType = 0;
+                if (vehType.compare("B") == 0) temp->vehType = 1;
+
+                objects.push_back((GameObject*)temp);
+
+
 
                 cout<<"dodano garage: "<<id<<endl;
             }

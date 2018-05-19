@@ -398,6 +398,7 @@ void Vehicle::update(float delta)
             }
 
             rot = Vec3(0, lerpAngle(begRot, endRot, s), 0);
+            crossProgress = s;
 
             //if (id.compare("CAR_6GA1B") == 0) cout<<begRot<<"   "<<endRot<<"  "<<lerpAngle(begRot, endRot, s)<<endl;
 
@@ -520,7 +521,7 @@ float Vehicle::getDst()
     //cout<<"getdst  "<<id<<"  "<<frontVeh<<endl;
     //if (id.compare("CAR_3GA1A")==0 && frontVeh != NULL)cout<<"          "<<curRoad->length<<"   "<<frontVeh->xPos<<frontVeh->id<<endl;
     if (frontVeh != NULL)
-        return frontVeh->xPos - xPos;
+        return frontVeh->xPos - xPos - frontVeh->vehicleLength/2.0;
 
     return curRoad->length - xPos;
 }
@@ -635,4 +636,104 @@ void Car::draw()
         drawCube(0.1);
     }
     glPopMatrix();*/
+}
+
+Bus::Bus(Road *spawnRoad) : Vehicle(spawnRoad)
+{
+//    Vehicle(spawnRoad);
+    maxV = randFloat(0.8, 1.1);
+    velocity = randFloat(2,5);
+    vehicleLength = 0.65;
+}
+
+void Bus::update(float delta)
+{
+    Vehicle::update(delta);
+
+    if (didReachCross)
+    {
+        //busAngle = (begRot - endRot) * crossProgress;
+        float s = crossProgress * 2.0 - 1.0;
+        s = 1 - abs(s);
+        float a = Vec3::angleDiff(begRot, endRot);
+        a /= 4.0;
+        //cout<<"BUS ANG   "<<begRot<<"  "<<endRot<<"    "<<a*2.3<<endl;
+
+        busAngle = lerpAngle(0, a, s);
+    }
+    else
+    {
+        busAngle = 0;
+    }
+
+    //if(id.compare("BUS_4")==0) cout<<"BUS ANGLE  "<<id<<"  "<<busAngle<<endl;
+}
+
+void Bus::draw()
+{
+    glPushMatrix();
+
+    glTranslatef(0,0.1,0);
+
+    setColor(0.7,0.7,0);
+    glPushMatrix();
+    glRotatef(busAngle, 0,-1,0);
+    glTranslatef(-0.2,0,0);
+    drawCube(0.3,0.13,0.135);
+    setColor(0,0.8,0.8);
+    glTranslatef(-0.02,0.02,0);
+    drawCube(0.25,0.07,0.14);
+    glPopMatrix();
+
+    setColor(0.7,0.7,0);
+    glPushMatrix();
+    glRotatef(busAngle , 0,1,0);
+    glTranslatef(0.2,0,0);
+    drawCube(0.3, 0.13, 0.135);
+    setColor(0,0.8,0.8);
+    glTranslatef(0.02,0.02,0);
+    drawCube(0.27,0.07,0.14);
+    glPopMatrix();
+
+    setColor(0.5,0.5,0);
+    drawCube(0.4,0.12,0.12);
+
+    glPushMatrix();
+    if (blinker < 0 && blinkerLight)
+    {
+        setColor(1,0.647,0);
+        glTranslatef(0, -0.031,-0.046);
+        drawCube(0.73,0.01,0.01);
+    }
+    if (blinker > 0 && blinkerLight)
+    {
+        setColor(1,0.647,0);
+        glTranslatef(0, -0.031,0.046);
+        drawCube(0.73,0.01,0.01);
+    }
+    glPopMatrix();
+
+    /*if (blinker < 0 && blinkerLight)
+    {
+        setColor(1,0.647,0);
+        glPushMatrix();
+        glRotatef(busAngle, 0,-1,0);
+        glTranslatef(-0.2,0,0);
+        drawCube(0.22,0.02,0.01);
+        //setColor(0,0.8,0.8);
+        //glTranslatef(-0.02,0.02,0);
+        //drawCube(0.27,0.07,0.14);
+        glPopMatrix();
+    }
+    if (blinker > 0 && blinkerLight)
+    {
+        glPushMatrix();
+        glTranslatef(0,0.05,0.038);
+        setColor(1,0.647,0);
+        drawCube(0.22,0.02,0.01);
+        glPopMatrix();
+    }*/
+
+
+    glPopMatrix();
 }

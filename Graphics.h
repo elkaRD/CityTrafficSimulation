@@ -17,6 +17,7 @@ public:
     static float length(Vec3 a);
     static Vec3 lerp(Vec3 b, Vec3 e, float s);
     static Vec3 cross(Vec3 u, Vec3 v);
+    static float angleDiff(float b, float e);
 
     float angleXZ();
 

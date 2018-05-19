@@ -727,7 +727,7 @@ void Garage::update(float delta)
     {
         //cout<<"%%%%%%%"<<endl;
         curTimeSpot = 0;
-        spotCar();
+        spotVeh();
     }
 
     if (vehiclesEnd.size() > 0)
@@ -736,7 +736,7 @@ void Garage::update(float delta)
     if (curTimeDelete > frecDelete)
     {
         curTimeDelete = 0;
-        deleteCar();
+        deleteVeh();
     }
 }
 
@@ -751,15 +751,24 @@ string Garage::itos(int x)
 }
 
 int number = 0;
-void Garage::spotCar()
+void Garage::spotVeh()
 {
     number ++;
     //if (number > 2) return;
     Vehicle *temp;
-    temp = new Car(this);
+    if (vehType == 0)
+    {
+        temp = new Car(this);
+        temp->id = "CAR_" + itos(Vehicle::numVeh);
+    }
+    else
+    {
+        temp = new Bus(this);
+        temp->id = "BUS_" + itos(Vehicle::numVeh);
+    }
     temp->curRoad = this;
     temp->direction = true;
-    temp->id = "CAR_" + itos(Vehicle::numVeh) + id;
+
     temp->isFirstVeh = vehiclesBeg.size() == 0;
     temp->idnumber = Vehicle::numVeh;
     vehiclesBeg.push(temp);
@@ -769,7 +778,7 @@ void Garage::spotCar()
     cout<<"spotted " << temp->id << " by "<<id<<endl;
 }
 
-void Garage::deleteCar()
+void Garage::deleteVeh()
 {
     if (vehiclesEnd.size() > 0)
     {

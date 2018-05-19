@@ -47,6 +47,7 @@ public:
 
     float begRot;
     float endRot;
+    float crossProgress;
 
     int blinker;
     float blinkerTime;
@@ -71,6 +72,18 @@ public:
     Car(Road *spawnRoad);
 
 private:
+
+    void update(float delta);
+    void draw();
+};
+
+class Bus : public Vehicle
+{
+public:
+
+    Bus(Road *spawnRoad);
+
+    float busAngle;
 
     void update(float delta);
     void draw();
