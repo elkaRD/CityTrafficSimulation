@@ -95,7 +95,7 @@ public:
 
     int allowedVeh;
     bool isSet;
-    virtual void additionalSetup();
+    virtual void additionalSetup(Road *s0, Road *s1, Road *s2, Road *s3);
 
     void update(float delta);
     virtual void updateCross(float delta);
@@ -118,7 +118,7 @@ public:
     std::vector<bool> defaultPriority;
     std::vector<bool> curPriority;
 
-    void setDefaultLights();
+    void setDefaultLights(Road *s0, Road *s1, Road *s2, Road *s3);
     void setLightsPriority();
 
     float curTime;
@@ -126,7 +126,7 @@ public:
     enum State{G1, Y1, B1, G2, Y2, B2};
     State curState;
     void getNextState();
-    void additionalSetup();
+    void additionalSetup(Road *s0, Road *s1, Road *s2, Road *s3);
 
     bool dontCheckStreet(int which);
 

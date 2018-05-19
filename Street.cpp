@@ -323,7 +323,7 @@ void Cross::setDefaultPriority(Road *s0, Road *s1, Road *s2, Road *s3)
             }
         }*/
     }
-    additionalSetup();
+    additionalSetup(s0, s1, s2, s3);
 
 }
 
@@ -333,14 +333,14 @@ Vec3 Cross::OneStreet::getJointPos()
     return street->begJoint;
 }
 
-void Cross::additionalSetup()
+void Cross::additionalSetup(Road *s0, Road *s1, Road *s2, Road *s3)
 {
 
 }
 
-void CrossLights::additionalSetup()
+void CrossLights::additionalSetup(Road *s0, Road *s1, Road *s2, Road *s3)
 {
-    setDefaultLights();
+    setDefaultLights(s0, s1, s2, s3);
 }
 
 bool CrossLights::dontCheckStreet(int which)
@@ -349,7 +349,7 @@ bool CrossLights::dontCheckStreet(int which)
     return !curPriority[which];
 }
 
-void CrossLights::setDefaultLights()
+void CrossLights::setDefaultLights(Road *s0, Road *s1, Road *s2, Road *s3)
 {
     defaultPriority.clear();
     curPriority.clear();
@@ -362,13 +362,22 @@ void CrossLights::setDefaultLights()
 
     if (streets.size() == 3)
     {
-        defaultPriority[0] = true;
+        //defaultPriority[0] = true;
+        for (int i=0;i<streets.size();i++)
+        {
+            if (streets[i].street == s0) defaultPriority[i] = true;
+        }
     }
 
     if (streets.size() == 4)
     {
-        defaultPriority[0] = true;
-        defaultPriority[2] = true;
+        //defaultPriority[0] = true;
+        //defaultPriority[2] = true;
+        for (int i=0;i<streets.size();i++)
+        {
+            if (streets[i].street == s0) defaultPriority[i] = true;
+            if (streets[i].street == s2) defaultPriority[i] = true;
+        }
     }
 
     cout<<id<<"  SET DEFAULT LIGHTS:   "<<curPriority.size()<<endl;
@@ -532,11 +541,39 @@ void CrossLights::draw()
     for(int i =0;i<streets.size();i++)
     {
         glPushMatrix();
+        glTranslatef(0,0.35,0);
+        //glPushMatrix();
+        //glScalef(0.4,0.4,0.4);
+        if (!streets[i].direction)
+            glTranslatef(streets[i].street->normal.x/10.0,streets[i].street->normal.y/10.0,streets[i].street->normal.z/10.0);
+        else
+            glTranslatef(-streets[i].street->normal.x/10.0,-streets[i].street->normal.y/10.0,-streets[i].street->normal.z/10.0);
+            //glPopMatrix();
         glTranslatef(streets[i].getJointPos().x,streets[i].getJointPos().y,streets[i].getJointPos().z);
         if (defaultPriority[i]) setColor(color1.x, color1.y, color1.z);
         else setColor(color2.x, color2.y, color2.z);
 
-        drawCube(0.15,1,0.15);
+        if (streets[i].direction)
+            glRotatef(streets[i].street->normal.angleXZ(), 0,1,0);
+        else
+            glRotatef(streets[i].street->normal.angleXZ() + 180, 0,1,0);
+
+        drawCube(0.05,0.1,0.05);
+        //glPopMatrix();
+
+        /*if (!streets[i].direction)
+            glTranslatef(streets[i].street->normal.x/5.0,streets[i].street->normal.y/5.0,streets[i].street->normal.z/5.0);
+        else
+            glTranslatef(-streets[i].street->normal.x/5.0,-streets[i].street->normal.y/5.0,-streets[i].street->normal.z/5.0);*/
+
+        glTranslatef(-0.2,0,0);
+
+        setColor(0,0,0);
+        glTranslatef(0,-0.35/2,0);
+        drawCube(0.025,0.35,0.025);
+
+        glTranslatef(0.1,0.35/2,0);
+        drawCube(0.2,0.025,0.025);
 
         glPopMatrix();
     }
