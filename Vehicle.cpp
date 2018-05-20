@@ -713,6 +713,26 @@ void Bus::draw()
     }
     glPopMatrix();
 
+    if (isBraking)
+    {
+        setColor(1,0,0);
+
+        glPushMatrix();
+        glTranslatef(-0.3,0.05,0);
+        drawCube(0.12,0.003,0.06);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-0.3,-0.02,0.04);
+        drawCube(0.12,0.01,0.01);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-0.3,-0.02,-0.04);
+        drawCube(0.12,0.01,0.01);
+        glPopMatrix();
+    }
+
     /*if (blinker < 0 && blinkerLight)
     {
         setColor(1,0.647,0);

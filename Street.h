@@ -97,6 +97,7 @@ public:
     bool isSet;
     virtual void additionalSetup(Road *s0, Road *s1, Road *s2, Road *s3);
 
+    bool checkSet();
     void update(float delta);
     virtual void updateCross(float delta);
     virtual bool dontCheckStreet(int which);

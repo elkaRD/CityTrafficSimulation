@@ -56,40 +56,37 @@ bool Cross::dontCheckStreet(int which)
     return false;
 }
 
-void Cross::updateCross(float delta)
+bool Cross::checkSet()
 {
-    if(!isSet && /*id.compare("SK2") == 0*/ streets.size() == 4)
+    if (isSet) return false;
+
+    if(streets.size() == 4)
     {
-        //isSet = true;
         setDefaultPriority(streets[0].street, streets[1].street, streets[2].street, streets[3].street);
-        //cout<<id<<"   did happen?"<<endl;
     }
 
-    if (!isSet && streets.size() == 2)
+    if (streets.size() == 2)
     {
-        //isSet = true;
         setDefaultPriority();
-        //cout<<"should happen"<<endl;
     }
 
-    if (!isSet && streets.size() == 3)
+    if (streets.size() == 3)
     {
-        //isSet = true;
         setDefaultPriority(streets[0].street, streets[1].street, streets[2].street);
     }
 
-    if (!isSet)
-    {
-        //cout<<id<<"   "<<streets.size()<<endl;
-    }
+    return !isSet;
+}
+
+void Cross::updateCross(float delta)
+{
+    if (checkSet()) return;
 
     bool didAllow = false;
-    int smallestDstIndex = -1;
-    float smallestDstValue = -1;
+    //int smallestDstIndex = -1;
+    //float smallestDstValue = -1;
 
-    //if (allowedVeh) cout<<id<<"   "<<allowedVeh<<endl;
-
-    if ((allowedVeh == 0 || streets.size() <= 2) && isSet)
+    if (allowedVeh == 0 || streets.size() <= 2)
     {
         vector<int> indexesToPass;
 
@@ -104,7 +101,7 @@ void Cross::updateCross(float delta)
             }
         }
 
-        if (streets.size() > 2)
+        else if (streets.size() > 2)
         for (int i=0;i<streets.size();i++)
         {
             if (streets[i].vehicles.size() > 0)
@@ -112,11 +109,11 @@ void Cross::updateCross(float delta)
                 if (dontCheckStreet(i)) continue;
                 if (streets[i].vehicles[0]->dstToCross > 1.2) continue;
 
-                if (streets[i].vehicles[0]->dstToCross < smallestDstValue || smallestDstIndex < 0)
+                /*if (streets[i].vehicles[0]->dstToCross < smallestDstValue || smallestDstIndex < 0)
                 {
                     smallestDstIndex = i;
                     smallestDstValue = streets[i].vehicles[0]->dstToCross;
-                }
+                }*/
 
                 int which = streets[i].vehicles[0]->desiredTurn;
                 bool isOK = true;
@@ -146,10 +143,6 @@ void Cross::updateCross(float delta)
 
                     indexesToPass.push_back(i);
                 }
-                else
-                {
-
-                }
             }
         }
 
@@ -165,7 +158,7 @@ void Cross::updateCross(float delta)
         }
 
 
-        if (allowedVeh == 0 && !didAllow)
+        if (allowedVeh == 0)
         {
             /*if (smallestDstIndex >= 0 && streets[smallestDstIndex].vehicles[0]->isEnoughSpace())
             {

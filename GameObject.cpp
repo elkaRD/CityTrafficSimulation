@@ -1,15 +1,5 @@
 #include "GameObject.h"
 
-/*std::istream& operator >> (std::istream& in, Vec3& right)
-{
-    //in >> right.x >> right.y >> right.z;
-    //in >> right.x;
-    int tx;
-    in >> tx;
-    return in;
-}
-*/
-
 GameObject::GameObject()
 {
     pos = Vec3(0,0,0);
@@ -27,17 +17,12 @@ float GameObject::randFloat(float minV, float maxV)
 {
     float d = maxV - minV;
     return minV + d*(rand()%1000)/1000.0;
-    //return (maxV+minV)/2.0; //DEBUG   TODO
 }
 
 int GameObject::randInt(int minV, int maxV)
 {
     int d = maxV - minV + 1;
-
-    //if (d == 0) return minV;
-
     return minV + rand()%d;
-    //return (minV + maxV)/2.0; //DEBUG   TODO
 }
 
 void GameObject::setPos(Vec3 p)

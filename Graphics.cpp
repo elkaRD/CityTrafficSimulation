@@ -104,14 +104,12 @@ Vec3& Vec3::operator /= (const float right)
 
 Vec3 operator + (Vec3 left, const Vec3& right)
 {
-    //return Vec3(left.x + right.x, left.y + right.y, left.z + right.z);
     left += right;
     return left;
 }
 
 Vec3 operator - (Vec3 left, const Vec3& right)
 {
-    //return Vec3(left.x - right.x, left.y - right.y, left.z - right.z);
     left -= right;
     return left;
 }
@@ -147,7 +145,7 @@ void Graphics::drawCube(float a)
 void Graphics::drawCube(float x, float y, float z)
 {
     glPushMatrix();
-    //glTranslatef(gdziex,gdziey,gdziez);
+
     x /= 2;
     y /= 2;
     z /= 2;
@@ -257,41 +255,16 @@ float Graphics::lerp(float a, float b, float s)
 
 float Graphics::lerpAngle(float a, float b, float s)
 {
-    /*while (a<0) a+=360;
-    while (b<0) b+=360;
-
-    if (a > b)
-    {
-        float t = a;
-        a = b;
-        b = t;
-    }
-
-
-
-    while (a>360) a-=360;
-    while (b>360) b-=360;
-    float temp = 360 - b + a;
-    float diff = b - a;
-
-    if (diff < temp) return lerp(a, b, s);
-
-    return lerp(b-360, a, s);*/
-
     while (a<0) a+=360;
     while (b<0) b+=360;
     while (a>=360) a-=360;
     while (b>=360) b-=360;
-
-    //if (a == 0 && signbit(a)) a *= -1;
-    //if (b == 0 && signbit(b)) b *= -1;
 
     float diff = abs(b - a);
     float temp = 360 - diff;
 
     if (diff < temp)
     {
-        //float d = abs(a-b);
         if (a<b)
             return a + diff * s;
         return a - diff * s;
@@ -312,12 +285,10 @@ int Graphics::rotateDirection(float a, float b)
     float diff = abs(b - a);
     float temp = 360 - diff;
 
-    //cout<<a<<"  "<<b<<"  diff:  "<<diff<<"   temp: "<<temp<<endl;
     if (diff < 45 || temp < 45) return 0;
 
     if (diff < temp)
     {
-        //float d = abs(a-b);
         if (a<b)
             return -1;
         return 1;
