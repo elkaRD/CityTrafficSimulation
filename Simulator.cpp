@@ -6,22 +6,22 @@
 #include"Simulator.h"
 using namespace std;
 
-int Simulator::width = 1280;
-int Simulator::height = 720;
+int EngineCore::width = 1280;
+int EngineCore::height = 720;
 
-int Simulator::snglBuf[] = {GLX_RGBA, GLX_DEPTH_SIZE, 16, None};
-int Simulator::dblBuf[]  = {GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
+int EngineCore::snglBuf[] = {GLX_RGBA, GLX_DEPTH_SIZE, 16, None};
+int EngineCore::dblBuf[]  = {GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
 
-Display   *Simulator::dpy = NULL;
-Window    Simulator::win = (Window) NULL;
-GLboolean Simulator::doubleBuffer = GL_TRUE;
+Display   *EngineCore::dpy = NULL;
+Window    EngineCore::win = (Window) NULL;
+GLboolean EngineCore::doubleBuffer = GL_TRUE;
 //XSetWindowAttributes Simulator::swa = NULL;
-long Simulator::eventMask = 0;
+long EngineCore::eventMask = 0;
 
 void fatalError(char *message)
 {
-  fprintf(stderr, "main: %s\n", message);
-  exit(1);
+    fprintf(stderr, "main: %s\n", message);
+    exit(1);
 }
 
 void Simulator::redraw()
@@ -30,151 +30,110 @@ void Simulator::redraw()
 
     glPushMatrix();
 
-        /*Graphics g;
-        g.setColor(0,0,0);
-        g.drawCube(1);*/
-
-        for (int i=0;i<objects.size();i++)
-        {
-            objects[i]->drawObject();
-        }
+    for (int i=0;i<objects.size();i++)
+    {
+        objects[i]->drawObject();
+    }
 
     glPopMatrix();
 
-    /* front face */
-    /*glBegin(GL_QUADS);
-    glPushMatrix();
-        glScalef(0.5,0.5,0.5);
-      glColor3f(0.0, 0.7, 0.1);  /* green */
-      /*glVertex3f(-1.0, 1.0, 1.0);
-      glVertex3f(1.0, 1.0, 1.0);
-      glVertex3f(1.0, -1.0, 1.0);
-      glVertex3f(-1.0, -1.0, 1.0);
 
-      /* back face */
-      //glColor3f(0.9, 1.0, 0.0);  /* yellow */
-      /*glVertex3f(-1.0, 1.0, -1.0);
-      glVertex3f(1.0, 1.0, -1.0);
-      glVertex3f(1.0, -1.0, -1.0);
-      glVertex3f(-1.0, -1.0, -1.0);
-
-      /* top side face */
-      //glColor3f(0.2, 0.2, 1.0);  /* blue */
-      /*glVertex3f(-1.0, 1.0, 1.0);
-      glVertex3f(1.0, 1.0, 1.0);
-      glVertex3f(1.0, 1.0, -1.0);
-      glVertex3f(-1.0, 1.0, -1.0);
-
-      /* bottom side face */
-      //glColor3f(0.7, 0.0, 0.1);  /* red */
-      /*glVertex3f(-1.0, -1.0, 1.0);
-      glVertex3f(1.0, -1.0, 1.0);
-      glVertex3f(1.0, -1.0, -1.0);
-      glVertex3f(-1.0, -1.0, -1.0);
-    glPopMatrix();
-    glEnd();*/
-
-  if (doubleBuffer)
-    glXSwapBuffers(dpy, win);/* buffer swap does implicit glFlush */
-  else
-    glFlush();  /* explicit flush for single buffered case */
+    if (doubleBuffer)
+        glXSwapBuffers(dpy, win);/* buffer swap does implicit glFlush */
+    else
+        glFlush();  /* explicit flush for single buffered case */
 }
 
-int Simulator::init(int argc, char **argv)
+int EngineCore::init(int argc, char **argv)
 {
-  XVisualInfo         *vi;
-  Colormap             cmap;
-  XSetWindowAttributes swa;
-  GLXContext           cx;
+    XVisualInfo         *vi;
+    Colormap             cmap;
+    XSetWindowAttributes swa;
+    GLXContext           cx;
 
-  int                  dummy;
+    int                  dummy;
 
-  /*** (1) open a connection to the X server ***/
+    /*** (1) open a connection to the X server ***/
 
-  dpy = XOpenDisplay(NULL);
-  if (dpy == NULL)
-    fatalError("could not open display");
+    dpy = XOpenDisplay(NULL);
+    if (dpy == NULL)
+        fatalError("could not open display");
 
-  /*** (2) make sure OpenGL's GLX extension supported ***/
+    /*** (2) make sure OpenGL's GLX extension supported ***/
 
-  if(!glXQueryExtension(dpy, &dummy, &dummy))
-    fatalError("X server has no OpenGL GLX extension");
+    if(!glXQueryExtension(dpy, &dummy, &dummy))
+        fatalError("X server has no OpenGL GLX extension");
 
-  /*** (3) find an appropriate visual ***/
+    /*** (3) find an appropriate visual ***/
 
-  /* find an OpenGL-capable RGB visual with depth buffer */
-  vi = glXChooseVisual(dpy, DefaultScreen(dpy), dblBuf);
-  if (vi == NULL)
-  {
-    vi = glXChooseVisual(dpy, DefaultScreen(dpy), snglBuf);
-    if (vi == NULL) fatalError("no RGB visual with depth buffer");
-    doubleBuffer = GL_FALSE;
-  }
-  if(vi->c_class != TrueColor)
-    fatalError("TrueColor visual required for this program");
+    /* find an OpenGL-capable RGB visual with depth buffer */
+    vi = glXChooseVisual(dpy, DefaultScreen(dpy), dblBuf);
+    if (vi == NULL)
+    {
+        vi = glXChooseVisual(dpy, DefaultScreen(dpy), snglBuf);
+        if (vi == NULL) fatalError("no RGB visual with depth buffer");
+        doubleBuffer = GL_FALSE;
+    }
+    if(vi->c_class != TrueColor)
+        fatalError("TrueColor visual required for this program");
 
-  /*** (4) create an OpenGL rendering context  ***/
+    /*** (4) create an OpenGL rendering context  ***/
 
-  /* create an OpenGL rendering context */
-  cx = glXCreateContext(dpy, vi, /* no shared dlists */ None,
-                        /* direct rendering if possible */ GL_TRUE);
-  if (cx == NULL)
-    fatalError("could not create rendering context");
+    /* create an OpenGL rendering context */
+    cx = glXCreateContext(dpy, vi, /* no shared dlists */ None,
+                            /* direct rendering if possible */ GL_TRUE);
+    if (cx == NULL)
+        fatalError("could not create rendering context");
 
-  /*** (5) create an X window with the selected visual ***/
+    /*** (5) create an X window with the selected visual ***/
 
-  /* create an X colormap since probably not using default visual */
-  cmap = XCreateColormap(dpy, RootWindow(dpy, vi->screen), vi->visual, AllocNone);
-  swa.colormap = cmap;
-  swa.border_pixel = 0;
-  swa.event_mask = KeyPressMask    | ExposureMask | KeyReleaseMask
-                 | ButtonPressMask | StructureNotifyMask | Button1MotionMask;
+    /* create an X colormap since probably not using default visual */
+    cmap = XCreateColormap(dpy, RootWindow(dpy, vi->screen), vi->visual, AllocNone);
+    swa.colormap = cmap;
+    swa.border_pixel = 0;
+    swa.event_mask = KeyPressMask    | ExposureMask | KeyReleaseMask
+                     | ButtonPressMask | StructureNotifyMask | Button1MotionMask;
     eventMask = swa.event_mask;
-  win = XCreateWindow(dpy, RootWindow(dpy, vi->screen), 0, 0,
-                      1280, 720, 0, vi->depth, InputOutput, vi->visual,
-                      CWBorderPixel | CWColormap | CWEventMask, &swa);
-  XSetStandardProperties(dpy, win, "main", "main", None,
-                         argv, argc, NULL);
+    win = XCreateWindow(dpy, RootWindow(dpy, vi->screen), 0, 0,
+                          1280, 720, 0, vi->depth, InputOutput, vi->visual,
+                          CWBorderPixel | CWColormap | CWEventMask, &swa);
+    XSetStandardProperties(dpy, win, "main", "main", None,
+                          argv, argc, NULL);
 
-  /*** (6) bind the rendering context to the window ***/
+    /*** (6) bind the rendering context to the window ***/
 
-  glXMakeCurrent(dpy, win, cx);
+    glXMakeCurrent(dpy, win, cx);
 
-  /*** (7) request the X window to be displayed on the screen ***/
+    /*** (7) request the X window to be displayed on the screen ***/
 
-  XMapWindow(dpy, win);
+    XMapWindow(dpy, win);
 
-  /*** (8) configure the OpenGL context for rendering ***/
+    /*** (8) configure the OpenGL context for rendering ***/
 
-  glEnable(GL_DEPTH_TEST); /* enable depth buffering */
-  glDepthFunc(GL_LESS);    /* pedantic, GL_LESS is the default */
-  glClearDepth(1.0);       /* pedantic, 1.0 is the default */
+    glEnable(GL_DEPTH_TEST); /* enable depth buffering */
+    glDepthFunc(GL_LESS);    /* pedantic, GL_LESS is the default */
+    glClearDepth(1.0);       /* pedantic, 1.0 is the default */
 
-  initLight();
+    initLight();
 
-  /* frame buffer clears should be to black */
-  glClearColor(0.0, 0.0, 0.0, 0.0);
+    /* frame buffer clears should be to black */
+    glClearColor(0.0, 0.0, 0.0, 0.0);
 
     float screenRatio = width / height *2.0;
 
-  /* set up projection transform */
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glFrustum(-1.0 * screenRatio, 1.0 * screenRatio, -1.0, 1.0, 20.0, 1000.0);
-  /* establish initial viewport */
-  /* pedantic, full window size is default viewport */
-  //glViewport(0, 0, 1280, 720);
-
-  printf( "Press left mouse button to rotate around X axis\n" );
-  printf( "Press middle mouse button to rotate around Y axis\n" );
-  printf( "Press right mouse button to rotate around Z axis\n" );
-  printf( "Press ESC to quit the application\n" );
-
-  /*** (9) dispatch X events ***/
+    /* set up projection transform */
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glFrustum(-1.0 * screenRatio, 1.0 * screenRatio, -1.0, 1.0, 20.0, 1000.0);
+    /* establish initial viewport */
+    /* pedantic, full window size is default viewport */
+    //glViewport(0, 0, 1280, 720);
 
 
 
-  return 0;
+    /*** (9) dispatch X events ***/
+
+    return 0;
 }
 
 Simulator::Simulator()
@@ -199,36 +158,35 @@ void Simulator::run()
     lastTime = startTime;
 
     while (1)
-  {
+    {
 
-      if (XCheckWindowEvent(dpy, win, eventMask, &event))
-      {
-       //   cout<<"event"<<endl;
-      }
+        if (XCheckWindowEvent(dpy, win, eventMask, &event))
+        {
+            //   cout<<"event"<<endl;
+        }
        // else cout<<"not"<<endl;
     //do
     {
-      //XNextEvent(dpy, &event);
+        //XNextEvent(dpy, &event);
 
-      switch (event.type)
-      {
-        case KeyPress:
+        switch (event.type)
         {
-          KeySym     keysym;
-          XKeyEvent *kevent;
-          char       buffer[1];
-          /* It is necessary to convert the keycode to a
-           * keysym before checking if it is an escape */
-          kevent = (XKeyEvent *) &event;
-          if (   (XLookupString((XKeyEvent *)&event,buffer,1,&keysym,NULL) == 1)
-              && (keysym == (KeySym)XK_Escape) )
+            case KeyPress:
             {
-                cleanSimulation();
-                exit(0);
-            }
-
-            if (buffer[0] < 256)
-                pressedKey[buffer[0]]=true;
+                KeySym     keysym;
+                XKeyEvent *kevent;
+                char       buffer[1];
+                /* It is necessary to convert the keycode to a
+                    * keysym before checking if it is an escape */
+                kevent = (XKeyEvent *) &event;
+                if (   (XLookupString((XKeyEvent *)&event,buffer,1,&keysym,NULL) == 1) && (keysym == (KeySym)XK_Escape) )
+                {
+                    cleanSimulation();
+                    exit(0);
+                }
+                for(int i=0;i<256;i++) pressedKey[i]=false;
+                if (buffer[0] < 256)
+                    pressedKey[buffer[0]]=true;
 
                 cout<<"key pressed           sdfdsf"<<endl;
 
@@ -240,113 +198,112 @@ void Simulator::run()
                 if(buffer[0] >= 'A' && buffer[0] <= 'Z')
                     pressedKey[buffer[0] + 32] = true;
 
-            if (keysym == (KeySym)XK_Shift_L) pressedShift = true;
+                if (keysym == (KeySym)XK_Shift_L) pressedShift = true;
 
-            //cout<<buffer[0]<<"   "<<keysym<<endl;
-          break;
-        }
+                //cout<<buffer[0]<<"   "<<keysym<<endl;
+                break;
+            }
 
-        case KeyRelease:
+            case KeyRelease:
             {
                 KeySym     keysym;
-          XKeyEvent *kevent;
-          char       buffer[1];
-          /* It is necessary to convert the keycode to a
-           * keysym before checking if it is an escape */
-          kevent = (XKeyEvent *) &event;
-          /*if (   (XLookupString((XKeyEvent *)&event,buffer,1,&keysym,NULL) == 1)
-              && (keysym == (KeySym)XK_Escape) )
-            {
-                cleanSimulation();
-                cout<<"TEST DEST"<<endl;
+                XKeyEvent *kevent;
+                char       buffer[1];
+                /* It is necessary to convert the keycode to a
+                * keysym before checking if it is an escape */
+                kevent = (XKeyEvent *) &event;
+                /*if (   (XLookupString((XKeyEvent *)&event,buffer,1,&keysym,NULL) == 1) && (keysym == (KeySym)XK_Escape) )
+                {
+                    cleanSimulation();
+                    cout<<"TEST DEST"<<endl;
 
-                exit(0);
-            }*/
+                    exit(0);
+                }*/
 
-            if (buffer[0] < 256) pressedKey[buffer[0]]=false;
+                //if (buffer[0] < 256) pressedKey[buffer[0]]=false;
 
-            if (keysym == (KeySym)XK_Shift_L) pressedShift = false;
+                //if (keysym == (KeySym)XK_Shift_L) pressedShift = false;
 
-            //cout<<buffer[0]<<"   "<<keysym<<endl;
+                //cout<<buffer[0]<<"   "<<keysym<<endl;
 
-            /*switch(buffer[0])
-            {
-                case 'w':case 'W': pressedKey['W']=true; break;
-            }*/
+                /*switch(buffer[0])
+                {
+                    case 'w':case 'W': pressedKey['W']=true; break;
+                }*/
 
-            //cout<<"before: "<<cameraPos<<endl;
+                //cout<<"before: "<<cameraPos<<endl;
 
-            //moveCamera(0.016);
+                //moveCamera(0.016);
 
-            //cout<<"after: "<<cameraPos<<endl;
-            //cout<<"after all: "<<cameraPos<<endl;
-            //cout<<"after all: "<<cameraPos<<endl;
+                //cout<<"after: "<<cameraPos<<endl;
+                //cout<<"after all: "<<cameraPos<<endl;
+                //cout<<"after all: "<<cameraPos<<endl;
 
-            for(int i=0;i<256;i++) pressedKey[i]=false;
+                //for(int i=0;i<256;i++) pressedKey[i]=false;
 
 
-            //cout<<"after all: "<<cameraPos<<endl;
+                //cout<<"after all: "<<cameraPos<<endl;
                 break;
             }
 
 
-        case ButtonPress:
+            case ButtonPress:
 
-            XButtonEvent *bevent;
-            bevent = (XButtonEvent*) &event;
+                XButtonEvent *bevent;
+                bevent = (XButtonEvent*) &event;
 
-            prevMouseX = bevent->x;
-            prevMouseY = bevent->y;
+                prevMouseX = bevent->x;
+                prevMouseY = bevent->y;
 
-          recalcModelView = GL_TRUE;
-          switch (event.xbutton.button)
-          {
-            case 1: xAngle += 10.0;
-              break;
-            case 2: yAngle += 10.0;
-              break;
-            case 3: zAngle += 10.0;
-              break;
-          }
-          break;
+                recalcModelView = GL_TRUE;
+                switch (event.xbutton.button)
+                {
+                    case 1: xAngle += 10.0;
+                            break;
+                    case 2: yAngle += 10.0;
+                            break;
+                    case 3: zAngle += 10.0;
+                            break;
+                }
+                break;
 
             case MotionNotify:
-                {
-                    //KeySym     keysym;
-                      XMotionEvent *mevent;
-                      //char       buffer[1];
+            {
+                //KeySym     keysym;
+                XMotionEvent *mevent;
+                //char       buffer[1];
 
-                      mevent = (XMotionEvent *) &event;
+                mevent = (XMotionEvent *) &event;
 
-                      //cout<<mevent->x<<"     "<<mevent->y<<endl;
+                //cout<<mevent->x<<"     "<<mevent->y<<endl;
 
-                      int dx = mevent->x - prevMouseX;
-                      int dy = mevent->y - prevMouseY;
+                int dx = mevent->x - prevMouseX;
+                int dy = mevent->y - prevMouseY;
 
-                      cameraRot.x += dx * 0.2;
-                      cameraRot.y += dy * 0.2;
+                cameraRot.x += dx * 0.2;
+                cameraRot.y += dy * 0.2;
 
-                      if (cameraRot.y > 90) cameraRot.y = 90;
+                if (cameraRot.y > 90) cameraRot.y = 90;
                         //cout<<"camera y: "<<cameraRot.y<<endl;
-                        if (cameraRot.y < -90) cameraRot.y = -90;
+                if (cameraRot.y < -90) cameraRot.y = -90;
 
-                      prevMouseX = mevent->x;
-                      prevMouseY = mevent->y;
+                prevMouseX = mevent->x;
+                prevMouseY = mevent->y;
 
-                    break;
-                }
+                break;
+            }
 
-        case ConfigureNotify:
+            case ConfigureNotify:
 
-            updateRatio = true;
-            width = event.xconfigure.width;
-            height = event.xconfigure.height;
+                updateRatio = true;
+                width = event.xconfigure.width;
+                height = event.xconfigure.height;
           //glViewport(0, 0, event.xconfigure.width, event.xconfigure.height);
           /* fall through... */
-        case Expose:
-          needRedraw = GL_TRUE;
-          break;
-      }
+            case Expose:
+                needRedraw = GL_TRUE;
+                break;
+        }
     }// while(XPending(dpy)); /* loop to compress events */
 //cout<<"after all: "<<cameraPos<<endl;
 
@@ -542,7 +499,7 @@ bool Simulator::isKeyPressed(long k)
     return false;
 }
 
-void Simulator::initLight()
+void EngineCore::initLight()
 {
     const GLfloat lambient[]  = { 0.3,0.3,0.3, 1.0f };
     const GLfloat ldiffuse[]  = { 1,1,1, 1.0f };    //111

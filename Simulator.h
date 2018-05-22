@@ -24,7 +24,7 @@ void destroyNextObject(Simulator *engine, GameObject *go);
 #define MULTIPLY_TIME       1
 #define MAX_DELTA           0.15
 #define MIN_DELTA           0.007
-#define REAL_INT_MULTIPLY   50
+#define REAL_INT_MULTIPLY   5
 #define CAMERA_VELOCITY     1
 
 #include <vector>
@@ -36,12 +36,46 @@ void destroyNextObject(Simulator *engine, GameObject *go);
 #include <unistd.h>
 #include <sys/time.h>
 class GameObject;
-class Simulator
+
+class EngineCore
+{
+public:
+
+    static int init(int argc, char **argv);
+    static bool didInit;
+
+    int prevMouseX;
+    int prevMouseY;
+
+    timeval startTime;
+    timeval lastTime;
+
+    static int snglBuf[];// = {GLX_RGBA, GLX_DEPTH_SIZE, 16, None};
+    static int dblBuf[];//  = {GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
+
+    static int width;
+    static int height;
+    bool updateRatio;
+
+    bool pressedKey[256];
+    bool pressedShift;
+
+    static Display   *dpy;
+    static Window     win;
+    GLfloat    xAngle = 0.0, yAngle = 82.0, zAngle = 112.0;
+    static GLboolean  doubleBuffer;// = GL_TRUE;
+    //static XSetWindowAttributes swa;
+    static long eventMask;
+
+    static void initLight();
+};
+
+class Simulator : public EngineCore
 {
     friend GameObject;
 
 public:
-    static int init(int argc, char** argv);
+    //static int init(int argc, char** argv);
 
     Simulator();
     void loadRoad(std::string fileName);
@@ -63,36 +97,9 @@ private:
 
     GameObject* findObjectByName(std::string on);
 
-    bool pressedKey[256];
-    bool pressedShift;
-
-    int prevMouseX;
-    int prevMouseY;
-
     std::vector<GameObject*> objects;
 
     void redraw();
-
-    timeval startTime;
-    timeval lastTime;
-
-    static bool didInit;
-
-    static int snglBuf[];// = {GLX_RGBA, GLX_DEPTH_SIZE, 16, None};
-    static int dblBuf[];//  = {GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
-
-    static int width;
-    static int height;
-    bool updateRatio;
-
-    static Display   *dpy;
-    static Window     win;
-    GLfloat    xAngle = 0.0, yAngle = 82.0, zAngle = 112.0;
-    static GLboolean  doubleBuffer;// = GL_TRUE;
-    //static XSetWindowAttributes swa;
-    static long eventMask;
-
-    static void initLight();
 
     friend void registerNewObject(Simulator *engine, GameObject *go);
     friend void destroyNextObject(Simulator *engine, GameObject *go);
