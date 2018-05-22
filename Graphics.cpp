@@ -102,6 +102,11 @@ Vec3& Vec3::operator /= (const float right)
     return *this;
 }
 
+Vec3 Vec3::operator - ()
+{
+    return Vec3(-x,-y,-z);
+}
+
 Vec3 operator + (Vec3 left, const Vec3& right)
 {
     left += right;
@@ -131,6 +136,11 @@ ostream& operator << (ostream& out, const Vec3& right)
     out << "(" << right.x << ", " << right.y << ", " << right.z << ")";
     return out;
 }
+
+unsigned int Graphics::QUADS = GL_QUADS;
+unsigned int Graphics::TRIANGLES = GL_TRIANGLES;
+unsigned int Graphics::POLYGON = GL_POLYGON;
+unsigned int Graphics::LINES = GL_LINES;
 
 void Graphics::draw()
 {
@@ -197,6 +207,18 @@ void Graphics::drawLine(Vec3 b, Vec3 e)
     glBegin(GL_LINES);
     glVertex3f(b.x,b.y,b.z);
     glVertex3f(e.x,e.y,e.z);
+    glEnd();
+}
+
+void Graphics::drawTile(float a)
+{
+    a /= 2;
+    glBegin(GL_QUADS);
+    glNormal3f(0,1,0);
+    glVertex3f(-a,0,-a);
+    glVertex3f(a,0,-a);
+    glVertex3f(a,0,a);
+    glVertex3f(-a,0,a);
     glEnd();
 }
 
@@ -297,4 +319,66 @@ int Graphics::rotateDirection(float a, float b)
     if (a<b)
         return 1;
     return -1;
+}
+
+void Graphics::beginDraw(int mode)
+{
+    glBegin(mode);
+}
+
+void Graphics::endDraw()
+{
+    glEnd();
+}
+
+void Graphics::drawTriangle(Vec3 a1, Vec3 a2, Vec3 a3)
+{
+    drawVertex(a1);
+    drawVertex(a2);
+    drawVertex(a3);
+}
+
+void Graphics::pushMatrix()
+{
+    glPushMatrix();
+}
+
+void Graphics::popMatrix()
+{
+    glPopMatrix();
+}
+
+void Graphics::rotateX(float x)
+{
+    glRotatef(x,1,0,0);
+}
+
+void Graphics::rotateY(float y)
+{
+    glRotatef(y,0,1,0);
+}
+
+void Graphics::rotateZ(float z)
+{
+    glRotatef(z,0,0,1);
+}
+
+void Graphics::translate(float x, float y, float z)
+{
+    glTranslatef(x,y,z);
+}
+
+void Graphics::translate(Vec3 t)
+{
+    glTranslatef(t.x,t.y,t.z);
+}
+
+void Graphics::scale(float x, float y, float z)
+{
+    glScalef(x,y,z);
+}
+
+void Graphics::scale(Vec3 s)
+{
+    glScalef(s.x,s.y,s.z);
 }

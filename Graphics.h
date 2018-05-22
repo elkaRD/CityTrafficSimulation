@@ -28,6 +28,8 @@ public:
     Vec3& operator *= (const float right);
     Vec3& operator /= (const float right);
 
+    Vec3 operator - ();
+
     //friend std::istream& operator >> (std::istream& in, Vec3& right);
 };
 
@@ -47,7 +49,9 @@ protected: public:
     void drawCube(float a);
     void drawCube(float x, float y, float z);
     void drawLine(Vec3 begP, Vec3 endP);
+    void drawTile(float a);
     void setColor(float r, float g, float b);
+    void setColor(Vec3 c);
 
     void drawVertex(Vec3 a);
     void drawQuad(Vec3 a1, Vec3 a2, Vec3 a3, Vec3 a4);
@@ -56,6 +60,24 @@ protected: public:
     float lerp(float a, float b, float s);
     float lerpAngle(float a, float b, float s);
     int rotateDirection(float a, float b);
+
+    static unsigned int QUADS;
+    static unsigned int TRIANGLES;
+    static unsigned int LINES;
+    static unsigned int POLYGON;
+
+    void beginDraw(int mode);
+    void endDraw();
+    void drawTriangle(Vec3 a1, Vec3 a2, Vec3 a3);
+    void pushMatrix();
+    void popMatrix();
+    void rotateX(float x);
+    void rotateY(float y);
+    void rotateZ(float z);
+    void translate(float x, float y, float z);
+    void translate(Vec3 t);
+    void scale(float x, float y, float z);
+    void scale(Vec3 s);
 };
 
 #endif // GRAPHICS_H

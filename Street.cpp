@@ -411,7 +411,8 @@ void glP(Vec3 x)
 void Cross::draw()
 {
     setColor(0.1,0.1,0.1);
-    drawCube(0.6, 0.01, 0.6);
+    drawTile(0.6);
+    //drawCube(0.6, 0.01, 0.6);
 
 }
 
@@ -529,7 +530,8 @@ void CrossLights::draw()
         //drawCube(0.5);
     }
 
-    glTranslatef(-pos.x,-pos.y,-pos.z);
+    //glTranslatef(-pos.x,-pos.y,-pos.z);
+    translate(-pos);
 
     for(int i =0;i<streets.size();i++)
     {

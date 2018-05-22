@@ -95,7 +95,7 @@ int EngineCore::init(int argc, char **argv)
                      | ButtonPressMask | StructureNotifyMask | Button1MotionMask;
     eventMask = swa.event_mask;
     win = XCreateWindow(dpy, RootWindow(dpy, vi->screen), 0, 0,
-                          1280, 720, 0, vi->depth, InputOutput, vi->visual,
+                          width, height, 0, vi->depth, InputOutput, vi->visual,
                           CWBorderPixel | CWColormap | CWEventMask, &swa);
     XSetStandardProperties(dpy, win, "main", "main", None,
                           argv, argc, NULL);
@@ -184,7 +184,7 @@ void Simulator::run()
                     cleanSimulation();
                     exit(0);
                 }
-                for(int i=0;i<256;i++) pressedKey[i]=false;
+
                 if (buffer[0] < 256)
                     pressedKey[buffer[0]]=true;
 
