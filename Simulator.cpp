@@ -44,38 +44,12 @@ void Simulator::keyPressed(char k)
     }
 }
 
-/*void Simulator::display(float delta)
-{
-
-
-  //glRotatef(cameraRot.x, 0,1,0);
-  //glRotatef(camer11aRot.y, 1,0,0);
-
-
-
-  xAngle +=0.1;
-
-  //recalcModelView = GL_FALSE;
-  //needRedraw = GL_TRUE;
-//}
-//if (needRedraw)
-//{
-
-    //cout<<"                  "<<fixed<<newTime.tv_usec<<"  "<<timeE<<"  "<<timeB<<"   "<<delta<<endl;
-    //cout<<delta<<endl;
-    for(int i=0;i<REAL_INT_MULTIPLY;i++ )
-    {
-        update(delta);
-    }
-}*/
-
 void Simulator::mouseMove(int dx, int dy)
 {
     cameraRot.x += dx * 0.2;
     cameraRot.y += dy * 0.2;
 
     if (cameraRot.y > 90) cameraRot.y = 90;
-            //cout<<"camera y: "<<cameraRot.y<<endl;
     if (cameraRot.y < -90) cameraRot.y = -90;
 }
 
@@ -128,9 +102,6 @@ void Simulator::moveCamera(float delta)
 void Simulator::moveCamera2(char c)
 {
     float multiplyMove=100;
-    //if(isKeyPressed(XK_Shift_L))multiplyMove *= 5;
-
-    //multiplyMove *= delta;
 
     cout<<cameraPos<<endl;
 

@@ -3,40 +3,29 @@
 
 #include"EngineCore.h"
 
-//#include "Graphics.h"
-
 class Simulator;
 class GameObject;
-void registerNewObject(Simulator *engine, GameObject *go);
-void destroyNextObject(Simulator *engine, GameObject *go);
 
 #include "GameObject.h"
 #include "Street.h"
 #include "Vehicle.h"
 
-
-
-
 class GameObject;
-
-
 
 class Simulator : public EngineCore
 {
     friend GameObject;
 
 public:
-    //static int init(int argc, char** argv);
-
     Simulator();
+
     void loadRoad(std::string fileName);
     void loadPriority(std::string fileName);
-    //void run();
 
     Vec3 cameraPos;
     Vec3 cameraRot;
+
 private:
-    //void update(float delta);
     void registerObject(GameObject *go);
     void destroyObject(GameObject *go);
 
@@ -50,21 +39,16 @@ private:
 
     std::vector<GameObject*> objects;
 
-    //void redraw();
-
-    //void run();
-
     void keyPressed(char k);
     void update(float delta);
     void redraw();
     void mouseMove(int dx, int dy);
 
+    //static void registerNewObject(Simulator *engine, GameObject *go);
+    //static void destroyNextObject(Simulator *engine, GameObject *go);
+
     friend void registerNewObject(Simulator *engine, GameObject *go);
     friend void destroyNextObject(Simulator *engine, GameObject *go);
 };
-
-
-
-//int init(int argc, char** argv);
 
 #endif // SIMULTOR_H
