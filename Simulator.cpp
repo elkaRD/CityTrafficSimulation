@@ -1,20 +1,11 @@
-/* A simple program to show how to set up an X window for OpenGL rendering.
- * X86 compilation: gcc -o -L/usr/X11/lib   main main.c -lGL -lX11
- * X64 compilation: gcc -o -L/usr/X11/lib64 main main.c -lGL -lX11
- */
-
 #include"Simulator.h"
 using namespace std;
 
-
-
 void Simulator::redraw()
 {
-    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     glRotatef(cameraRot.y, 1,0,0);
     glRotatef(cameraRot.x, 0,1,0);
-    //glTranslatef(0,-100,0);
+
     glScalef(10, 10, 10);
 
     glTranslatef(-cameraPos.x, -cameraPos.y, -cameraPos.z);
@@ -29,12 +20,6 @@ void Simulator::redraw()
     }
 
     glPopMatrix();
-
-
-    if (doubleBuffer)
-        glXSwapBuffers(dpy, win);/* buffer swap does implicit glFlush */
-    else
-        glFlush();  /* explicit flush for single buffered case */
 }
 
 

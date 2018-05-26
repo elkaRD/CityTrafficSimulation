@@ -48,10 +48,6 @@ Vec3 GameObject::getRot()
 void GameObject::drawObject()
 {
     pushMatrix();
-    //glTranslatef(pos.x,pos.y,pos.z);
-    //glRotatef(rot.y, 0, 1, 0);
-    //glRotatef(rot.x, 1, 0, 0);
-    //glRotatef(rot.z, 0, 0, 1);
 
     translate(pos);
     rotateY(rot.y);
