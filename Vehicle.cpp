@@ -185,14 +185,14 @@ void Vehicle::update(float delta)
 
             if (curCross != NULL)
             {
-                for (int i=0;i<curCross->streets.size();i++)
+                for (unsigned int i=0;i<curCross->streets.size();i++)
                 {
                     if (curCross->streets[i].street == curRoad)
                     {
                         if (curCross->id.compare("SK3") ==0) cout<< curCross->streets.size()-1<<endl;
 
                         desiredTurn = randInt(0, curCross->streets.size()-1);
-                        if (desiredTurn == i) desiredTurn = (desiredTurn+1) % curCross->streets.size();
+                        if (desiredTurn == (int)i) desiredTurn = (desiredTurn+1) % curCross->streets.size();
 
                         if (curCross->streets.size() == 2) desiredTurn = (i+1) % 2;
 
@@ -237,7 +237,7 @@ void Vehicle::update(float delta)
 
     if (!isLeavingRoad && curCross != NULL && nextRoad != NULL && allowedToCross/* && nextRoad->freeSpace(direction) > vehicleLength + remainDst*/)
     {
-        for(int i=0;i<curCross->streets.size();i++)
+        for(unsigned int i=0;i<curCross->streets.size();i++)
         {
             if (curCross->streets[i].street == nextRoad)
             {
@@ -528,7 +528,7 @@ float Vehicle::getDst()
 
 bool Vehicle::isEnoughSpace()
 {
-    if (nextRoad == NULL || curCross == NULL || desiredTurn >= curCross->streets.size()) return false;
+    if (nextRoad == NULL || curCross == NULL || desiredTurn >= (int)curCross->streets.size()) return false;
 
     return nextRoad->freeSpace(curCross->streets[desiredTurn].direction) > vehicleLength + remainDst;
 }
@@ -549,20 +549,20 @@ void Car::draw()
 
     if (blinker < 0 && blinkerLight)
     {
-        glPushMatrix();
-        glTranslatef(0,0.05,-0.038);
+        pushMatrix();
+        translate(0,0.05,-0.038);
         setColor(1,0.647,0);
         drawCube(0.22,0.02,0.01);
         //drawCube(1,0.02,0.01);
-        glPopMatrix();
+        popMatrix();
     }
     if (blinker > 0 && blinkerLight)
     {
-        glPushMatrix();
-        glTranslatef(0,0.05,0.038);
+        pushMatrix();
+        translate(0,0.05,0.038);
         setColor(1,0.647,0);
         drawCube(0.22,0.02,0.01);
-        glPopMatrix();
+        popMatrix();
     }
 
     //setColor(0,1,0);
@@ -571,20 +571,20 @@ void Car::draw()
     {
         setColor(1,0,0);
 
-        glPushMatrix();
-        glTranslatef(-0.05,0.08,0);
+        pushMatrix();
+        translate(-0.05,0.08,0);
         drawCube(0.07,0.003,0.04);
-        glPopMatrix();
+        popMatrix();
 
-        glPushMatrix();
-        glTranslatef(-0.05,0.05,0.033);
+        pushMatrix();
+        translate(-0.05,0.05,0.033);
         drawCube(0.12,0.01,0.01);
-        glPopMatrix();
+        popMatrix();
 
-        glPushMatrix();
-        glTranslatef(-0.05,0.05,-0.033);
+        pushMatrix();
+        translate(-0.05,0.05,-0.033);
         drawCube(0.12,0.01,0.01);
-        glPopMatrix();
+        popMatrix();
     }
     setColor(0,1,0);
     if (curCross != NULL/* && allowedToCross*/)
@@ -617,15 +617,15 @@ void Car::draw()
     }*/
 
     //drawCube(0.2,4,0.2);
-    glPushMatrix();
-    glTranslatef(0,0.05,0);
+    pushMatrix();
+    translate(0,0.05,0);
     drawCube(0.2,0.05,0.1);
     drawRoof();
 
     //glTranslatef(0.2,0,0);
     //setColor(0,0,0);
     //drawCube(0.1);
-    glPopMatrix();
+    popMatrix();
 
     /*glPushMatrix();
     glTranslatef(0.25,0,0);
@@ -671,66 +671,71 @@ void Bus::update(float delta)
 
 void Bus::draw()
 {
-    glPushMatrix();
+    pushMatrix();
 
-    glTranslatef(0,0.1,0);
+    translate(0,0.1,0);
 
     setColor(0.7,0.7,0);
-    glPushMatrix();
-    glRotatef(busAngle, 0,-1,0);
-    glTranslatef(-0.2,0,0);
+    pushMatrix();
+    //glRotatef(busAngle, 0,-1,0);
+    rotateY(-busAngle);
+    translate(-0.2,0,0);
     drawCube(0.3,0.13,0.135);
     setColor(0,0.8,0.8);
-    glTranslatef(-0.02,0.02,0);
+    translate(-0.02,0.02,0);
     drawCube(0.25,0.07,0.14);
-    glPopMatrix();
+    popMatrix();
 
     setColor(0.7,0.7,0);
-    glPushMatrix();
-    glRotatef(busAngle , 0,1,0);
-    glTranslatef(0.2,0,0);
+    pushMatrix();
+    //glRotatef(busAngle , 0,1,0);
+    rotateY(busAngle);
+    translate(0.2,0,0);
     drawCube(0.3, 0.13, 0.135);
     setColor(0,0.8,0.8);
-    glTranslatef(0.02,0.02,0);
+    translate(0.02,0.02,0);
     drawCube(0.27,0.07,0.14);
-    glPopMatrix();
+    popMatrix();
 
     setColor(0.5,0.5,0);
     drawCube(0.4,0.12,0.12);
 
-    glPushMatrix();
+    pushMatrix();
     if (blinker < 0 && blinkerLight)
     {
         setColor(1,0.647,0);
-        glTranslatef(0, -0.031,-0.046);
+        translate(0, -0.031,-0.046);
         drawCube(0.73,0.01,0.01);
     }
     if (blinker > 0 && blinkerLight)
     {
         setColor(1,0.647,0);
-        glTranslatef(0, -0.031,0.046);
+        translate(0, -0.031,0.046);
         drawCube(0.73,0.01,0.01);
     }
-    glPopMatrix();
+    popMatrix();
 
     if (isBraking)
     {
+        pushMatrix();
         setColor(1,0,0);
+        rotateY(-busAngle);
 
-        glPushMatrix();
-        glTranslatef(-0.3,0.05,0);
+        pushMatrix();
+        translate(-0.3,0.05,0);
         drawCube(0.12,0.003,0.06);
-        glPopMatrix();
+        popMatrix();
 
-        glPushMatrix();
-        glTranslatef(-0.3,-0.02,0.04);
+        pushMatrix();
+        translate(-0.3,-0.02,0.04);
         drawCube(0.12,0.01,0.01);
-        glPopMatrix();
+        popMatrix();
 
-        glPushMatrix();
-        glTranslatef(-0.3,-0.02,-0.04);
+        pushMatrix();
+        translate(-0.3,-0.02,-0.04);
         drawCube(0.12,0.01,0.01);
-        glPopMatrix();
+        popMatrix();
+        popMatrix();
     }
 
     /*if (blinker < 0 && blinkerLight)
@@ -755,5 +760,5 @@ void Bus::draw()
     }*/
 
 
-    glPopMatrix();
+    popMatrix();
 }

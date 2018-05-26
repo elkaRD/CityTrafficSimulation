@@ -30,7 +30,7 @@ void Simulator::redraw()
 
     glPushMatrix();
 
-    for (int i=0;i<objects.size();i++)
+    for (unsigned int i=0;i<objects.size();i++)
     {
         objects[i]->drawObject();
     }
@@ -371,8 +371,8 @@ void Simulator::run()
         timeval newTime;
         gettimeofday(&newTime, 0);
         //float timeB = (int)newTime.tv_sec + (float)newTime.tv_usec / 1000000.0;
-        float timeB = (long long)newTime.tv_sec;
-        float timeE = lastTime.tv_sec + (float)lastTime.tv_usec / 1000000.0;
+        //float timeB = (long long)newTime.tv_sec;
+        //float timeE = lastTime.tv_sec + (float)lastTime.tv_usec / 1000000.0;
         //float delta =  0;//newTime.tv_sec;// - lastTime.tv_sec;
         //delta += newTime.tv_usec / 1000000.0;
         //delta -= lastTime.tv_sec;
@@ -550,7 +550,7 @@ void Simulator::loadRoad(string fileName)
             if (type.compare("SK") == 0)
             {
                 float x1,y1,z1;
-                float x2,y2,z2;
+                //float x2,y2,z2;
                 file >> x1 >> y1 >> z1;// >> x1 >> y2 >> z2;
                 Vec3 v1(x1,y1,z1);
                 //Vec3 v2(x2,y2,z2);
@@ -572,7 +572,7 @@ void Simulator::loadRoad(string fileName)
                 Cross *crossB;
                 Cross *crossE;
 
-                for (int i=0;i<crosses.size();i++)
+                for (unsigned int i=0;i<crosses.size();i++)
                 {
                     if (crosses[i]->id.compare(begCrossID) == 0)
                     {
@@ -580,7 +580,7 @@ void Simulator::loadRoad(string fileName)
                         break;
                     }
                 }
-                for (int i=0;i<crosses.size();i++)
+                for (unsigned int i=0;i<crosses.size();i++)
                 {
                     if (crosses[i]->id.compare(endCrossID) == 0)
                     {
@@ -605,7 +605,7 @@ void Simulator::loadRoad(string fileName)
                 file >> vehType >> jointCross >> x >> y >> z;
                 Vec3 v(x,y,z);
                 Cross *cross;
-                for(int i=0;i<objects.size();i++)
+                for(unsigned int i=0;i<objects.size();i++)
                 {
                     if (crosses[i]->id.compare(jointCross) == 0)
                     {
@@ -629,7 +629,7 @@ void Simulator::loadRoad(string fileName)
             if (type.compare("CL") == 0)
             {
                 float x1,y1,z1;
-                float x2,y2,z2;
+                //float x2,y2,z2;
                 file >> x1 >> y1 >> z1;// >> x1 >> y2 >> z2;
                 Vec3 v1(x1,y1,z1);
                 //Vec3 v2(x2,y2,z2);
@@ -685,7 +685,7 @@ void Simulator::loadPriority(string fileName)
 
 void Simulator::update(float delta)
 {
-    for(int i=0;i<objects.size();i++)
+    for(unsigned int i=0;i<objects.size();i++)
     {
         objects[i]->updateObject(delta);
     }
@@ -698,7 +698,7 @@ void Simulator::registerObject(GameObject *go)
 
 void Simulator::destroyObject(GameObject *go)
 {
-    for(int i=0;i<objects.size();i++)
+    for(unsigned int i=0;i<objects.size();i++)
     {
         if (objects[i] == go)
         {
@@ -736,7 +736,7 @@ void destroyNextObject(Simulator *engine, GameObject *go)
 
 GameObject* Simulator::findObjectByName(string no)
 {
-    for(int i=0;i<objects.size();i++)
+    for(unsigned int i=0;i<objects.size();i++)
     {
         if (objects[i]->id.compare(no) == 0)
         {

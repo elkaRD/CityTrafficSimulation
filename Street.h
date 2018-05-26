@@ -82,7 +82,7 @@ public:
     {
         Road *street;
         std::vector<Vehicle*> vehicles;
-        bool enabled = true;
+        //bool enabled;
         bool direction;
         //Vec3 jointPos;
         Vec3 getJointPos();

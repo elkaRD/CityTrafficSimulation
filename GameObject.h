@@ -23,6 +23,7 @@ public:
 //private:
     GameObject();
     GameObject(Simulator *engine);
+    virtual ~GameObject(){};
 
     void updateObject(float delta);
     void drawObject();
