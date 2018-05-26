@@ -6,23 +6,7 @@
 #include"Simulator.h"
 using namespace std;
 
-int EngineCore::width = 1280;
-int EngineCore::height = 720;
 
-int EngineCore::snglBuf[] = {GLX_RGBA, GLX_DEPTH_SIZE, 16, None};
-int EngineCore::dblBuf[]  = {GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
-
-Display   *EngineCore::dpy = NULL;
-Window    EngineCore::win = (Window) NULL;
-GLboolean EngineCore::doubleBuffer = GL_TRUE;
-//XSetWindowAttributes Simulator::swa = NULL;
-long EngineCore::eventMask = 0;
-
-void fatalError(char *message)
-{
-    fprintf(stderr, "main: %s\n", message);
-    exit(1);
-}
 
 void Simulator::redraw()
 {
@@ -44,97 +28,7 @@ void Simulator::redraw()
         glFlush();  /* explicit flush for single buffered case */
 }
 
-int EngineCore::init(int argc, char **argv)
-{
-    XVisualInfo         *vi;
-    Colormap             cmap;
-    XSetWindowAttributes swa;
-    GLXContext           cx;
 
-    int                  dummy;
-
-    /*** (1) open a connection to the X server ***/
-
-    dpy = XOpenDisplay(NULL);
-    if (dpy == NULL)
-        fatalError("could not open display");
-
-    /*** (2) make sure OpenGL's GLX extension supported ***/
-
-    if(!glXQueryExtension(dpy, &dummy, &dummy))
-        fatalError("X server has no OpenGL GLX extension");
-
-    /*** (3) find an appropriate visual ***/
-
-    /* find an OpenGL-capable RGB visual with depth buffer */
-    vi = glXChooseVisual(dpy, DefaultScreen(dpy), dblBuf);
-    if (vi == NULL)
-    {
-        vi = glXChooseVisual(dpy, DefaultScreen(dpy), snglBuf);
-        if (vi == NULL) fatalError("no RGB visual with depth buffer");
-        doubleBuffer = GL_FALSE;
-    }
-    if(vi->c_class != TrueColor)
-        fatalError("TrueColor visual required for this program");
-
-    /*** (4) create an OpenGL rendering context  ***/
-
-    /* create an OpenGL rendering context */
-    cx = glXCreateContext(dpy, vi, /* no shared dlists */ None,
-                            /* direct rendering if possible */ GL_TRUE);
-    if (cx == NULL)
-        fatalError("could not create rendering context");
-
-    /*** (5) create an X window with the selected visual ***/
-
-    /* create an X colormap since probably not using default visual */
-    cmap = XCreateColormap(dpy, RootWindow(dpy, vi->screen), vi->visual, AllocNone);
-    swa.colormap = cmap;
-    swa.border_pixel = 0;
-    swa.event_mask = KeyPressMask    | ExposureMask | KeyReleaseMask
-                     | ButtonPressMask | StructureNotifyMask | Button1MotionMask;
-    eventMask = swa.event_mask;
-    win = XCreateWindow(dpy, RootWindow(dpy, vi->screen), 0, 0,
-                          width, height, 0, vi->depth, InputOutput, vi->visual,
-                          CWBorderPixel | CWColormap | CWEventMask, &swa);
-    XSetStandardProperties(dpy, win, "main", "main", None,
-                          argv, argc, NULL);
-
-    /*** (6) bind the rendering context to the window ***/
-
-    glXMakeCurrent(dpy, win, cx);
-
-    /*** (7) request the X window to be displayed on the screen ***/
-
-    XMapWindow(dpy, win);
-
-    /*** (8) configure the OpenGL context for rendering ***/
-
-    glEnable(GL_DEPTH_TEST); /* enable depth buffering */
-    glDepthFunc(GL_LESS);    /* pedantic, GL_LESS is the default */
-    glClearDepth(1.0);       /* pedantic, 1.0 is the default */
-
-    initLight();
-
-    /* frame buffer clears should be to black */
-    glClearColor(0.0, 0.0, 0.0, 0.0);
-
-    float screenRatio = width / height *2.0;
-
-    /* set up projection transform */
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glFrustum(-1.0 * screenRatio, 1.0 * screenRatio, -1.0, 1.0, 20.0, 1000.0);
-    /* establish initial viewport */
-    /* pedantic, full window size is default viewport */
-    //glViewport(0, 0, 1280, 720);
-
-
-
-    /*** (9) dispatch X events ***/
-
-    return 0;
-}
 
 Simulator::Simulator()
 {
@@ -499,33 +393,7 @@ bool Simulator::isKeyPressed(long k)
     return false;
 }
 
-void EngineCore::initLight()
-{
-    const GLfloat lambient[]  = { 0.3,0.3,0.3, 1.0f };
-    const GLfloat ldiffuse[]  = { 1,1,1, 1.0f };    //111
-    const GLfloat lspecular[] = { 0,0,0, 1.0f };    //111
-    const GLfloat lposition[] = { 30,30,30, 0.0f };
 
-    const GLfloat mambient[]    = { 0.7f, 0.7f, 0.7f, 1.0f };
-    const GLfloat mdiffuse[]    = { 0.8f, 0.8f, 0.8f, 1.0f };
-    const GLfloat mspecular[]   = { 0,0,0, 1.0f };               //111
-    const GLfloat shininess[] = { 100 };
-
-    glEnable(GL_LIGHT0);
-    glEnable(GL_NORMALIZE);
-    glEnable(GL_COLOR_MATERIAL);
-    glEnable(GL_LIGHTING);
-
-    glLightfv(GL_LIGHT0, GL_AMBIENT,  lambient);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE,  ldiffuse);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, lspecular);
-    glLightfv(GL_LIGHT0, GL_POSITION, lposition);
-
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   mambient);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   mdiffuse);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  mspecular);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
-}
 
 
 void Simulator::loadRoad(string fileName)

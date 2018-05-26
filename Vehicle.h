@@ -64,6 +64,22 @@ public:
     bool debugstop;
     //int idnum;
     static int numVeh;
+
+    void initRandValues();
+    void initBlinkers();
+    void initPointers(Road *spawnRoad);
+
+    void setVelocity();
+    void checkVelocity(float delta, float prevVelocity);
+    void setNewPos();
+    void registerToCross();
+
+    void tryBeAllowedToEnterCross();
+    void leaveRoad();
+    void setCornerPosition();
+    void enterNewRoad();
+
+    void updateBlinkers(float delta);
 };
 
 class Car : public Vehicle
