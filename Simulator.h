@@ -14,20 +14,9 @@ void destroyNextObject(Simulator *engine, GameObject *go);
 #include "Street.h"
 #include "Vehicle.h"
 
-#define MULTIPLY_TIME       1
-#define MAX_DELTA           0.15
-#define MIN_DELTA           0.007
-#define REAL_INT_MULTIPLY   2
-#define CAMERA_VELOCITY     1
 
-#include <vector>
-#include <fstream>
-#include <string>
-#include <sstream>
-#include <ctime>
-#include <iostream>
-#include <unistd.h>
-#include <sys/time.h>
+
+
 class GameObject;
 
 
@@ -42,12 +31,12 @@ public:
     Simulator();
     void loadRoad(std::string fileName);
     void loadPriority(std::string fileName);
-    void run();
+    //void run();
 
     Vec3 cameraPos;
     Vec3 cameraRot;
 private:
-    void update(float delta);
+    //void update(float delta);
     void registerObject(GameObject *go);
     void destroyObject(GameObject *go);
 
@@ -61,7 +50,14 @@ private:
 
     std::vector<GameObject*> objects;
 
+    //void redraw();
+
+    //void run();
+
+    void keyPressed(char k);
+    void update(float delta);
     void redraw();
+    void mouseMove(int dx, int dy);
 
     friend void registerNewObject(Simulator *engine, GameObject *go);
     friend void destroyNextObject(Simulator *engine, GameObject *go);

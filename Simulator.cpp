@@ -12,6 +12,15 @@ void Simulator::redraw()
 {
     //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    glRotatef(cameraRot.y, 1,0,0);
+    glRotatef(cameraRot.x, 0,1,0);
+    //glTranslatef(0,-100,0);
+    glScalef(10, 10, 10);
+
+    glTranslatef(-cameraPos.x, -cameraPos.y, -cameraPos.z);
+
+    glScalef(1,1,-1);
+
     glPushMatrix();
 
     for (unsigned int i=0;i<objects.size();i++)
@@ -41,262 +50,48 @@ Simulator::Simulator()
     cameraRot = Vec3(0,90,0);
 }
 
-void Simulator::run()
+void Simulator::keyPressed(char k)
 {
-    GLboolean            needRedraw = GL_FALSE, recalcModelView = GL_TRUE;;
-    XEvent               event;
-
-    //startTime = time(0);
-    //lastTime = startTime;
-    gettimeofday(&startTime, 0);
-    lastTime = startTime;
-
-    while (1)
+    if (k == 27)
     {
-
-        if (XCheckWindowEvent(dpy, win, eventMask, &event))
-        {
-            //   cout<<"event"<<endl;
-        }
-       // else cout<<"not"<<endl;
-    //do
-    {
-        //XNextEvent(dpy, &event);
-
-        switch (event.type)
-        {
-            case KeyPress:
-            {
-                KeySym     keysym;
-                XKeyEvent *kevent;
-                char       buffer[1];
-                /* It is necessary to convert the keycode to a
-                    * keysym before checking if it is an escape */
-                kevent = (XKeyEvent *) &event;
-                if (   (XLookupString((XKeyEvent *)&event,buffer,1,&keysym,NULL) == 1) && (keysym == (KeySym)XK_Escape) )
-                {
-                    cleanSimulation();
-                    exit(0);
-                }
-
-                if (buffer[0] < 256)
-                    pressedKey[buffer[0]]=true;
-
-                cout<<"key pressed           sdfdsf"<<endl;
-
-                moveCamera(0.016);
-
-                if(buffer[0] >= 'a' && buffer[0] <= 'z')
-                    pressedKey[buffer[0] - 32] = true;
-
-                if(buffer[0] >= 'A' && buffer[0] <= 'Z')
-                    pressedKey[buffer[0] + 32] = true;
-
-                if (keysym == (KeySym)XK_Shift_L) pressedShift = true;
-
-                //cout<<buffer[0]<<"   "<<keysym<<endl;
-                break;
-            }
-
-            case KeyRelease:
-            {
-                KeySym     keysym;
-                XKeyEvent *kevent;
-                char       buffer[1];
-                /* It is necessary to convert the keycode to a
-                * keysym before checking if it is an escape */
-                kevent = (XKeyEvent *) &event;
-                /*if (   (XLookupString((XKeyEvent *)&event,buffer,1,&keysym,NULL) == 1) && (keysym == (KeySym)XK_Escape) )
-                {
-                    cleanSimulation();
-                    cout<<"TEST DEST"<<endl;
-
-                    exit(0);
-                }*/
-
-                //if (buffer[0] < 256) pressedKey[buffer[0]]=false;
-
-                //if (keysym == (KeySym)XK_Shift_L) pressedShift = false;
-
-                //cout<<buffer[0]<<"   "<<keysym<<endl;
-
-                /*switch(buffer[0])
-                {
-                    case 'w':case 'W': pressedKey['W']=true; break;
-                }*/
-
-                //cout<<"before: "<<cameraPos<<endl;
-
-                //moveCamera(0.016);
-
-                //cout<<"after: "<<cameraPos<<endl;
-                //cout<<"after all: "<<cameraPos<<endl;
-                //cout<<"after all: "<<cameraPos<<endl;
-
-                //for(int i=0;i<256;i++) pressedKey[i]=false;
-
-
-                //cout<<"after all: "<<cameraPos<<endl;
-                break;
-            }
-
-
-            case ButtonPress:
-
-                XButtonEvent *bevent;
-                bevent = (XButtonEvent*) &event;
-
-                prevMouseX = bevent->x;
-                prevMouseY = bevent->y;
-
-                recalcModelView = GL_TRUE;
-                switch (event.xbutton.button)
-                {
-                    case 1: xAngle += 10.0;
-                            break;
-                    case 2: yAngle += 10.0;
-                            break;
-                    case 3: zAngle += 10.0;
-                            break;
-                }
-                break;
-
-            case MotionNotify:
-            {
-                //KeySym     keysym;
-                XMotionEvent *mevent;
-                //char       buffer[1];
-
-                mevent = (XMotionEvent *) &event;
-
-                //cout<<mevent->x<<"     "<<mevent->y<<endl;
-
-                int dx = mevent->x - prevMouseX;
-                int dy = mevent->y - prevMouseY;
-
-                cameraRot.x += dx * 0.2;
-                cameraRot.y += dy * 0.2;
-
-                if (cameraRot.y > 90) cameraRot.y = 90;
-                        //cout<<"camera y: "<<cameraRot.y<<endl;
-                if (cameraRot.y < -90) cameraRot.y = -90;
-
-                prevMouseX = mevent->x;
-                prevMouseY = mevent->y;
-
-                break;
-            }
-
-            case ConfigureNotify:
-
-                updateRatio = true;
-                width = event.xconfigure.width;
-                height = event.xconfigure.height;
-          //glViewport(0, 0, event.xconfigure.width, event.xconfigure.height);
-          /* fall through... */
-            case Expose:
-                needRedraw = GL_TRUE;
-                break;
-        }
-    }// while(XPending(dpy)); /* loop to compress events */
-//cout<<"after all: "<<cameraPos<<endl;
-
-    recalcModelView = GL_TRUE;
-    //if (recalcModelView)
-    {
-    //if (updateRatio)
-      {
-          glMatrixMode(GL_PROJECTION);
-          glLoadIdentity();
-          updateRatio = false;
-          float screenRatio = width / height * 2.0;
-          glViewport(0,0,width,height);
-          glFrustum(-1.0 * screenRatio, 1.0 * screenRatio, -1.0, 1.0, 5.0, 1000.0);
-          //glTranslatef(0,0,-5);
-      }
-//cout<<"after all: "<<cameraPos<<endl;
-
-
-      glMatrixMode(GL_MODELVIEW);
-
-      /* reset modelview matrix to the identity matrix */
-      glLoadIdentity();
-
-
-
-        glClearColor(1,1,1,1);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-      /* move the camera back three units */
-        glTranslatef(0,0,5);
-
-      //glTranslatef(cameraPos.x, cameraPos.y, cameraPos.z);
-        //glRotatef(cameraRot.y, 1,0,0);
-        //glRotatef(cameraRot.x, 0,1,0);
-
-        //glTranslatef(-cameraPos.x,-cameraPos.y,-cameraPos.z);
-        //glTranslatef(0,-xAngle,0);
-      //glTranslatef(0.0, -xAngle, 0.0);
-    //glRotatef(xAngle*10,1,0,0);
-        //cout<<xAngle<<endl;
-        //glRotatef(90,1,0,0);
-        glRotatef(cameraRot.y, 1,0,0);
-        glRotatef(cameraRot.x, 0,1,0);
-        //glTranslatef(0,-100,0);
-        glScalef(10, 10, 10);
-
-      glTranslatef(-cameraPos.x, -cameraPos.y, -cameraPos.z);
-
-      glScalef(1,1,-1);
-      //glRotatef(cameraRot.x, 0,1,0);
-      //glRotatef(camer11aRot.y, 1,0,0);
-
-
-      /* rotate by X, Y, and Z angles */
-      /*glRotatef(xAngle, 0.1, 0.1, 0.0);
-      glRotatef(yAngle, 0.0, 0.1, 0.0);
-      glRotatef(zAngle, 0.0, 0.0, 1.0);*/
-      xAngle +=0.1;
-
-      recalcModelView = GL_FALSE;
-      needRedraw = GL_TRUE;
+        cleanSimulation();
+        exit(0);
     }
-    if (needRedraw)
+}
+
+/*void Simulator::display(float delta)
+{
+
+
+  //glRotatef(cameraRot.x, 0,1,0);
+  //glRotatef(camer11aRot.y, 1,0,0);
+
+
+
+  xAngle +=0.1;
+
+  //recalcModelView = GL_FALSE;
+  //needRedraw = GL_TRUE;
+//}
+//if (needRedraw)
+//{
+
+    //cout<<"                  "<<fixed<<newTime.tv_usec<<"  "<<timeE<<"  "<<timeB<<"   "<<delta<<endl;
+    //cout<<delta<<endl;
+    for(int i=0;i<REAL_INT_MULTIPLY;i++ )
     {
-        timeval newTime;
-        gettimeofday(&newTime, 0);
-        //float timeB = (int)newTime.tv_sec + (float)newTime.tv_usec / 1000000.0;
-        //float timeB = (long long)newTime.tv_sec;
-        //float timeE = lastTime.tv_sec + (float)lastTime.tv_usec / 1000000.0;
-        //float delta =  0;//newTime.tv_sec;// - lastTime.tv_sec;
-        //delta += newTime.tv_usec / 1000000.0;
-        //delta -= lastTime.tv_sec;
-        //delta -= lastTime.tv_usec / 1000000.0;
-//        delta +=
-        //delta /= 1000000;
-        int secB = newTime.tv_sec * 1000000 + newTime.tv_usec;
-        int secE = lastTime.tv_sec * 1000000 + lastTime.tv_usec;
-        float delta = secB - secE;
-        delta /= 1000000.0;
-
-        //moveCamera(delta);
-
-        delta *= MULTIPLY_TIME;
-        if (delta > MAX_DELTA * MULTIPLY_TIME) delta = MAX_DELTA * MULTIPLY_TIME;
-        if (delta < MIN_DELTA * MULTIPLY_TIME) delta = MIN_DELTA * MULTIPLY_TIME;
-        if (delta > 0.4) delta = 0.4;
-        //cout<<"                  "<<fixed<<newTime.tv_usec<<"  "<<timeE<<"  "<<timeB<<"   "<<delta<<endl;
-        //cout<<delta<<endl;
-        for(int i=0;i<REAL_INT_MULTIPLY;i++ )
-        {
-            update(delta);
-        }
-        lastTime = newTime;
-      redraw();
-      needRedraw = GL_FALSE;
-
-
+        update(delta);
     }
-  }
+}*/
+
+void Simulator::mouseMove(int dx, int dy)
+{
+    cameraRot.x += dx * 0.2;
+    cameraRot.y += dy * 0.2;
+
+    if (cameraRot.y > 90) cameraRot.y = 90;
+            //cout<<"camera y: "<<cameraRot.y<<endl;
+    if (cameraRot.y < -90) cameraRot.y = -90;
 }
 
 void Simulator::moveCamera(float delta)

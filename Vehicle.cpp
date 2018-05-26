@@ -463,8 +463,6 @@ void Vehicle::updateBlinkers(float delta)
 
 float Vehicle::getDst()
 {
-    //cout<<"getdst  "<<id<<"  "<<frontVeh<<endl;
-    //if (id.compare("CAR_3GA1A")==0 && frontVeh != NULL)cout<<"          "<<curRoad->length<<"   "<<frontVeh->xPos<<frontVeh->id<<endl;
     if (frontVeh != NULL)
         return frontVeh->xPos - xPos - frontVeh->vehicleLength/2.0;
 
