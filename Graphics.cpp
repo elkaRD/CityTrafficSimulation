@@ -214,7 +214,7 @@ void Graphics::drawTile(float a)
 {
     a /= 2;
     glBegin(GL_QUADS);
-    glNormal3f(0,1,0);
+    glNormal3f(0,-1,0);
     glVertex3f(-a,0,-a);
     glVertex3f(a,0,-a);
     glVertex3f(a,0,a);
@@ -227,9 +227,24 @@ void Graphics::setColor(float r, float g, float b)
     glColor3f(r,g,b);
 }
 
+void Graphics::setColor(Vec3 c)
+{
+    glColor3f(c.x, c.y, c.z);
+}
+
 void Graphics::drawVertex(Vec3 a)
 {
     glVertex3f(a.x,a.y,a.z);
+}
+
+void Graphics::setNormal(float x, float y, float z)
+{
+    glNormal3f(x, y, z);
+}
+
+void Graphics::setNormal(Vec3 a)
+{
+    glNormal3f(a.x, a.y, a.z);
 }
 
 void Graphics::drawQuad(Vec3 a1, Vec3 a2, Vec3 a3, Vec3 a4)

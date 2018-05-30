@@ -50,6 +50,8 @@ protected: public:
     void setColor(Vec3 c);
 
     void drawVertex(Vec3 a);
+    void setNormal(Vec3 a);
+    void setNormal(float x, float y, float z);
     void drawQuad(Vec3 a1, Vec3 a2, Vec3 a3, Vec3 a4);
     void drawRoof();
 

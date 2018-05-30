@@ -4,6 +4,8 @@ using namespace std;
 
 class Simulator;
 
+Vec3 Road::roadColor = Vec3(0.2, 0.2, 0.2);
+
 float Road::freeSpace(bool dir)
 {
     if (dir)
@@ -84,72 +86,82 @@ void Cross::updateCross(float delta)
 
     if (allowedVeh == 0 || streets.size() <= 2)
     {
-        vector<int> indexesToPass;
-
-        if (streets.size() == 2)
-        {
-            for(unsigned int i=0;i<streets.size();i++)
-            {
-                if (streets[i].vehicles.size() > 0)
-                {
-                    indexesToPass.push_back(i);
-                }
-            }
-        }
-
-        else if (streets.size() > 2)
-        for (unsigned int i=0;i<streets.size();i++)
-        {
-            if (streets[i].vehicles.size() > 0)
-            {
-                if (dontCheckStreet(i)) continue;
-                if (streets[i].vehicles[0]->dstToCross > 1.2) continue;
-
-                int which = streets[i].vehicles[0]->desiredTurn;
-                bool isOK = true;
-
-                for (unsigned int j=0;j<streets[i].yield[which].size();j++)
-                {
-                    if (streets[streets[i].yield[which][j]].vehicles.size() > 0 && !dontCheckStreet(streets[i].yield[which][j]))
-                    {
-                        isOK = false;
-                        break;
-                    }
-                }
-
-                if (isOK)
-                {
-                    indexesToPass.push_back(i);
-                }
-            }
-        }
-
-        for (unsigned int i=0;i<indexesToPass.size();i++)
-        {
-            if (streets[indexesToPass[i]].vehicles[0]->isEnoughSpace())
-            {
-                streets[indexesToPass[i]].vehicles[0]->allowedToCross = true;
-                streets[indexesToPass[i]].vehicles.erase(streets[indexesToPass[i]].vehicles.begin());
-                allowedVeh++;
-            }
-        }
+        tryPassVehiclesWithPriority();
 
         if (allowedVeh == 0)
         {
-            for(unsigned int i=0;i<streets.size();i++)
-            {
-                if (dontCheckStreet(i)) continue;
-                if (streets[i].vehicles.size() > 0 && streets[i].vehicles[0]->dstToCross < 0.7)
-                {
-                    if (streets[i].vehicles[0]->isEnoughSpace())
-                    {
-                        streets[i].vehicles[0]->allowedToCross = true;
-                        streets[i].vehicles.erase(streets[i].vehicles.begin());
-                        allowedVeh++;
+            tryPassAnyVehicle();
+        }
+    }
+}
 
-                        break;
-                    }
+void Cross::tryPassVehiclesWithPriority()
+{
+    vector<int> indexesToPass;
+
+    if (streets.size() == 2)
+    {
+        for(unsigned int i=0;i<streets.size();i++)
+        {
+            if (streets[i].vehicles.size() > 0)
+            {
+                indexesToPass.push_back(i);
+            }
+        }
+    }
+
+    else if (streets.size() > 2)
+    for (unsigned int i=0;i<streets.size();i++)
+    {
+        if (streets[i].vehicles.size() > 0)
+        {
+            if (dontCheckStreet(i)) continue;
+            if (streets[i].vehicles[0]->dstToCross > 1.2) continue;
+
+            int which = streets[i].vehicles[0]->desiredTurn;
+            bool isOK = true;
+
+            for (unsigned int j=0;j<streets[i].yield[which].size();j++)
+            {
+                if (streets[streets[i].yield[which][j]].vehicles.size() > 0 && !dontCheckStreet(streets[i].yield[which][j]))
+                {
+                    isOK = false;
+                    break;
                 }
+            }
+
+            if (isOK)
+            {
+                indexesToPass.push_back(i);
+            }
+        }
+    }
+
+    for (unsigned int i=0;i<indexesToPass.size();i++)
+    {
+        if (streets[indexesToPass[i]].vehicles[0]->isEnoughSpace())
+        {
+            streets[indexesToPass[i]].vehicles[0]->allowedToCross = true;
+            streets[indexesToPass[i]].vehicles.erase(streets[indexesToPass[i]].vehicles.begin());
+            allowedVeh++;
+        }
+    }
+}
+
+void Cross::tryPassAnyVehicle()
+{
+    for(unsigned int i=0;i<streets.size();i++)
+    {
+        if (dontCheckStreet(i)) continue;
+        if (streets[i].vehicles.size() > 0 && streets[i].vehicles[0]->dstToCross < 0.7)
+        {
+            if (streets[i].vehicles[0]->isEnoughSpace())
+            {
+                streets[i].vehicles[0]->allowedToCross = true;
+                streets[i].vehicles.erase(streets[i].vehicles.begin());
+                allowedVeh++;
+
+                break;
             }
         }
     }
@@ -334,7 +346,8 @@ void CrossLights::setLightsPriority()
 
 void Cross::draw()
 {
-    setColor(0.1,0.1,0.1);
+    //setColor(0.1,0.1,0.1);
+    setColor(roadColor);
     drawTile(0.6);
 }
 
@@ -513,7 +526,7 @@ Street::Street(Cross *begCross, Cross *endCross)
 
 void Street::draw()
 {
-    setColor(0.3,0.3,0.3);
+    setColor(roadColor);
     drawLine(crossBeg->getPos(), crossEnd->getPos());
 
     Vec3 szer = Vec3::cross(Vec3(0,1,0), direction);
@@ -526,6 +539,7 @@ void Street::draw()
     Vec3 d = begPos - szer;
 
     beginDraw(POLYGON);
+    setNormal(0, -1, 0);
     drawVertex(a);
     drawVertex(b);
     drawVertex(d);
@@ -578,7 +592,7 @@ void Garage::draw()
     setColor(0,0,1);
     drawCube(0.3);
 
-    setColor(0.3,0.3,0.3);
+    setColor(roadColor);
 
     Vec3 szer = Vec3::cross(Vec3(0,1,0), direction);
     szer.normalize();

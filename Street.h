@@ -33,6 +33,8 @@ public:
 
     Vec3 normal;
 
+    static Vec3 roadColor;
+
     virtual float freeSpace(bool dir);
 
     float reservedSpaceBeg;
@@ -101,6 +103,9 @@ public:
     void update(float delta);
     virtual void updateCross(float delta);
     virtual bool dontCheckStreet(int which);
+
+    virtual void tryPassVehiclesWithPriority();
+    virtual void tryPassAnyVehicle();
 
     void draw();
 };
