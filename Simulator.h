@@ -38,6 +38,7 @@ private:
     GameObject* findObjectByName(std::string on);
 
     std::vector<GameObject*> objects;
+    std::vector<Garage*> spots;
 
     void keyPressed(char k);
     void update(float delta);

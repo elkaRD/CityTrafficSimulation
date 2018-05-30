@@ -174,12 +174,12 @@ void Simulator::loadRoad(string fileName)
                 Vec3 v1(x1,y1,z1);
                 //Vec3 v2(x2,y2,z2);
 
-                GameObject *temp;
+                Cross *temp;
                 temp = new Cross(v1);
                 temp->gameEngine = this;
                 temp->id = id;
                 objects.push_back(temp);
-                crosses.push_back(dynamic_cast<Cross*>(temp));
+                crosses.push_back(temp);
 
                 cout<<"dodano cross: "<<id<<endl;
             }
@@ -239,8 +239,8 @@ void Simulator::loadRoad(string fileName)
                 if (vehType.compare("C") == 0) temp->vehType = 0;
                 if (vehType.compare("B") == 0) temp->vehType = 1;
 
-                objects.push_back((GameObject*)temp);
-
+                objects.push_back(temp);
+                spots.push_back(temp);
 
 
                 cout<<"dodano garage: "<<id<<endl;
@@ -253,12 +253,12 @@ void Simulator::loadRoad(string fileName)
                 Vec3 v1(x1,y1,z1);
                 //Vec3 v2(x2,y2,z2);
 
-                GameObject *temp;
+                Cross *temp;
                 temp = new CrossLights(v1);
                 temp->gameEngine = this;
                 temp->id = id;
                 objects.push_back(temp);
-                crosses.push_back(dynamic_cast<Cross*>(temp));
+                crosses.push_back(temp);
 
                 cout<<"dodano crossLights: "<<id<<endl;
             }
@@ -304,8 +304,25 @@ void Simulator::loadPriority(string fileName)
 
 void Simulator::update(float delta)
 {
-    for(unsigned int i=0;i<objects.size();i++)
+    for (unsigned int i = 0; i < spots.size(); i++)
     {
+        if (spots[i]->isReadyToSpot)
+        {
+            registerObject(spots[i]->spotVeh());
+        }
+        if (spots[i]->isReadyToDelete)
+        {
+            destroyObject(spots[i]->deleteVeh());
+        }
+    }
+
+    for (unsigned int i=0;i<objects.size();i++)
+    {
+        if (objects[i] == NULL)
+        {
+            objects.erase(objects.begin() + i);
+            continue;
+        }
         objects[i]->updateObject(delta);
     }
 }
@@ -322,7 +339,7 @@ void Simulator::destroyObject(GameObject *go)
         if (objects[i] == go)
         {
             //cout<<"TEST DEST   "<<go->id<<endl;
-            delete go;
+            //delete go;
             objects.erase(objects.begin() + i);
             break;
         }

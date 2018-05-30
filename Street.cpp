@@ -585,6 +585,9 @@ Garage::Garage(Simulator *engine, Vec3 p, Cross *c)
 
     curTimeDelete = 0;
     frecDelete = 6;
+
+    isReadyToSpot = false;
+    isReadyToDelete = false;
 }
 
 void Garage::draw()
@@ -620,8 +623,9 @@ void Garage::update(float delta)
 
     if (curTimeSpot > frecSpot)
     {
-        curTimeSpot = 0;
-        spotVeh();
+        //curTimeSpot = 0;
+        //spotVeh();
+        isReadyToSpot = true;
     }
 
     if (vehiclesEnd.size() > 0)
@@ -629,8 +633,12 @@ void Garage::update(float delta)
 
     if (curTimeDelete > frecDelete)
     {
-        curTimeDelete = 0;
-        deleteVeh();
+        //curTimeDelete = 0;
+        //deleteVeh();
+        if (vehiclesEnd.size() > 0)
+        {
+            isReadyToDelete = true;
+        }
     }
 }
 
@@ -644,8 +652,11 @@ string Garage::itos(int x)
     return ss.str();
 }
 
-void Garage::spotVeh()
+Vehicle* Garage::spotVeh()
 {
+    curTimeSpot = 0;
+    isReadyToSpot = false;
+
     Vehicle *temp;
     if (vehType == 0)
     {
@@ -664,13 +675,18 @@ void Garage::spotVeh()
     temp->idnumber = Vehicle::numVeh;
     vehiclesBeg.push(temp);
 //    gameEngine->registerObject(temp);
-    registerNewObject(gameEngine, temp);
+    //registerNewObject(gameEngine, temp);
 
     cout<<"spotted " << temp->id << " by "<<id<<endl;
+
+    return temp;
 }
 
-void Garage::deleteVeh()
+Vehicle* Garage::deleteVeh()
 {
+    curTimeDelete = 0;
+    isReadyToDelete = false;
+
     if (vehiclesEnd.size() > 0)
     {
         Vehicle *temp = vehiclesEnd.front();
@@ -682,6 +698,10 @@ void Garage::deleteVeh()
             temp->backVeh->frontVeh = NULL;
         }
 
-        destroyNextObject(gameEngine, temp);
+        delete temp;
+
+        return temp;
+
+        //destroyNextObject(gameEngine, temp);
     }
 }

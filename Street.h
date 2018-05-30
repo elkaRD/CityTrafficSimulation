@@ -162,8 +162,11 @@ public:
     void draw();
     void update(float delta);
     std::string itos(int x);
-    void spotVeh();
-    void deleteVeh();
+    Vehicle* spotVeh();
+    Vehicle* deleteVeh();
+
+    bool isReadyToSpot;
+    bool isReadyToDelete;
 };
 
 #endif // STREET_H
