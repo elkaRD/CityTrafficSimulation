@@ -139,14 +139,21 @@ void Simulator::loadRoad(string fileName)
 
         while (!file.eof())
         {
+            string data;
+            getline(file, data);
+            stringstream ss;
+            ss << data;
+
             string type;
             string id;
-            file >> type >> id;
+
+
+            ss >> type >> id;
             if (type.compare("SK") == 0)
             {
                 float x1,y1,z1;
                 //float x2,y2,z2;
-                file >> x1 >> y1 >> z1;// >> x1 >> y2 >> z2;
+                ss >> x1 >> y1 >> z1;// >> x1 >> y2 >> z2;
                 Vec3 v1(x1,y1,z1);
                 //Vec3 v2(x2,y2,z2);
 
@@ -163,7 +170,7 @@ void Simulator::loadRoad(string fileName)
             {
                 string begCrossID;
                 string endCrossID;
-                file >> begCrossID >> endCrossID;
+                ss >> begCrossID >> endCrossID;
                 Cross *crossB;
                 Cross *crossE;
 
@@ -197,7 +204,7 @@ void Simulator::loadRoad(string fileName)
                 string jointCross;
                 string vehType;
                 float x,y,z;
-                file >> vehType >> jointCross >> x >> y >> z;
+                ss >> vehType >> jointCross >> x >> y >> z;
                 Vec3 v(x,y,z);
                 Cross *cross;
                 for(unsigned int i=0;i<objects.size();i++)
@@ -225,7 +232,7 @@ void Simulator::loadRoad(string fileName)
             {
                 float x1,y1,z1;
                 //float x2,y2,z2;
-                file >> x1 >> y1 >> z1;// >> x1 >> y2 >> z2;
+                ss >> x1 >> y1 >> z1;// >> x1 >> y2 >> z2;
                 Vec3 v1(x1,y1,z1);
                 //Vec3 v2(x2,y2,z2);
 
