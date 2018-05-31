@@ -11,8 +11,61 @@ float Road::getLength()
     return length;
 }
 
-Driveable::Driveable()
+Driveable::Driveable(Cross *begCross, Cross *endCross)
 {
+    crossBeg = begCross;
+    crossEnd = endCross;
+
+    begPos = crossBeg->getPos();
+    endPos = crossEnd->getPos();
+
+    commonConstructor();
+
+    Cross::OneStreet temp;
+    temp.street = this;
+    //temp.enabled = true;
+    temp.direction = true;
+    //temp.jointPos = crossBeg->getPos() + direction * 0.3;
+    begJoint = crossBeg->getPos() + direction * 0.3;;
+
+    crossBeg->streets.push_back(temp);
+
+    temp.direction = false;
+    //temp.jointPos = crossEnd->getPos() - direction * 0.3;
+    endJoint = crossEnd->getPos() - direction * 0.3;
+    crossEnd->streets.push_back(temp);
+}
+
+Driveable::Driveable(Vec3 p, Cross *endCross)
+{
+    crossBeg = NULL;
+    crossEnd = endCross;
+
+    pos = p;
+
+    begPos = pos;
+    endPos = crossEnd->getPos();
+
+    commonConstructor();
+
+    Cross::OneStreet temp;
+    temp.street = this;
+    temp.direction = false;
+    begJoint = begPos;
+    endJoint = crossEnd->getPos() - direction * 0.3;
+    crossEnd->streets.push_back(temp);
+}
+
+void Driveable::commonConstructor()
+{
+    direction = endPos - begPos;
+    direction.normalize();
+
+    length = Vec3::dst(begPos, endPos);
+
+    normal = Vec3::cross(Vec3(0,1,0), direction);
+    normal.normalize();
+
     reservedSpaceBeg = 0;
     reservedSpaceEnd = 0;
 }
@@ -525,16 +578,16 @@ void CrossLights::draw()
     }
 }
 
-Street::Street(Cross *begCross, Cross *endCross) : Driveable()
+Street::Street(Cross *begCross, Cross *endCross) : Driveable(begCross, endCross)
 {
-    crossBeg = begCross;
-    crossEnd = endCross;
+    //crossBeg = begCross;
+    //crossEnd = endCross;
 
-    length = Vec3::dst(crossBeg->getPos(), crossEnd->getPos());
-    direction = crossEnd->getPos() - crossBeg->getPos();
-    direction.normalize();
+    //length = Vec3::dst(crossBeg->getPos(), crossEnd->getPos());
+    //direction = crossEnd->getPos() - crossBeg->getPos();
+    //direction.normalize();
 
-    Cross::OneStreet temp;
+    /*Cross::OneStreet temp;
     temp.street = this;
     //temp.enabled = true;
     temp.direction = true;
@@ -546,13 +599,13 @@ Street::Street(Cross *begCross, Cross *endCross) : Driveable()
     temp.direction = false;
     //temp.jointPos = crossEnd->getPos() - direction * 0.3;
     endJoint = crossEnd->getPos() - direction * 0.3;
-    crossEnd->streets.push_back(temp);
+    crossEnd->streets.push_back(temp);*/
 
-    begPos = crossBeg->getPos();
-    endPos = crossEnd->getPos();
+    //begPos = crossBeg->getPos();
+    //endPos = crossEnd->getPos();
 
-    normal = Vec3::cross(Vec3(0,1,0), direction);
-    normal.normalize();
+    //normal = Vec3::cross(Vec3(0,1,0), direction);
+    //normal.normalize();
 }
 
 void Street::draw()
@@ -578,35 +631,35 @@ void Street::draw()
     endDraw();
 }
 
-Garage::Garage(Vec3 p, Cross *c) : Driveable()
+Garage::Garage(Vec3 p, Cross *c) : Driveable(p, c)
 {
-    pos = p;
-    crossEnd = c;
-    crossBeg = NULL;
+    //pos = p;
+    //crossEnd = c;
+    //crossBeg = NULL;
 
-    begPos = pos;
-    endPos = crossEnd->getPos();
+    //begPos = pos;
+    //endPos = crossEnd->getPos();
 
-    direction = endPos - begPos;
-    direction.normalize();
+    //direction = endPos - begPos;
+    //direction.normalize();
 
-    length = Vec3::dst(begPos, endPos);
+    //length = Vec3::dst(begPos, endPos);
 
-    Cross::OneStreet temp;
-    temp.street = this;
+    //Cross::OneStreet temp;
+    //temp.street = this;
     //temp.enabled = false;
-    temp.direction = false;
+    //temp.direction = false;
     //temp.jointPos = crossEnd->getPos() - direction * 0.3;
 
-    begJoint = begPos;
-    endJoint = crossEnd->getPos() - direction * 0.3;
+    //begJoint = begPos;
+    //endJoint = crossEnd->getPos() - direction * 0.3;
 
     //gameEngine = engine;
 
-    crossEnd->streets.push_back(temp);
+    //crossEnd->streets.push_back(temp);
 
-    normal = Vec3::cross(Vec3(0,1,0), direction);
-    normal.normalize();
+    //normal = Vec3::cross(Vec3(0,1,0), direction);
+    //normal.normalize();
 
     curTimeSpot = 0;
     frecSpot = 4;

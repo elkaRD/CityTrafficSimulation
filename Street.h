@@ -33,7 +33,8 @@ public:
 
 protected:
 
-    Driveable();
+    Driveable(Cross *begCross, Cross *endCross);
+    Driveable(Vec3 p, Cross *endCross);
 
     std::queue<Vehicle*> vehiclesBeg;
     std::queue<Vehicle*> vehiclesEnd;
@@ -59,6 +60,8 @@ protected:
 private:
     float reservedSpaceBeg;
     float reservedSpaceEnd;
+
+    void commonConstructor();
 
     friend Vehicle;
 };
@@ -100,7 +103,7 @@ public:
     Cross(Vec3 position);
     virtual void setDefaultPriority(Driveable *s0 = NULL, Driveable *s1 = NULL, Driveable *s2 = NULL, Driveable *s3 = NULL);
 
-//protected:
+protected:
 
     struct OneStreet
     {
@@ -117,12 +120,11 @@ public:
 
 
 
-    int allowedVeh;
-    bool isSet;
+
+
     //virtual void additionalSetup(Driveable *s0, Driveable *s1, Driveable *s2, Driveable *s3);
 
-    bool checkSet();
-    void update(float delta);
+
     virtual void updateCross(float delta);
     virtual bool dontCheckStreet(int which);
 
@@ -130,6 +132,17 @@ public:
     virtual void tryPassAnyVehicle();
 
     void draw();
+
+private:
+    bool isSet;
+    int allowedVeh;
+
+    bool checkSet();
+    void update(float delta);
+
+
+    friend Driveable;
+    friend Vehicle;
 };
 
 class CrossLights : public Cross
