@@ -59,6 +59,8 @@ void Simulator::keyPressed(char k)
         case 's': cameraDirection = BACK;       break;
         case 'a': cameraDirection = LEFT;       break;
         case 'd': cameraDirection = RIGHT;      break;
+        case 'e': cameraDirection = UP;         break;
+        case 'q': cameraDirection = DOWN;       break;
         default:  cameraDirection = STAY;
     }
 }
@@ -83,12 +85,28 @@ void Simulator::cameraMove(float delta)
         break;
 
     case LEFT:
-
+        cameraPos.z +=cos( (cameraRot.x + 90.0) * M_PI / 180 )*multiplyMove;
+        cameraPos.x -=sin( (cameraRot.x + 90.0) * M_PI / 180 )*multiplyMove;
         break;
 
     case RIGHT:
-
+        cameraPos.z -=cos( (cameraRot.x + 90.0) * M_PI / 180 )*multiplyMove;
+        cameraPos.x +=sin( (cameraRot.x + 90.0) * M_PI / 180 )*multiplyMove;
         break;
+
+    case UP:
+        cameraPos.z -=cos( cameraRot.x * M_PI / 180 )*multiplyMoveHorizontal;
+        cameraPos.x +=sin( cameraRot.x * M_PI / 180 )*multiplyMoveHorizontal;
+        cameraPos.y +=sin((-cameraRot.y + 90)*M_PI/180)*multiplyMove;
+        break;
+
+    case DOWN:
+        cameraPos.z +=cos( cameraRot.x * M_PI / 180 )*multiplyMoveHorizontal;
+        cameraPos.x -=sin( cameraRot.x * M_PI / 180 )*multiplyMoveHorizontal;
+        cameraPos.y +=sin((-cameraRot.y - 90)*M_PI/180)*multiplyMove;
+        break;
+
+    default: break;
     }
 
     cameraDirection = STAY;
@@ -104,100 +122,6 @@ void Simulator::mouseMove(int dx, int dy)
 
     cout<<cameraRot.x<<"   "<<cameraRot.y<<endl;
 }
-
-void Simulator::moveCamera(float delta)
-{
-    float multiplyMove=CAMERA_VELOCITY;
-    float multiplyMoveHorizontal;
-    if(isKeyPressed(XK_Shift_L))multiplyMove *= 5;
-
-    multiplyMove *= delta;
-    multiplyMoveHorizontal = cos(-cameraRot.y * M_PI / 180) * multiplyMove;
-
-    if(isKeyPressed('W'))
-    {
-        cout<<"UP:  "<<cos( cameraRot.x * M_PI / 180 )<<"    "<<sin( cameraRot.x * M_PI / 180 )<<endl;
-        //cout<<"DEBUG POS: "<<cameraPos<<"   "<<tan((-cameraRot.y)*M_PI/180)*multiplyMove;endl;
-        cameraPos.z -=cos( cameraRot.x * M_PI / 180 )*multiplyMoveHorizontal;
-        cameraPos.x +=sin( cameraRot.x * M_PI / 180 )*multiplyMoveHorizontal;
-        cameraPos.y +=sin((-cameraRot.y)*M_PI/180)*multiplyMove;
-    }
-    if(isKeyPressed('S'))
-    {
-        cout<<"DOWN"<<endl;
-        cameraPos.z+=cos( cameraRot.x * M_PI / 180 )*multiplyMove;
-        cameraPos.x-=sin( cameraRot.x * M_PI / 180 )*multiplyMove;
-        cameraPos.y+=atan(cameraRot.y*M_PI/180)*multiplyMove;
-    }
-    if(isKeyPressed('A'))
-    {
-        cout<<"LEFT"<<endl;
-        cameraPos.z+=cos( (cameraRot.x+270) * M_PI / 180 )*multiplyMove;
-        cameraPos.x-=sin( (cameraRot.x+270) * M_PI / 180 )*multiplyMove;
-    }
-    if(isKeyPressed('D'))
-    {
-        cout<<"RIGHT"<<endl;
-        cameraPos.z+=cos( (cameraRot.x+90) * M_PI / 180 )*multiplyMove;
-        cameraPos.x-=sin( (cameraRot.x+90) * M_PI / 180 )*multiplyMove;
-    }
-    if(isKeyPressed('Q'))
-    {
-
-    }
-    if(isKeyPressed('E'))
-    {
-
-    }
-}
-
-void Simulator::moveCamera2(char c)
-{
-    float multiplyMove=100;
-
-    cout<<cameraPos<<endl;
-
-    if(c=='W' || c=='w')
-    {
-        cout<<"UP  "<<cos( cameraRot.x * M_PI / 180 )<<endl;
-        cameraPos.z+=cos( cameraRot.x * M_PI / 180 )/10*multiplyMove;
-        cameraPos.x-=sin( cameraRot.x * M_PI / 180 )/10*multiplyMove;
-        cameraPos.y+=atan(cameraRot.y*M_PI/180)/10*multiplyMove;
-
-        cout<<cameraPos<<endl;
-    }
-    if(c=='S'||c=='s')
-    {
-        cameraPos.z+=cos( cameraRot.x * M_PI / 180 )/10*multiplyMove*-1;
-        cameraPos.x-=sin( cameraRot.x * M_PI / 180 )/10*multiplyMove*-1;
-        cameraPos.y-=atan(cameraRot.y*M_PI/180)/10*multiplyMove;
-    }
-    if(c=='A'||c=='a')
-    {
-        cameraPos.z+=cos( (cameraRot.x+270) * M_PI / 180 )/10*multiplyMove;
-        cameraPos.x-=sin( (cameraRot.x+270) * M_PI / 180 )/10*multiplyMove;
-    }
-    if(c=='D'||c=='d')
-    {
-        cameraPos.z+=cos( (cameraRot.x+90) * M_PI / 180 )/10*multiplyMove;
-        cameraPos.x-=sin( (cameraRot.x+90) * M_PI / 180 )/10*multiplyMove;
-    }
-}
-
-bool Simulator::isKeyPressed(long k)
-{
-    if (k<256)
-    {
-        return pressedKey[k];
-    }
-
-    if (k == XK_Shift_L) return pressedShift;
-
-    return false;
-}
-
-
-
 
 void Simulator::loadRoad(string fileName)
 {

@@ -33,10 +33,6 @@ private:
 
     void cleanSimulation();
 
-    void moveCamera(float delta);
-    void moveCamera2(char c);
-    bool isKeyPressed(long k);
-
     GameObject* findObjectByName(std::string on);
 
     std::vector<GameObject*> objects;
@@ -54,6 +50,8 @@ private:
         BACK,
         LEFT,
         RIGHT,
+        UP,
+        DOWN,
         STAY
     };
 
