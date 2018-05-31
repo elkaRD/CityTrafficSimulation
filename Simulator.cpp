@@ -119,12 +119,6 @@ void Simulator::mouseMove(int dx, int dy)
 
     if (cameraRot.y > 90) cameraRot.y = 90;
     else if (cameraRot.y < -90) cameraRot.y = -90;
-
-    //while (cameraRot.x >= 360) cameraRot.x -= 360;
-    //while(cameraRot.x < 0) cameraRot.x += 360;
-
-    //cout<<cameraRot.x<<"   "<<cameraRot.y<<endl;
-    //cout <<dx<<"   "<<dy<<endl;
 }
 
 void Simulator::loadRoad(string fileName)
@@ -133,12 +127,6 @@ void Simulator::loadRoad(string fileName)
     file.open(fileName.c_str(), ios::app | ios::in);
     if (file.good())
     {
-        /*string data;
-        getline(file, data);
-
-        stringstream ss;
-        ss << data;*/
-
         vector<Cross*>crosses;
 
         while (!file.eof())
@@ -156,14 +144,12 @@ void Simulator::loadRoad(string fileName)
             if (type.compare("SK") == 0)
             {
                 float x1,y1,z1;
-                //float x2,y2,z2;
-                ss >> x1 >> y1 >> z1;// >> x1 >> y2 >> z2;
+
+                ss >> x1 >> y1 >> z1;
                 Vec3 v1(x1,y1,z1);
-                //Vec3 v2(x2,y2,z2);
 
                 Cross *temp;
                 temp = new Cross(v1);
-                //temp->gameEngine = this;
                 temp->id = id;
                 objects.push_back(temp);
                 crosses.push_back(temp);
@@ -197,7 +183,6 @@ void Simulator::loadRoad(string fileName)
 
                 GameObject *temp;
                 temp = new Street(crossB, crossE);
-                //temp->gameEngine = this;
                 temp->id = id;
                 objects.push_back(temp);
 
@@ -229,20 +214,16 @@ void Simulator::loadRoad(string fileName)
                 objects.push_back(temp);
                 spots.push_back(temp);
 
-
                 cout<<"dodano garage: "<<id<<endl;
             }
             if (type.compare("CL") == 0)
             {
                 float x1,y1,z1;
-                //float x2,y2,z2;
-                ss >> x1 >> y1 >> z1;// >> x1 >> y2 >> z2;
+                ss >> x1 >> y1 >> z1;
                 Vec3 v1(x1,y1,z1);
-                //Vec3 v2(x2,y2,z2);
 
                 Cross *temp;
                 temp = new CrossLights(v1);
-                //temp->gameEngine = this;
                 temp->id = id;
                 objects.push_back(temp);
                 crosses.push_back(temp);
@@ -267,30 +248,27 @@ void Simulator::loadPriority(string fileName)
 
             file >> name;// >> mode;
 
-            //if (mode.compare("DEFAULT") == 0)
+            file >> number;
+
+            string ids[4];
+
+            for(int i=0;i<number;i++)
             {
-                file >> number;
+                file >> ids[i];
+            }
 
-                string ids[4];
-
-                for(int i=0;i<number;i++)
-                {
-                    file >> ids[i];
-                }
-
-                Cross *cross = dynamic_cast<Cross*>(findObjectByName(name));
-                if (cross != NULL)
-                {
-                    cout<<"set priority on "<<cross->id<<endl;
-                    cross->setDefaultPriority(dynamic_cast<Driveable*>(findObjectByName(ids[0])),
-                                              dynamic_cast<Driveable*>(findObjectByName(ids[1])),
-                                              dynamic_cast<Driveable*>(findObjectByName(ids[2])),
-                                              dynamic_cast<Driveable*>(findObjectByName(ids[3])));
-                }
-                else
-                {
-                    cout<<"unable to set priority on "<<name<<endl;
-                }
+            Cross *cross = dynamic_cast<Cross*>(findObjectByName(name));
+            if (cross != NULL)
+            {
+                cout<<"set priority on "<<cross->id<<endl;
+                cross->setDefaultPriority(dynamic_cast<Driveable*>(findObjectByName(ids[0])),
+                                          dynamic_cast<Driveable*>(findObjectByName(ids[1])),
+                                          dynamic_cast<Driveable*>(findObjectByName(ids[2])),
+                                          dynamic_cast<Driveable*>(findObjectByName(ids[3])));
+            }
+            else
+            {
+                cout<<"unable to set priority on "<<name<<endl;
             }
         }
     }
@@ -338,8 +316,6 @@ void Simulator::destroyObject(GameObject *go)
     {
         if (objects[i] == go)
         {
-            //cout<<"TEST DEST   "<<go->id<<endl;
-            //delete go;
             objects.erase(objects.begin() + i);
             break;
         }
@@ -348,27 +324,14 @@ void Simulator::destroyObject(GameObject *go)
 
 void Simulator::cleanSimulation()
 {
-
     int i = objects.size();
 
     while (i > 0)
     {
-        //objects.erase(objects.begin());
         destroyObject(*objects.begin());
         i--;
     }
-
 }
-
-/*void registerNewObject(Simulator *engine, GameObject *go)
-{
-    engine->registerObject(go);
-}
-
-void destroyNextObject(Simulator *engine, GameObject *go)
-{
-    engine->destroyObject(go);
-}*/
 
 GameObject* Simulator::findObjectByName(string no)
 {

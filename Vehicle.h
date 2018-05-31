@@ -8,7 +8,6 @@
 class Road;
 class Driveable;
 class Cross;
-//class GameObject;
 class Garage;
 
 class Vehicle : public GameObject
@@ -30,9 +29,9 @@ protected:
     float vehicleLength;
     float remainDst;
     float maxAcceleration;
-    //float timeCorner;
+
     bool isBraking;
-    //Vec3 direction;
+
     void update(float delta);
 
     float getDst();
@@ -49,14 +48,7 @@ protected:
     int blinker;
     bool blinkerLight;
 
-
-
     Vec3 vehicleColor;
-
-    //int idnumber;
-    //bool debugstop;
-    //int idnum;
-
 
     void initRandValues();
 
@@ -107,7 +99,6 @@ public:
     Car(Driveable *spawnRoad);
 
 private:
-
     void update(float delta);
     void draw();
 };
@@ -115,11 +106,9 @@ private:
 class Bus : public Vehicle
 {
 public:
-
     Bus(Driveable *spawnRoad);
 
 private:
-
     float busAngle;
 
     void update(float delta);

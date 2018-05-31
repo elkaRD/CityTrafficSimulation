@@ -59,14 +59,6 @@ private:
     float cameraVelocity;
 
     void cameraMove(float delta);
-
-    //std::string getNextString(std::string &data);
-
-    //static void registerNewObject(Simulator *engine, GameObject *go);
-    //static void destroyNextObject(Simulator *engine, GameObject *go);
-
-    //friend void registerNewObject(Simulator *engine, GameObject *go);
-    //friend void destroyNextObject(Simulator *engine, GameObject *go);
 };
 
 #endif // SIMULTOR_H

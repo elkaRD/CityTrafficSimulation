@@ -7,8 +7,6 @@
 #include <cstdlib>
 #include <queue>
 #include "Graphics.h"
-//#include "Vehicle.h"
-//#include "Simulator.h"
 
 class Simulator;
 
@@ -20,9 +18,8 @@ public:
     Vec3 getPos();
     Vec3 getRot();
     std::string id;
-//private:
+
     GameObject();
-    //GameObject(Simulator *engine);
     virtual ~GameObject(){};
 
     void updateObject(float delta);
@@ -35,10 +32,6 @@ protected:
     virtual void update(float delta);
     float randFloat(float minV, float maxV);
     int randInt(int minV, int maxV);
-
-    //public:
-    //Simulator *gameEngine;
-    //virtual void draw();
 };
 
 #endif // GAMEOBJECT_H

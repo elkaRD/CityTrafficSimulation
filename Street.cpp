@@ -23,15 +23,12 @@ Driveable::Driveable(Cross *begCross, Cross *endCross)
 
     Cross::OneStreet temp;
     temp.street = this;
-    //temp.enabled = true;
-    temp.direction = true;
-    //temp.jointPos = crossBeg->getPos() + direction * 0.3;
-    begJoint = crossBeg->getPos() + direction * 0.3;;
 
+    temp.direction = true;
+    begJoint = crossBeg->getPos() + direction * 0.3;;
     crossBeg->streets.push_back(temp);
 
     temp.direction = false;
-    //temp.jointPos = crossEnd->getPos() - direction * 0.3;
     endJoint = crossEnd->getPos() - direction * 0.3;
     crossEnd->streets.push_back(temp);
 }
@@ -342,14 +339,10 @@ void Cross::setDefaultPriority(Driveable *s0, Driveable *s1, Driveable *s2, Driv
             }
         }
     }
-    //additionalSetup(s0, s1, s2, s3);
-
 }
 
 Vec3 Cross::OneStreet::getJointPos()
 {
-    //if (!direction) return street->endJoint;
-    //return street->begJoint;
     return street->getJointPoint(direction);
 }
 
@@ -358,16 +351,6 @@ void CrossLights::setDefaultPriority(Driveable *s0, Driveable *s1, Driveable *s2
     Cross::setDefaultPriority(s0, s1, s2, s3);
     setDefaultLights(s0, s1, s2, s3);
 }
-
-/*void Cross::additionalSetup(Driveable *s0, Driveable *s1, Driveable *s2, Driveable *s3)
-{
-
-}*/
-
-/*void CrossLights::additionalSetup(Driveable *s0, Driveable *s1, Driveable *s2, Driveable *s3)
-{
-    setDefaultLights(s0, s1, s2, s3);
-}*/
 
 bool CrossLights::dontCheckStreet(int which)
 {
@@ -433,7 +416,6 @@ void CrossLights::setLightsPriority()
 
 void Cross::draw()
 {
-    //setColor(0.1,0.1,0.1);
     setColor(roadColor);
     drawTile(0.6);
 }
@@ -580,32 +562,7 @@ void CrossLights::draw()
 
 Street::Street(Cross *begCross, Cross *endCross) : Driveable(begCross, endCross)
 {
-    //crossBeg = begCross;
-    //crossEnd = endCross;
 
-    //length = Vec3::dst(crossBeg->getPos(), crossEnd->getPos());
-    //direction = crossEnd->getPos() - crossBeg->getPos();
-    //direction.normalize();
-
-    /*Cross::OneStreet temp;
-    temp.street = this;
-    //temp.enabled = true;
-    temp.direction = true;
-    //temp.jointPos = crossBeg->getPos() + direction * 0.3;
-    begJoint = crossBeg->getPos() + direction * 0.3;;
-
-    crossBeg->streets.push_back(temp);
-
-    temp.direction = false;
-    //temp.jointPos = crossEnd->getPos() - direction * 0.3;
-    endJoint = crossEnd->getPos() - direction * 0.3;
-    crossEnd->streets.push_back(temp);*/
-
-    //begPos = crossBeg->getPos();
-    //endPos = crossEnd->getPos();
-
-    //normal = Vec3::cross(Vec3(0,1,0), direction);
-    //normal.normalize();
 }
 
 void Street::draw()
@@ -633,34 +590,6 @@ void Street::draw()
 
 Garage::Garage(Vec3 p, Cross *c) : Driveable(p, c)
 {
-    //pos = p;
-    //crossEnd = c;
-    //crossBeg = NULL;
-
-    //begPos = pos;
-    //endPos = crossEnd->getPos();
-
-    //direction = endPos - begPos;
-    //direction.normalize();
-
-    //length = Vec3::dst(begPos, endPos);
-
-    //Cross::OneStreet temp;
-    //temp.street = this;
-    //temp.enabled = false;
-    //temp.direction = false;
-    //temp.jointPos = crossEnd->getPos() - direction * 0.3;
-
-    //begJoint = begPos;
-    //endJoint = crossEnd->getPos() - direction * 0.3;
-
-    //gameEngine = engine;
-
-    //crossEnd->streets.push_back(temp);
-
-    //normal = Vec3::cross(Vec3(0,1,0), direction);
-    //normal.normalize();
-
     curTimeSpot = 0;
     frecSpot = 4;
 
@@ -704,8 +633,6 @@ void Garage::update(float delta)
 
     if (curTimeSpot > frecSpot)
     {
-        //curTimeSpot = 0;
-        //spotVeh();
         isReadyToSpot = true;
     }
 
@@ -714,8 +641,6 @@ void Garage::update(float delta)
 
     if (curTimeDelete > frecDelete)
     {
-        //curTimeDelete = 0;
-        //deleteVeh();
         if (vehiclesEnd.size() > 0)
         {
             isReadyToDelete = true;
@@ -751,12 +676,9 @@ Vehicle* Garage::spotVeh()
     }
     temp->curRoad = this;
     temp->direction = true;
-
     temp->isFirstVeh = vehiclesBeg.size() == 0;
-    //temp->idnumber = Vehicle::numVeh;
+
     vehiclesBeg.push(temp);
-//    gameEngine->registerObject(temp);
-    //registerNewObject(gameEngine, temp);
 
     cout<<"spotted " << temp->id << " by "<<id<<endl;
 
@@ -778,12 +700,9 @@ Vehicle* Garage::deleteVeh()
             temp->backVeh->isFirstVeh = true;
             temp->backVeh->frontVeh = NULL;
         }
-
         delete temp;
 
         return temp;
-
-        //destroyNextObject(gameEngine, temp);
     }
 }
 

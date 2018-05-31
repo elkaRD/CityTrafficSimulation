@@ -7,8 +7,6 @@ int Vehicle::numVeh = 0;
 
 Vehicle::Vehicle(Driveable *spawnRoad)
 {
-    //debugstop = false;
-
     numVeh++;
 
     initRandValues();
@@ -25,8 +23,6 @@ Vehicle::Vehicle(Driveable *spawnRoad)
     desiredTurn = 0;
 
     initBlinkers();
-
-    //gameEngine = spawnRoad->gameEngine;
 
     initPointers(spawnRoad);
 
@@ -74,12 +70,6 @@ void Vehicle::initPointers(Driveable *spawnRoad)
         frontVeh->backVeh = this;
     }
 }
-
-/*#include<iostream>
-using namespace std;
-bool pierwszy = true;
-Vehicle *pie;
-int kla = 0;*/
 
 void Vehicle::update(float delta)
 {
@@ -149,21 +139,18 @@ void Vehicle::setVelocity()
     {
         velocity = posDiff - acceleration * stopTime * stopTime / 2.0;
         velocity /= stopTime;
-        //isBraking = true;
     }
     else if (posDiff > newDst)
     {
         velocity = posDiff - acceleration * stopTime * stopTime / 2.0;
         velocity /= stopTime;
-        //velocity += acceleration * delta;
-        //isBraking = false;
     }
 }
 
 void Vehicle::checkVelocity(float delta, float prevVelocity)
 {
     float braking = (velocity - prevVelocity) / delta;
-    //cout<<"BRAKE:  "<<braking<<endl;
+
     if (braking < -0.3)
     {
         isBraking = true;
@@ -206,7 +193,6 @@ void Vehicle::setNewPos()
     if(xPos > curRoad->getLength())
     {
         xPos = curRoad->getLength();
-        //didReachCross = true;
     }
 
     float s = xPos / curRoad->getLength();
@@ -216,23 +202,14 @@ void Vehicle::setNewPos()
         s=1;
     }
 
-    //if (frontVeh!=NULL) cout<<id<<"   "<<xPos<<"   "<<frontVeh->xPos<< " "<<curRoad->length<<"  "<<getDst()<<endl;
-    //cout<<id<<"   "<<curRoad->id<<"  "<<xPos<<"  "<<pos<< "   "<<curRoad->length<<"  "<<getDst()<<endl;
-
     if (direction)
     {
-        //pos = Vec3::lerp(curRoad->begJoint, curRoad->endJoint, s);
-        //pos += curRoad->normal * 0.1;
         pos = Vec3::lerp(curRoad->getBegJointWidth(direction), curRoad->getEndJointWidth(direction), s);
     }
     else
     {
-        //pos = Vec3::lerp(curRoad->endJoint, curRoad->begJoint, s);
-        //pos -= curRoad->normal * 0.1;
         pos = Vec3::lerp(curRoad->getEndJointWidth(direction), curRoad->getBegJointWidth(direction), s);
     }
-
-    //pos = Vec3::lerp(curRoad->getJoint(direction))
 
     dstToCross = curRoad->getLength() - xPos;
 }
@@ -258,8 +235,6 @@ void Vehicle::registerToCross()
         {
             if (curCross->streets[i].street == curRoad)
             {
-                //if (curCross->id.compare("SK3") ==0) cout<< curCross->streets.size()-1<<endl;
-
                 desiredTurn = randInt(0, curCross->streets.size()-1);
                 if (desiredTurn == (int)i) desiredTurn = (desiredTurn+1) % curCross->streets.size();
 
@@ -273,14 +248,11 @@ void Vehicle::registerToCross()
                 if (!direction) begRot += 180;
                 if (!curCross->streets[desiredTurn].direction) endRot += 180;
 
-                //blinker = rotateDirection(curRoad->direction.angleXZ(), nextRoad->direction.angleXZ());
                 blinker = rotateDirection(begRot, endRot);
                 if (curCross->streets.size() == 2) blinker = 0;
 
                 blinkerTime = 0;
                 blinkerLight = true;
-
-                //cout<<id<<"  desired road: "<<nextRoad->id<<endl;
 
                 curCross->streets[i].vehicles.push_back(this);
 
@@ -298,7 +270,6 @@ void Vehicle::tryBeAllowedToEnterCross()
         {
             if (nextRoad->freeSpace(curCross->streets[i].direction) > vehicleLength + remainDst)
             {
-
                 isLeavingRoad = true;
 
                 if (curCross->streets[i].direction)
@@ -313,9 +284,6 @@ void Vehicle::tryBeAllowedToEnterCross()
                 isChanging = true;
                 didReachCross = false;
             }
-
-            //cout<<curCross->id<<"  "<<id<<" warunek"<<endl;
-            //xPos = 0;
 
             break;
         }
@@ -341,8 +309,6 @@ void Vehicle::leaveRoad()
     {
         backVeh->isFirstVeh = true;
         backVeh->frontVeh = NULL;
-        //cout<<"prev veh: "<<backVeh->id<<"  "<<backVeh->frontVeh<<endl;
-        //int i;cin>>i;
     }
 
     begRot = curRoad->direction.angleXZ();
@@ -401,7 +367,6 @@ void Vehicle::enterNewRoad()
 
     xPos = 0;
     isBraking = false;
-
 
     allowedToCross = false;
 
@@ -494,7 +459,6 @@ bool Vehicle::isEnoughSpace()
 
 Car::Car(Driveable *spawnRoad) : Vehicle(spawnRoad)
 {
-//    Vehicle(spawnRoad);
     velocity = randFloat(2,5);
 }
 
@@ -505,14 +469,12 @@ void Car::update(float delta)
 
 void Car::draw()
 {
-
     if (blinker < 0 && blinkerLight)
     {
         pushMatrix();
         translate(0,0.05,-0.038);
         setColor(1,0.647,0);
         drawCube(0.22,0.02,0.01);
-        //drawCube(1,0.02,0.01);
         popMatrix();
     }
     if (blinker > 0 && blinkerLight)
@@ -523,8 +485,6 @@ void Car::draw()
         drawCube(0.22,0.02,0.01);
         popMatrix();
     }
-
-    //setColor(0,1,0);
 
     if (isBraking)
     {
@@ -559,17 +519,6 @@ void Car::draw()
         setColor(0,1,1);
     }*/
 
-    /*if (idnumber == 64)
-    {
-        setColor(1,0.667,0);
-    }
-    if (idnumber == 41)
-    {
-        setColor(0.7,0.5,0);
-    }*/
-
-
-
     /*if (curCross != NULL)
     {
         setColor(0,0,0);
@@ -581,25 +530,11 @@ void Car::draw()
     drawCube(0.2,0.05,0.1);
     drawRoof();
 
-    //glTranslatef(0.2,0,0);
-    //setColor(0,0,0);
-    //drawCube(0.1);
     popMatrix();
-
-    /*glPushMatrix();
-    glTranslatef(0.25,0,0);
-    setColor(0,0,0);
-    for(int i=0;i<idnumber;i++)
-    {
-        glTranslatef(0.2,0,0);
-        drawCube(0.1);
-    }
-    glPopMatrix();*/
 }
 
 Bus::Bus(Driveable *spawnRoad) : Vehicle(spawnRoad)
 {
-//    Vehicle(spawnRoad);
     maxV = randFloat(0.8, 1.1);
     velocity = randFloat(2,5);
     vehicleLength = 0.65;
@@ -624,8 +559,6 @@ void Bus::update(float delta)
     {
         busAngle = 0;
     }
-
-    //if(id.compare("BUS_4")==0) cout<<"BUS ANGLE  "<<id<<"  "<<busAngle<<endl;
 }
 
 void Bus::draw()
@@ -696,28 +629,6 @@ void Bus::draw()
         popMatrix();
         popMatrix();
     }
-
-    /*if (blinker < 0 && blinkerLight)
-    {
-        setColor(1,0.647,0);
-        glPushMatrix();
-        glRotatef(busAngle, 0,-1,0);
-        glTranslatef(-0.2,0,0);
-        drawCube(0.22,0.02,0.01);
-        //setColor(0,0.8,0.8);
-        //glTranslatef(-0.02,0.02,0);
-        //drawCube(0.27,0.07,0.14);
-        glPopMatrix();
-    }
-    if (blinker > 0 && blinkerLight)
-    {
-        glPushMatrix();
-        glTranslatef(0,0.05,0.038);
-        setColor(1,0.647,0);
-        drawCube(0.22,0.02,0.01);
-        glPopMatrix();
-    }*/
-
 
     popMatrix();
 }
