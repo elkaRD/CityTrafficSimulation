@@ -422,14 +422,14 @@ void Cross::draw()
 
 CrossLights::CrossLights(Vec3 position) : Cross(position)
 {
-    durationGreen1 = randFloat(10, 20);
-    durationYellow1 = randFloat(2, 6);
-    durationGreen2 = randFloat(10, 20);
-    durationYellow2 = randFloat(2, 6);
-    durationBreak = randFloat(1, 6);
+    durLight.durationGreen1 = randFloat(10, 20);
+    durLight.durationYellow1 = randFloat(2, 6);
+    durLight.durationGreen2 = randFloat(10, 20);
+    durLight.durationYellow2 = randFloat(2, 6);
+    durLight.durationBreak = randFloat(1, 6);
 
     curState = B1;
-    curTime = durationBreak;
+    curTime = durLight.durationBreak;
     setLightsPriority();
 }
 
@@ -440,42 +440,42 @@ void CrossLights::getNextState()
         if (curState == G1)
         {
             curState = Y1;
-            curTime = durationYellow1;
+            curTime = durLight.durationYellow1;
             setLightsPriority();
             return;
         }
         if (curState == Y1)
         {
             curState = B1;
-            curTime = durationBreak;
+            curTime = durLight.durationBreak;
             setLightsPriority();
             return;
         }
         if (curState == B1)
         {
             curState = G2;
-            curTime = durationGreen2;
+            curTime = durLight.durationGreen2;
             setLightsPriority();
             return;
         }
         if (curState == G2)
         {
             curState = Y2;
-            curTime = durationYellow2;
+            curTime = durLight.durationYellow2;
             setLightsPriority();
             return;
         }
         if (curState == Y2)
         {
             curState = B2;
-            curTime = durationBreak;
+            curTime = durLight.durationBreak;
             setLightsPriority();
             return;
         }
         if (curState == B2)
         {
             curState = G1;
-            curTime = durationGreen1;
+            curTime = durLight.durationGreen1;
             setLightsPriority();
             return;
         }

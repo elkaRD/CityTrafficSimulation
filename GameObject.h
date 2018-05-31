@@ -30,8 +30,8 @@ protected:
     Vec3 rot;
 
     virtual void update(float delta);
-    float randFloat(float minV, float maxV);
-    int randInt(int minV, int maxV);
+    static float randFloat(float minV, float maxV);
+    static int randInt(int minV, int maxV);
 };
 
 #endif // GAMEOBJECT_H

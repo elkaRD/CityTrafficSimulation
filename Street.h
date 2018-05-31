@@ -112,11 +112,14 @@ public:
     CrossLights(Vec3 position);
 
 private:
-    float durationGreen1;
-    float durationGreen2;
-    float durationYellow1;
-    float durationYellow2;
-    float durationBreak;
+    struct LightsDuration
+    {
+        float durationGreen1;
+        float durationGreen2;
+        float durationYellow1;
+        float durationYellow2;
+        float durationBreak;
+    } durLight;
 
     std::vector<bool> defaultPriority;
     std::vector<bool> curPriority;

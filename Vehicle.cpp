@@ -12,9 +12,8 @@ Vehicle::Vehicle(Driveable *spawnRoad)
     initRandValues();
 
     velocity = 0;
-    vehicleLength = 0.2;
+    specs.vehicleLength = 0.2;
     xPos = 0;
-    maxAcceleration = 0.5;
 
     isBraking = false;
 
@@ -22,7 +21,7 @@ Vehicle::Vehicle(Driveable *spawnRoad)
     direction = true;
     desiredTurn = 0;
 
-    initBlinkers();
+    blinker.init();
 
     initPointers(spawnRoad);
 
@@ -31,20 +30,20 @@ Vehicle::Vehicle(Driveable *spawnRoad)
 
 void Vehicle::initRandValues()
 {
-    maxV = randFloat(1, 1.5);
-    minV = randFloat(0.02, 0.08);
-    cornerVelocity = 1;
-    stopTime = randFloat(0.5, 0.8);
-    acceleration = randFloat(0.1,0.2);
-    remainDst = randFloat(0.1, 0.2);
+    specs.maxV = randFloat(1, 1.5);
+    specs.minV = randFloat(0.02, 0.08);
+    specs.cornerVelocity = 1;
+    specs.stopTime = randFloat(0.5, 0.8);
+    specs.acceleration = randFloat(0.1,0.2);
+    specs.remainDst = randFloat(0.1, 0.2);
 }
 
-void Vehicle::initBlinkers()
+void Vehicle::Blinker::init()
 {
-    blinker = 0;
-    blinkerTime = 0;
-    blinkerDuration  = randFloat(0.45,0.55);
-    blinkerLight = true;
+    which = 0;
+    time = 0;
+    duration  = randFloat(0.45,0.55);
+    isLighting = true;
 }
 
 void Vehicle::initPointers(Driveable *spawnRoad)
@@ -56,9 +55,9 @@ void Vehicle::initPointers(Driveable *spawnRoad)
     backVeh = NULL;
 
     allowedToCross = false;
-    isChanging = false;
-    didReachCross = false;
-    isLeavingRoad = false;
+    crossState.isChanging = false;
+    crossState.didReachCross = false;
+    crossState.isLeavingRoad = false;
 
     frontVeh = NULL;
     isFirstVeh = true;
@@ -73,7 +72,7 @@ void Vehicle::initPointers(Driveable *spawnRoad)
 
 void Vehicle::update(float delta)
 {
-    if (!isChanging && !didReachCross)
+    if (!crossState.isChanging && !crossState.didReachCross)
     {
         float prevVelocity = velocity;
 
@@ -89,14 +88,14 @@ void Vehicle::update(float delta)
         }
     }
 
-    if (!isLeavingRoad && curCross != NULL && nextRoad != NULL && allowedToCross/* && nextRoad->freeSpace(direction) > vehicleLength + remainDst*/)
+    if (!crossState.isLeavingRoad && curCross != NULL && nextRoad != NULL && allowedToCross/* && nextRoad->freeSpace(direction) > vehicleLength + remainDst*/)
     {
         tryBeAllowedToEnterCross();
     }
 
-    if (isChanging)
+    if (crossState.isChanging)
     {
-        xPos += cornerVelocity * delta;
+        xPos += specs.cornerVelocity * delta;
 
         float s = xPos / curRoad->getLength();
 
@@ -115,35 +114,35 @@ void Vehicle::update(float delta)
         }
     }
 
-    if (didReachCross)
+    if (crossState.didReachCross)
     {
-        xPos += cornerVelocity * delta;
+        xPos += specs.cornerVelocity * delta;
 
         setCornerPosition();
 
-        if (crossProgress>=1)
+        if (crossState.crossProgress>=1)
         {
             enterNewRoad();
         }
     }
 
-    updateBlinkers(delta);
+    blinker.updateBlinkers(delta);
 }
 
 void Vehicle::setVelocity()
 {
-    float posDiff = getDst() - vehicleLength / 2.0 - remainDst;
-    float newDst = velocity * stopTime - acceleration * stopTime * stopTime / 2.0;
+    float posDiff = getDst() - specs.vehicleLength / 2.0 - specs.remainDst;
+    float newDst = velocity * specs.stopTime - specs.acceleration * specs.stopTime * specs.stopTime / 2.0;
 
     if (newDst > posDiff)
     {
-        velocity = posDiff - acceleration * stopTime * stopTime / 2.0;
-        velocity /= stopTime;
+        velocity = posDiff - specs.acceleration * specs.stopTime * specs.stopTime / 2.0;
+        velocity /= specs.stopTime;
     }
     else if (posDiff > newDst)
     {
-        velocity = posDiff - acceleration * stopTime * stopTime / 2.0;
-        velocity /= stopTime;
+        velocity = posDiff - specs.acceleration * specs.stopTime * specs.stopTime / 2.0;
+        velocity /= specs.stopTime;
     }
 }
 
@@ -160,15 +159,15 @@ void Vehicle::checkVelocity(float delta, float prevVelocity)
         isBraking = false;
     }
 
-    if (velocity < minV)
+    if (velocity < specs.minV)
     {
         velocity = 0;
         isBraking = true;
     }
 
-    if (velocity > maxV)
+    if (velocity > specs.maxV)
     {
-        velocity = maxV;
+        velocity = specs.maxV;
     }
 }
 
@@ -227,7 +226,7 @@ void Vehicle::registerToCross()
         curCross = curRoad->crossBeg;
     }
 
-    blinker = 0;
+    blinker.which = 0;
 
     if (curCross != NULL)
     {
@@ -242,17 +241,17 @@ void Vehicle::registerToCross()
 
                 nextRoad = curCross->streets[desiredTurn].street;
 
-                begRot = curRoad->direction.angleXZ();
-                endRot = nextRoad->direction.angleXZ();
+                crossState.begRot = curRoad->direction.angleXZ();
+                crossState.endRot = nextRoad->direction.angleXZ();
 
-                if (!direction) begRot += 180;
-                if (!curCross->streets[desiredTurn].direction) endRot += 180;
+                if (!direction) crossState.begRot += 180;
+                if (!curCross->streets[desiredTurn].direction) crossState.endRot += 180;
 
-                blinker = rotateDirection(begRot, endRot);
-                if (curCross->streets.size() == 2) blinker = 0;
+                blinker.which = rotateDirection(crossState.begRot, crossState.endRot);
+                if (curCross->streets.size() == 2) blinker.which = 0;
 
-                blinkerTime = 0;
-                blinkerLight = true;
+                blinker.time = 0;
+                blinker.isLighting = true;
 
                 curCross->streets[i].vehicles.push_back(this);
 
@@ -268,21 +267,21 @@ void Vehicle::tryBeAllowedToEnterCross()
     {
         if (curCross->streets[i].street == nextRoad)
         {
-            if (nextRoad->freeSpace(curCross->streets[i].direction) > vehicleLength + remainDst)
+            if (nextRoad->freeSpace(curCross->streets[i].direction) > specs.vehicleLength + specs.remainDst)
             {
-                isLeavingRoad = true;
+                crossState.isLeavingRoad = true;
 
                 if (curCross->streets[i].direction)
                 {
-                    nextRoad->reservedSpaceBeg += vehicleLength + remainDst;
+                    nextRoad->reservedSpaceBeg += specs.vehicleLength + specs.remainDst;
                 }
                 else
                 {
-                    nextRoad->reservedSpaceEnd += vehicleLength + remainDst;
+                    nextRoad->reservedSpaceEnd += specs.vehicleLength + specs.remainDst;
                 }
 
-                isChanging = true;
-                didReachCross = false;
+                crossState.isChanging = true;
+                crossState.didReachCross = false;
             }
 
             break;
@@ -293,8 +292,8 @@ void Vehicle::tryBeAllowedToEnterCross()
 void Vehicle::leaveRoad()
 {
     xPos = 0;
-    didReachCross = true;
-    isChanging = false;
+    crossState.didReachCross = true;
+    crossState.isChanging = false;
 
     if (curCross->streets[desiredTurn].direction)
     {
@@ -311,11 +310,11 @@ void Vehicle::leaveRoad()
         backVeh->frontVeh = NULL;
     }
 
-    begRot = curRoad->direction.angleXZ();
-    endRot = nextRoad->direction.angleXZ();
+    crossState.begRot = curRoad->direction.angleXZ();
+    crossState.endRot = nextRoad->direction.angleXZ();
 
-    if (!direction) begRot += 180;
-    if (!curCross->streets[desiredTurn].direction) endRot += 180;
+    if (!direction) crossState.begRot += 180;
+    if (!curCross->streets[desiredTurn].direction) crossState.endRot += 180;
 }
 
 void Vehicle::setCornerPosition()
@@ -342,13 +341,13 @@ void Vehicle::setCornerPosition()
         pos  = Vec3::lerp(curRoad->getBegJointWidth(direction), nextRoadJoint, s);
     }
 
-    rot = Vec3(0, lerpAngle(begRot, endRot, s), 0);
-    crossProgress = s;
+    rot = Vec3(0, lerpAngle(crossState.begRot, crossState.endRot, s), 0);
+    crossState.crossProgress = s;
 }
 
 void Vehicle::enterNewRoad()
 {
-    blinker = 0;
+    blinker.which = 0;
 
     if(backVeh != NULL)
     {
@@ -370,11 +369,11 @@ void Vehicle::enterNewRoad()
 
     allowedToCross = false;
 
-    isChanging = false;
-    didReachCross = false;
-    isLeavingRoad = false;
+    crossState.isChanging = false;
+    crossState.didReachCross = false;
+    crossState.isLeavingRoad = false;
 
-    velocity = cornerVelocity;
+    velocity = specs.cornerVelocity;
 
     curRoad = curCross->streets[desiredTurn].street;
 
@@ -384,11 +383,11 @@ void Vehicle::enterNewRoad()
 
     if (direction)
     {
-        nextRoad->reservedSpaceBeg -= vehicleLength + remainDst;
+        nextRoad->reservedSpaceBeg -= specs.vehicleLength + specs.remainDst;
     }
     else
     {
-        nextRoad->reservedSpaceEnd -= vehicleLength + remainDst;
+        nextRoad->reservedSpaceEnd -= specs.vehicleLength + specs.remainDst;
     }
 
     curCross->allowedVeh--;
@@ -431,21 +430,21 @@ void Vehicle::enterNewRoad()
     curCross = NULL;
 }
 
-void Vehicle::updateBlinkers(float delta)
+void Vehicle::Blinker::updateBlinkers(float delta)
 {
-    blinkerTime += delta;
+    time += delta;
 
-    if (blinkerTime > blinkerDuration)
+    if (time > duration)
     {
-        blinkerTime = 0;
-        blinkerLight = !blinkerLight;
+        time = 0;
+        isLighting = !isLighting;
     }
 }
 
 float Vehicle::getDst()
 {
     if (frontVeh != NULL)
-        return frontVeh->xPos - xPos - frontVeh->vehicleLength/2.0;
+        return frontVeh->xPos - xPos - frontVeh->specs.vehicleLength/2.0;
 
     return curRoad->getLength() - xPos;
 }
@@ -454,7 +453,7 @@ bool Vehicle::isEnoughSpace()
 {
     if (nextRoad == NULL || curCross == NULL || desiredTurn >= (int)curCross->streets.size()) return false;
 
-    return nextRoad->freeSpace(curCross->streets[desiredTurn].direction) > vehicleLength + remainDst;
+    return nextRoad->freeSpace(curCross->streets[desiredTurn].direction) > specs.vehicleLength + specs.remainDst;
 }
 
 Car::Car(Driveable *spawnRoad) : Vehicle(spawnRoad)
@@ -469,7 +468,7 @@ void Car::update(float delta)
 
 void Car::draw()
 {
-    if (blinker < 0 && blinkerLight)
+    if (blinker.which < 0 && blinker.isLighting)
     {
         pushMatrix();
         translate(0,0.05,-0.038);
@@ -477,7 +476,7 @@ void Car::draw()
         drawCube(0.22,0.02,0.01);
         popMatrix();
     }
-    if (blinker > 0 && blinkerLight)
+    if (blinker.which > 0 && blinker.isLighting)
     {
         pushMatrix();
         translate(0,0.05,0.038);
@@ -535,21 +534,21 @@ void Car::draw()
 
 Bus::Bus(Driveable *spawnRoad) : Vehicle(spawnRoad)
 {
-    maxV = randFloat(0.8, 1.1);
+    specs.maxV = randFloat(0.8, 1.1);
     velocity = randFloat(2,5);
-    vehicleLength = 0.65;
+    specs.vehicleLength = 0.65;
 }
 
 void Bus::update(float delta)
 {
     Vehicle::update(delta);
 
-    if (didReachCross)
+    if (crossState.didReachCross)
     {
         //busAngle = (begRot - endRot) * crossProgress;
-        float s = crossProgress * 2.0 - 1.0;
+        float s = crossState.crossProgress * 2.0 - 1.0;
         s = 1 - abs(s);
-        float a = Vec3::angleDiff(begRot, endRot);
+        float a = Vec3::angleDiff(crossState.begRot, crossState.endRot);
         a /= 4.0;
         //cout<<"BUS ANG   "<<begRot<<"  "<<endRot<<"    "<<a*2.3<<endl;
 
@@ -593,13 +592,13 @@ void Bus::draw()
     drawCube(0.2,0.12,0.12);
 
     pushMatrix();
-    if (blinker < 0 && blinkerLight)
+    if (blinker.which < 0 && blinker.isLighting)
     {
         setColor(1,0.647,0);
         translate(0, -0.031,-0.046);
         drawCube(0.73,0.01,0.01);
     }
-    if (blinker > 0 && blinkerLight)
+    if (blinker.which > 0 && blinker.isLighting)
     {
         setColor(1,0.647,0);
         translate(0, -0.031,0.046);

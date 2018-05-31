@@ -19,17 +19,19 @@ public:
     static int getNumberId();
 
 protected:
-    float maxV;
-    float minV;
-    float velocity;
-    float cornerVelocity;
-    float stopTime;
-    float acceleration;
-    float xPos;
-    float vehicleLength;
-    float remainDst;
-    float maxAcceleration;
+    struct Adjustable
+    {
+        float maxV;
+        float minV;
+        float cornerVelocity;
+        float stopTime;
+        float acceleration;
+        float vehicleLength;
+        float remainDst;
+    } specs;
 
+    float velocity;
+    float xPos;
     bool isBraking;
 
     void update(float delta);
@@ -37,16 +39,31 @@ protected:
     float getDst();
     bool isEnoughSpace();
 
-    bool isChanging;
-    bool didReachCross;
-    bool isLeavingRoad;
+    struct CrossingState
+    {
+        bool isChanging;
+        bool didReachCross;
+        bool isLeavingRoad;
 
-    float begRot;
-    float endRot;
-    float crossProgress;
+        float begRot;
+        float endRot;
+        float crossProgress;
+    } crossState;
 
-    int blinker;
-    bool blinkerLight;
+    struct Blinker
+    {
+        int which;
+        bool isLighting;
+
+    private:
+        float time;
+        float duration;
+
+        void init();
+        void updateBlinkers(float delta);
+
+        friend Vehicle;
+    } blinker;
 
     Vec3 vehicleColor;
 
@@ -55,10 +72,6 @@ protected:
 private:
     static int numVeh;
 
-    float blinkerTime;
-    float blinkerDuration;
-
-    void initBlinkers();
     void initPointers(Driveable *spawnRoad);
 
     void setVelocity();
@@ -70,8 +83,6 @@ private:
     void leaveRoad();
     void setCornerPosition();
     void enterNewRoad();
-
-    void updateBlinkers(float delta);
 
     float dstToCross;
 
