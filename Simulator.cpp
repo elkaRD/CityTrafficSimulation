@@ -1,6 +1,17 @@
 #include"Simulator.h"
 using namespace std;
 
+Simulator* Simulator::instance = NULL;
+
+Simulator* Simulator::getInstance()
+{
+    if (instance == NULL)
+    {
+        instance = new Simulator();
+    }
+    return instance;
+}
+
 void Simulator::redraw()
 {
     glRotatef(cameraRot.y, 1,0,0);
@@ -14,9 +25,9 @@ void Simulator::redraw()
 
     glPushMatrix();
 
-    for (unsigned int i=0;i<objects.size();i++)
+    for (const auto &object : objects)
     {
-        objects[i]->drawObject();
+        object->drawObject();
     }
 
     glPopMatrix();
@@ -282,15 +293,15 @@ void Simulator::singleUpdate(float delta)
 
 void Simulator::update(float delta)
 {
-    for (unsigned int i = 0; i < spots.size(); i++)
+    for (auto &spot : spots)
     {
-        if (spots[i]->checkReadyToSpot())
+        if (spot->checkReadyToSpot())
         {
-            registerObject(spots[i]->spotVeh());
+            registerObject(spot->spotVeh());
         }
-        if (spots[i]->checkReadyToDelete())
+        if (spot->checkReadyToDelete())
         {
-            destroyObject(spots[i]->deleteVeh());
+            destroyObject(spot->deleteVeh());
         }
     }
 
@@ -333,13 +344,13 @@ void Simulator::cleanSimulation()
     }
 }
 
-GameObject* Simulator::findObjectByName(string no)
+GameObject* Simulator::findObjectByName(string no) const
 {
-    for(unsigned int i=0;i<objects.size();i++)
+    for (const auto &object : objects)
     {
-        if (objects[i]->id.compare(no) == 0)
+        if (object->id.compare(no) == 0)
         {
-            return objects[i];
+            return object;
         }
     }
 

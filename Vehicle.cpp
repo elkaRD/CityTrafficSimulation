@@ -171,12 +171,12 @@ void Vehicle::checkVelocity(float delta, float prevVelocity)
     }
 }
 
-float Vehicle::getXPos()
+float Vehicle::getXPos() const
 {
     return xPos;
 }
 
-float Vehicle::getDstToCross()
+float Vehicle::getDstToCross() const
 {
     return dstToCross;
 }
@@ -263,15 +263,15 @@ void Vehicle::registerToCross()
 
 void Vehicle::tryBeAllowedToEnterCross()
 {
-    for(unsigned int i=0;i<curCross->streets.size();i++)
+    for (auto &street : curCross->streets)
     {
-        if (curCross->streets[i].street == nextRoad)
+        if (street.street == nextRoad)
         {
-            if (nextRoad->freeSpace(curCross->streets[i].direction) > specs.vehicleLength + specs.remainDst)
+            if (nextRoad->freeSpace(street.direction) > specs.vehicleLength + specs.remainDst)
             {
                 crossState.isLeavingRoad = true;
 
-                if (curCross->streets[i].direction)
+                if (street.direction)
                 {
                     nextRoad->reservedSpaceBeg += specs.vehicleLength + specs.remainDst;
                 }
@@ -441,7 +441,7 @@ void Vehicle::Blinker::updateBlinkers(float delta)
     }
 }
 
-float Vehicle::getDst()
+float Vehicle::getDst() const
 {
     if (frontVeh != NULL)
         return frontVeh->xPos - xPos - frontVeh->specs.vehicleLength/2.0;
@@ -449,7 +449,7 @@ float Vehicle::getDst()
     return curRoad->getLength() - xPos;
 }
 
-bool Vehicle::isEnoughSpace()
+bool Vehicle::isEnoughSpace() const
 {
     if (nextRoad == NULL || curCross == NULL || desiredTurn >= (int)curCross->streets.size()) return false;
 

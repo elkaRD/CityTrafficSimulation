@@ -15,8 +15,8 @@ class GameObject : public Graphics
 public:
     void setPos(Vec3 p);
     void setRot(Vec3 r);
-    Vec3 getPos();
-    Vec3 getRot();
+    Vec3 getPos() const;
+    Vec3 getRot() const;
     std::string id;
 
     GameObject();

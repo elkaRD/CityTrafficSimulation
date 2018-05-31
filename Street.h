@@ -13,7 +13,7 @@ class Road : public GameObject
 {
 public:
     static Vec3 roadColor;
-    float getLength();
+    float getLength() const;
 
 protected:
     float length;
@@ -22,9 +22,9 @@ protected:
 class Driveable : public Road
 {
 public:
-    Vec3 getJointPoint(bool dir);
-    Vec3 getNormal();
-    Vec3 getDirection();
+    Vec3 getJointPoint(bool dir) const;
+    Vec3 getNormal() const;
+    Vec3 getDirection() const;
 
 protected:
     Driveable(Cross *begCross, Cross *endCross);
@@ -39,13 +39,13 @@ protected:
     Vec3 begJoint;
     Vec3 endJoint;
 
-    Vec3 getBegJointWidth(bool dir);
-    Vec3 getEndJointWidth(bool dir);
+    Vec3 getBegJointWidth(bool dir) const;
+    Vec3 getEndJointWidth(bool dir) const;
 
     Vec3 direction;
     Vec3 normal;
 
-    virtual float freeSpace(bool dir);
+    virtual float freeSpace(bool dir) const;
 
     Cross* crossBeg;
     Cross* crossEnd;
@@ -147,8 +147,8 @@ public:
 
     int vehType;
 
-    bool checkReadyToSpot();
-    bool checkReadyToDelete();
+    bool checkReadyToSpot() const;
+    bool checkReadyToDelete() const;
 
 private:
     float frecSpot;

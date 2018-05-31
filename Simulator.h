@@ -19,7 +19,7 @@ class Simulator : public EngineCore
     friend GameObject;
 
 public:
-    Simulator();
+    static Simulator *getInstance();
 
     void loadRoad(std::string fileName);
     void loadPriority(std::string fileName);
@@ -28,12 +28,15 @@ public:
     Vec3 cameraRot;
 
 private:
+    static Simulator *instance;
+    Simulator();
+
     void registerObject(GameObject *go);
     void destroyObject(GameObject *go);
 
     void cleanSimulation();
 
-    GameObject* findObjectByName(std::string on);
+    GameObject* findObjectByName(std::string on) const;
 
     std::vector<GameObject*> objects;
     std::vector<Garage*> spots;

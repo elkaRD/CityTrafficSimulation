@@ -28,12 +28,12 @@ void GameObject::setRot(Vec3 r)
     rot = r;
 }
 
-Vec3 GameObject::getPos()
+Vec3 GameObject::getPos() const
 {
     return pos;
 }
 
-Vec3 GameObject::getRot()
+Vec3 GameObject::getRot() const
 {
     return rot;
 }

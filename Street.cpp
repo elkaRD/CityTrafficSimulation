@@ -6,7 +6,7 @@ class Simulator;
 
 Vec3 Road::roadColor = Vec3(0.2, 0.2, 0.2);
 
-float Road::getLength()
+float Road::getLength() const
 {
     return length;
 }
@@ -67,7 +67,7 @@ void Driveable::commonConstructor()
     reservedSpaceEnd = 0;
 }
 
-float Driveable::freeSpace(bool dir)
+float Driveable::freeSpace(bool dir) const
 {
     if (dir)
     {
@@ -81,23 +81,23 @@ float Driveable::freeSpace(bool dir)
     return vehiclesEnd.back()->getXPos() - reservedSpaceEnd;
 }
 
-Vec3 Driveable::getJointPoint(bool dir)
+Vec3 Driveable::getJointPoint(bool dir) const
 {
     if (dir) return begJoint;
     return endJoint;
 }
 
-Vec3 Driveable::getNormal()
+Vec3 Driveable::getNormal() const
 {
     return normal;
 }
 
-Vec3 Driveable::getDirection()
+Vec3 Driveable::getDirection() const
 {
     return direction;
 }
 
-Vec3 Driveable::getBegJointWidth(bool dir)
+Vec3 Driveable::getBegJointWidth(bool dir) const
 {
     if (dir)
     {
@@ -107,7 +107,7 @@ Vec3 Driveable::getBegJointWidth(bool dir)
     return begJoint - normal * 0.1;
 }
 
-Vec3 Driveable::getEndJointWidth(bool dir)
+Vec3 Driveable::getEndJointWidth(bool dir) const
 {
     if (dir)
     {
@@ -706,12 +706,12 @@ Vehicle* Garage::deleteVeh()
     }
 }
 
-bool Garage::checkReadyToSpot()
+bool Garage::checkReadyToSpot() const
 {
     return isReadyToSpot;
 }
 
-bool Garage::checkReadyToDelete()
+bool Garage::checkReadyToDelete() const
 {
     return isReadyToDelete;
 }

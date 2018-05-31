@@ -14,8 +14,8 @@ class Vehicle : public GameObject
 {
 public:
     Vehicle(Driveable *spawnRoad);
-    float getXPos();
-    float getDstToCross();
+    float getXPos() const;
+    float getDstToCross() const;
     static int getNumberId();
 
 protected:
@@ -36,8 +36,8 @@ protected:
 
     void update(float delta);
 
-    float getDst();
-    bool isEnoughSpace();
+    float getDst() const;
+    bool isEnoughSpace() const;
 
     struct CrossingState
     {
