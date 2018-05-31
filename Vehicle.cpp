@@ -1,11 +1,11 @@
 #include "Vehicle.h"
 #include "Street.h"
 
-class Road;
+class Driveable;
 
 int Vehicle::numVeh = 0;
 
-Vehicle::Vehicle(Road *spawnRoad)
+Vehicle::Vehicle(Driveable *spawnRoad)
 {
     //debugstop = false;
 
@@ -50,7 +50,7 @@ void Vehicle::initBlinkers()
     blinkerLight = true;
 }
 
-void Vehicle::initPointers(Road *spawnRoad)
+void Vehicle::initPointers(Driveable *spawnRoad)
 {
     curRoad = spawnRoad;
     curCross = NULL;
@@ -476,7 +476,7 @@ bool Vehicle::isEnoughSpace()
     return nextRoad->freeSpace(curCross->streets[desiredTurn].direction) > vehicleLength + remainDst;
 }
 
-Car::Car(Road *spawnRoad) : Vehicle(spawnRoad)
+Car::Car(Driveable *spawnRoad) : Vehicle(spawnRoad)
 {
 //    Vehicle(spawnRoad);
     velocity = randFloat(2,5);
@@ -581,7 +581,7 @@ void Car::draw()
     glPopMatrix();*/
 }
 
-Bus::Bus(Road *spawnRoad) : Vehicle(spawnRoad)
+Bus::Bus(Driveable *spawnRoad) : Vehicle(spawnRoad)
 {
 //    Vehicle(spawnRoad);
     maxV = randFloat(0.8, 1.1);

@@ -16,6 +16,14 @@ class Road : public GameObject
 {
 public:
 
+    static Vec3 roadColor;
+    float length;
+};
+
+class Driveable : public Road
+{
+public:
+
     std::queue<Vehicle*> vehiclesBeg;
     std::queue<Vehicle*> vehiclesEnd;
 
@@ -28,12 +36,9 @@ public:
     Vec3 getBegJoint(bool dir);
     Vec3 getEndJoint(bool dir);
 
-    float length;
     Vec3 direction;
 
     Vec3 normal;
-
-    static Vec3 roadColor;
 
     virtual float freeSpace(bool dir);
 
@@ -44,7 +49,7 @@ public:
     Cross* crossEnd;
 };
 
-class Street : public Road
+class Street : public Driveable
 {
 public:
     Street(Cross *begCross, Cross *endCross);
@@ -82,7 +87,7 @@ public:
 
     struct OneStreet
     {
-        Road *street;
+        Driveable *street;
         std::vector<Vehicle*> vehicles;
         //bool enabled;
         bool direction;
@@ -93,11 +98,11 @@ public:
     };
     std::vector<OneStreet> streets;
 
-    void setDefaultPriority(Road *s0 = NULL, Road *s1 = NULL, Road *s2 = NULL, Road *s3 = NULL);
+    virtual void setDefaultPriority(Driveable *s0 = NULL, Driveable *s1 = NULL, Driveable *s2 = NULL, Driveable *s3 = NULL);
 
     int allowedVeh;
     bool isSet;
-    virtual void additionalSetup(Road *s0, Road *s1, Road *s2, Road *s3);
+    //virtual void additionalSetup(Driveable *s0, Driveable *s1, Driveable *s2, Driveable *s3);
 
     bool checkSet();
     void update(float delta);
@@ -124,7 +129,8 @@ public:
     std::vector<bool> defaultPriority;
     std::vector<bool> curPriority;
 
-    void setDefaultLights(Road *s0, Road *s1, Road *s2, Road *s3);
+    void setDefaultPriority(Driveable *s0 = NULL, Driveable *s1 = NULL, Driveable *s2 = NULL, Driveable *s3 = NULL);
+    void setDefaultLights(Driveable *s0, Driveable *s1, Driveable *s2, Driveable *s3);
     void setLightsPriority();
 
     float curTime;
@@ -132,7 +138,7 @@ public:
     enum State{G1, Y1, B1, G2, Y2, B2};
     State curState;
     void getNextState();
-    void additionalSetup(Road *s0, Road *s1, Road *s2, Road *s3);
+    //void additionalSetup(Driveable *s0, Driveable *s1, Driveable *s2, Driveable *s3);
 
     bool dontCheckStreet(int which);
 
@@ -142,7 +148,7 @@ public:
     //void setDefaultPriority(Road *s0 = NULL, Road *s1 = NULL, Road *s2 = NULL, Road *s3 = NULL);
 };
 
-class Garage : public Road
+class Garage : public Driveable
 {
 public:
     Garage(Simulator *engine, Vec3 p, Cross *c);

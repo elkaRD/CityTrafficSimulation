@@ -22,8 +22,6 @@ void Simulator::redraw()
     glPopMatrix();
 }
 
-
-
 Simulator::Simulator()
 {
     if (!didInit)
@@ -32,7 +30,7 @@ Simulator::Simulator()
     }
 
     cameraPos = Vec3(0,20,0);
-    cameraRot = Vec3(0,90,0);
+    cameraRot = Vec3(180,70,0);
 
     cameraDirection = STAY;
 }
@@ -349,10 +347,10 @@ void Simulator::loadPriority(string fileName)
                 if (cross != NULL)
                 {
                     cout<<"set priority on "<<cross->id<<endl;
-                    cross->setDefaultPriority(dynamic_cast<Road*>(findObjectByName(ids[0])),
-                                              dynamic_cast<Road*>(findObjectByName(ids[1])),
-                                              dynamic_cast<Road*>(findObjectByName(ids[2])),
-                                              dynamic_cast<Road*>(findObjectByName(ids[3])));
+                    cross->setDefaultPriority(dynamic_cast<Driveable*>(findObjectByName(ids[0])),
+                                              dynamic_cast<Driveable*>(findObjectByName(ids[1])),
+                                              dynamic_cast<Driveable*>(findObjectByName(ids[2])),
+                                              dynamic_cast<Driveable*>(findObjectByName(ids[3])));
                 }
                 else
                 {

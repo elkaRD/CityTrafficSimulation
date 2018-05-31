@@ -6,7 +6,7 @@ class Simulator;
 
 Vec3 Road::roadColor = Vec3(0.2, 0.2, 0.2);
 
-float Road::freeSpace(bool dir)
+float Driveable::freeSpace(bool dir)
 {
     if (dir)
     {
@@ -20,7 +20,7 @@ float Road::freeSpace(bool dir)
     return vehiclesEnd.back()->xPos - reservedSpaceEnd;
 }
 
-Vec3 Road::getBegJoint(bool dir)
+Vec3 Driveable::getBegJoint(bool dir)
 {
     if (dir)
     {
@@ -30,7 +30,7 @@ Vec3 Road::getBegJoint(bool dir)
     return begJoint - normal * 0.1;
 }
 
-Vec3 Road::getEndJoint(bool dir)
+Vec3 Driveable::getEndJoint(bool dir)
 {
     if (dir)
     {
@@ -167,7 +167,7 @@ void Cross::tryPassAnyVehicle()
     }
 }
 
-void Cross::setDefaultPriority(Road *s0, Road *s1, Road *s2, Road *s3)
+void Cross::setDefaultPriority(Driveable *s0, Driveable *s1, Driveable *s2, Driveable *s3)
 {
     isSet = true;
 
@@ -262,7 +262,7 @@ void Cross::setDefaultPriority(Road *s0, Road *s1, Road *s2, Road *s3)
             }
         }
     }
-    additionalSetup(s0, s1, s2, s3);
+    //additionalSetup(s0, s1, s2, s3);
 
 }
 
@@ -272,22 +272,28 @@ Vec3 Cross::OneStreet::getJointPos()
     return street->begJoint;
 }
 
-void Cross::additionalSetup(Road *s0, Road *s1, Road *s2, Road *s3)
+void CrossLights::setDefaultPriority(Driveable *s0, Driveable *s1, Driveable *s2, Driveable *s3)
 {
-
-}
-
-void CrossLights::additionalSetup(Road *s0, Road *s1, Road *s2, Road *s3)
-{
+    Cross::setDefaultPriority(s0, s1, s2, s3);
     setDefaultLights(s0, s1, s2, s3);
 }
+
+/*void Cross::additionalSetup(Driveable *s0, Driveable *s1, Driveable *s2, Driveable *s3)
+{
+
+}*/
+
+/*void CrossLights::additionalSetup(Driveable *s0, Driveable *s1, Driveable *s2, Driveable *s3)
+{
+    setDefaultLights(s0, s1, s2, s3);
+}*/
 
 bool CrossLights::dontCheckStreet(int which)
 {
     return !curPriority[which];
 }
 
-void CrossLights::setDefaultLights(Road *s0, Road *s1, Road *s2, Road *s3)
+void CrossLights::setDefaultLights(Driveable *s0, Driveable *s1, Driveable *s2, Driveable *s3)
 {
     defaultPriority.clear();
     curPriority.clear();

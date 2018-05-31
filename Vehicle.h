@@ -5,14 +5,14 @@
 //#include "Street.h"
 
 
-class Road;
+class Driveable;
 class Cross;
 //class GameObject;
 
 class Vehicle : public GameObject
 {
 public:
-    Vehicle(Road *spawnRoad);
+    Vehicle(Driveable *spawnRoad);
 //protected:
     float maxV;
     float minV;
@@ -36,7 +36,7 @@ public:
     bool direction;
 
     int desiredTurn;
-    Road *nextRoad;
+    Driveable *nextRoad;
     bool allowedToCross;
 
     bool isChanging;
@@ -54,7 +54,7 @@ public:
     float blinkerDuration;
     bool blinkerLight;
 
-    Road *curRoad;
+    Driveable *curRoad;
     Cross *curCross;
     Vehicle *frontVeh;
     Vehicle *backVeh;
@@ -69,7 +69,7 @@ public:
 
     void initRandValues();
     void initBlinkers();
-    void initPointers(Road *spawnRoad);
+    void initPointers(Driveable *spawnRoad);
 
     void setVelocity();
     void checkVelocity(float delta, float prevVelocity);
@@ -87,7 +87,7 @@ public:
 class Car : public Vehicle
 {
 public:
-    Car(Road *spawnRoad);
+    Car(Driveable *spawnRoad);
 
 private:
 
@@ -99,7 +99,7 @@ class Bus : public Vehicle
 {
 public:
 
-    Bus(Road *spawnRoad);
+    Bus(Driveable *spawnRoad);
 
     float busAngle;
 
