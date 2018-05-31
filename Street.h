@@ -33,6 +33,8 @@ public:
 
 protected:
 
+    Driveable();
+
     std::queue<Vehicle*> vehiclesBeg;
     std::queue<Vehicle*> vehiclesEnd;
 
@@ -51,11 +53,12 @@ protected:
 
     virtual float freeSpace(bool dir);
 
-    float reservedSpaceBeg;
-    float reservedSpaceEnd;
-
     Cross* crossBeg;
     Cross* crossEnd;
+
+private:
+    float reservedSpaceBeg;
+    float reservedSpaceEnd;
 
     friend Vehicle;
 };
@@ -65,13 +68,13 @@ class Street : public Driveable
 public:
     Street(Cross *begCross, Cross *endCross);
 
-    void draw();
+
 
 private:
     //Vec3 begPos;
     //Vec3 endPos;
 
-
+    void draw();
 
 
 };
@@ -95,6 +98,9 @@ class Cross : public Road
     //std::vector<std::vector<Vehicle>>
 public:
     Cross(Vec3 position);
+    virtual void setDefaultPriority(Driveable *s0 = NULL, Driveable *s1 = NULL, Driveable *s2 = NULL, Driveable *s3 = NULL);
+
+//protected:
 
     struct OneStreet
     {
@@ -109,7 +115,7 @@ public:
     };
     std::vector<OneStreet> streets;
 
-    virtual void setDefaultPriority(Driveable *s0 = NULL, Driveable *s1 = NULL, Driveable *s2 = NULL, Driveable *s3 = NULL);
+
 
     int allowedVeh;
     bool isSet;
@@ -130,6 +136,8 @@ class CrossLights : public Cross
 {
 public:
     CrossLights(Vec3 position);
+
+private:
 
     float durationGreen1;
     float durationGreen2;
@@ -170,6 +178,11 @@ public:
 
     int vehType;
 
+    bool checkReadyToSpot();
+    bool checkReadyToDelete();
+
+private:
+
     float frecSpot;
     float curTimeSpot;
 
@@ -184,6 +197,8 @@ public:
 
     bool isReadyToSpot;
     bool isReadyToDelete;
+
+    friend Simulator;
 };
 
 #endif // STREET_H

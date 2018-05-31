@@ -11,6 +11,12 @@ float Road::getLength()
     return length;
 }
 
+Driveable::Driveable()
+{
+    reservedSpaceBeg = 0;
+    reservedSpaceEnd = 0;
+}
+
 float Driveable::freeSpace(bool dir)
 {
     if (dir)
@@ -519,7 +525,7 @@ void CrossLights::draw()
     }
 }
 
-Street::Street(Cross *begCross, Cross *endCross)
+Street::Street(Cross *begCross, Cross *endCross) : Driveable()
 {
     crossBeg = begCross;
     crossEnd = endCross;
@@ -544,9 +550,6 @@ Street::Street(Cross *begCross, Cross *endCross)
 
     begPos = crossBeg->getPos();
     endPos = crossEnd->getPos();
-
-    reservedSpaceBeg = 0;
-    reservedSpaceEnd = 0;
 
     normal = Vec3::cross(Vec3(0,1,0), direction);
     normal.normalize();
@@ -575,7 +578,7 @@ void Street::draw()
     endDraw();
 }
 
-Garage::Garage(Simulator *engine, Vec3 p, Cross *c)
+Garage::Garage(Simulator *engine, Vec3 p, Cross *c) : Driveable()
 {
     pos = p;
     crossEnd = c;
@@ -601,9 +604,6 @@ Garage::Garage(Simulator *engine, Vec3 p, Cross *c)
     gameEngine = engine;
 
     crossEnd->streets.push_back(temp);
-
-    reservedSpaceBeg = 0;
-    reservedSpaceEnd = 0;
 
     normal = Vec3::cross(Vec3(0,1,0), direction);
     normal.normalize();
@@ -732,4 +732,14 @@ Vehicle* Garage::deleteVeh()
 
         //destroyNextObject(gameEngine, temp);
     }
+}
+
+bool Garage::checkReadyToSpot()
+{
+    return isReadyToSpot;
+}
+
+bool Garage::checkReadyToDelete()
+{
+    return isReadyToDelete;
 }

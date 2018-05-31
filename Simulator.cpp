@@ -306,11 +306,11 @@ void Simulator::update(float delta)
 {
     for (unsigned int i = 0; i < spots.size(); i++)
     {
-        if (spots[i]->isReadyToSpot)
+        if (spots[i]->checkReadyToSpot())
         {
             registerObject(spots[i]->spotVeh());
         }
-        if (spots[i]->isReadyToDelete)
+        if (spots[i]->checkReadyToDelete())
         {
             destroyObject(spots[i]->deleteVeh());
         }
