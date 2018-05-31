@@ -60,8 +60,10 @@ public:
     Vehicle *backVeh;
     bool isFirstVeh;
 
+    Vec3 vehicleColor;
+
     int idnumber;
-    bool debugstop;
+    //bool debugstop;
     //int idnum;
     static int numVeh;
 

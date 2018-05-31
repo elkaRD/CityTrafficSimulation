@@ -10,6 +10,8 @@ class GameObject;
 #include "Street.h"
 #include "Vehicle.h"
 
+#define CAMERA_VELOCITY     1
+
 class GameObject;
 
 class Simulator : public EngineCore
@@ -42,14 +44,29 @@ private:
 
     void keyPressed(char k);
     void update(float delta);
+    void singleUpdate(float delta);
     void redraw();
     void mouseMove(int dx, int dy);
+
+    enum DirectionMove
+    {
+        FORWARD,
+        BACK,
+        LEFT,
+        RIGHT,
+        STAY
+    };
+
+    DirectionMove cameraDirection;
+    float cameraVelocity;
+
+    void cameraMove(float delta);
 
     //static void registerNewObject(Simulator *engine, GameObject *go);
     //static void destroyNextObject(Simulator *engine, GameObject *go);
 
-    friend void registerNewObject(Simulator *engine, GameObject *go);
-    friend void destroyNextObject(Simulator *engine, GameObject *go);
+    //friend void registerNewObject(Simulator *engine, GameObject *go);
+    //friend void destroyNextObject(Simulator *engine, GameObject *go);
 };
 
 #endif // SIMULTOR_H

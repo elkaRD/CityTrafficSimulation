@@ -23,7 +23,6 @@
 #define MAX_DELTA           0.15
 #define MIN_DELTA           0.007
 #define REAL_INT_MULTIPLY   2
-#define CAMERA_VELOCITY     1
 
 class EngineCore
 {
@@ -38,6 +37,7 @@ public:
 
     virtual void keyPressed(char k) = 0;
     virtual void update(float delta) = 0;
+    virtual void singleUpdate(float delta) = 0;
     virtual void redraw() = 0;
     virtual void mouseMove(int dx, int dy) = 0;
 

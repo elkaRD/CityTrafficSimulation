@@ -157,6 +157,10 @@ void EngineCore::run()
 
                 cout<<"key pressed           sdfdsf"<<endl;
 
+                for(int i =0;i<10;i++)cout<<buffer[i];
+                cout<<endl;
+                keyPressed(buffer[0]);
+
                 if(buffer[0] >= 'a' && buffer[0] <= 'z')
                     pressedKey[buffer[0] - 32] = true;
 
@@ -207,6 +211,8 @@ void EngineCore::run()
                 int dx = mevent->x - prevMouseX;
                 int dy = mevent->y - prevMouseY;
 
+                cout<<".";
+
                 mouseMove(dx, dy);
 
                 prevMouseX = mevent->x;
@@ -254,6 +260,8 @@ void EngineCore::run()
         glClearColor(1,1,1,1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glTranslatef(0,0,5);
+
+        singleUpdate(delta);
 
         for(int i=0;i<REAL_INT_MULTIPLY;i++)
         {

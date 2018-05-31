@@ -33,6 +33,8 @@ Simulator::Simulator()
 
     cameraPos = Vec3(0,20,0);
     cameraRot = Vec3(0,90,0);
+
+    cameraDirection = STAY;
 }
 
 void Simulator::keyPressed(char k)
@@ -42,6 +44,56 @@ void Simulator::keyPressed(char k)
         cleanSimulation();
         exit(0);
     }
+
+    if (k >= 'A' && k <= 'Z')
+    {
+        k += 32;
+        cameraVelocity = CAMERA_VELOCITY * 5.0f;
+    }
+    else
+    {
+        cameraVelocity = CAMERA_VELOCITY;
+    }
+
+    switch (k)
+    {
+        case 'w': cameraDirection = FORWARD;    break;
+        case 's': cameraDirection = BACK;       break;
+        case 'a': cameraDirection = LEFT;       break;
+        case 'd': cameraDirection = RIGHT;      break;
+        default:  cameraDirection = STAY;
+    }
+}
+
+void Simulator::cameraMove(float delta)
+{
+    float multiplyMove = cameraVelocity * delta;
+    float multiplyMoveHorizontal = cos(-cameraRot.y * M_PI / 180) * multiplyMove;
+
+    switch (cameraDirection)
+    {
+    case FORWARD:
+        cameraPos.z -=cos( cameraRot.x * M_PI / 180 )*multiplyMoveHorizontal;
+        cameraPos.x +=sin( cameraRot.x * M_PI / 180 )*multiplyMoveHorizontal;
+        cameraPos.y +=sin((-cameraRot.y)*M_PI/180)*multiplyMove;
+        break;
+
+    case BACK:
+        cameraPos.z +=cos( cameraRot.x * M_PI / 180 )*multiplyMoveHorizontal;
+        cameraPos.x -=sin( cameraRot.x * M_PI / 180 )*multiplyMoveHorizontal;
+        cameraPos.y -=sin((-cameraRot.y)*M_PI/180)*multiplyMove;
+        break;
+
+    case LEFT:
+
+        break;
+
+    case RIGHT:
+
+        break;
+    }
+
+    cameraDirection = STAY;
 }
 
 void Simulator::mouseMove(int dx, int dy)
@@ -51,6 +103,8 @@ void Simulator::mouseMove(int dx, int dy)
 
     if (cameraRot.y > 90) cameraRot.y = 90;
     if (cameraRot.y < -90) cameraRot.y = -90;
+
+    cout<<cameraRot.x<<"   "<<cameraRot.y<<endl;
 }
 
 void Simulator::moveCamera(float delta)
@@ -275,12 +329,12 @@ void Simulator::loadPriority(string fileName)
     {
         while (!file.eof())
         {
-            string name, mode;
+            string name;//, mode;
             int number; //of streets in the cross
 
-            file >> name >> mode;
+            file >> name;// >> mode;
 
-            if (mode.compare("DEFAULT") == 0)
+            //if (mode.compare("DEFAULT") == 0)
             {
                 file >> number;
 
@@ -292,14 +346,27 @@ void Simulator::loadPriority(string fileName)
                 }
 
                 Cross *cross = dynamic_cast<Cross*>(findObjectByName(name));
-                cross->setDefaultPriority(dynamic_cast<Road*>(findObjectByName(ids[0])),
-                                          dynamic_cast<Road*>(findObjectByName(ids[1])),
-                                          dynamic_cast<Road*>(findObjectByName(ids[2])),
-                                          dynamic_cast<Road*>(findObjectByName(ids[3])));
+                if (cross != NULL)
+                {
+                    cout<<"set priority on "<<cross->id<<endl;
+                    cross->setDefaultPriority(dynamic_cast<Road*>(findObjectByName(ids[0])),
+                                              dynamic_cast<Road*>(findObjectByName(ids[1])),
+                                              dynamic_cast<Road*>(findObjectByName(ids[2])),
+                                              dynamic_cast<Road*>(findObjectByName(ids[3])));
+                }
+                else
+                {
+                    cout<<"unable to set priority on "<<name<<endl;
+                }
             }
         }
     }
     file.close();
+}
+
+void Simulator::singleUpdate(float delta)
+{
+    cameraMove(delta);
 }
 
 void Simulator::update(float delta)
@@ -360,7 +427,7 @@ void Simulator::cleanSimulation()
 
 }
 
-void registerNewObject(Simulator *engine, GameObject *go)
+/*void registerNewObject(Simulator *engine, GameObject *go)
 {
     engine->registerObject(go);
 }
@@ -368,7 +435,7 @@ void registerNewObject(Simulator *engine, GameObject *go)
 void destroyNextObject(Simulator *engine, GameObject *go)
 {
     engine->destroyObject(go);
-}
+}*/
 
 GameObject* Simulator::findObjectByName(string no)
 {
