@@ -10,7 +10,7 @@ class GameObject;
 #include "Street.h"
 #include "Vehicle.h"
 
-#define CAMERA_VELOCITY     1
+#define CAMERA_VELOCITY     3
 
 class GameObject;
 

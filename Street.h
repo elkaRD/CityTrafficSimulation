@@ -15,14 +15,23 @@ class Simulator;
 class Road : public GameObject
 {
 public:
-
     static Vec3 roadColor;
+    float getLength();
+
+protected:
     float length;
 };
 
 class Driveable : public Road
 {
 public:
+    Vec3 getJointPoint(bool dir);
+    //Vec3 getBegJoint();
+    //Vec3 getEndJoint();
+    Vec3 getNormal();
+    Vec3 getDirection();
+
+protected:
 
     std::queue<Vehicle*> vehiclesBeg;
     std::queue<Vehicle*> vehiclesEnd;
@@ -33,8 +42,8 @@ public:
     Vec3 begJoint;
     Vec3 endJoint;
 
-    Vec3 getBegJoint(bool dir);
-    Vec3 getEndJoint(bool dir);
+    Vec3 getBegJointWidth(bool dir);
+    Vec3 getEndJointWidth(bool dir);
 
     Vec3 direction;
 
@@ -47,6 +56,8 @@ public:
 
     Cross* crossBeg;
     Cross* crossEnd;
+
+    friend Vehicle;
 };
 
 class Street : public Driveable

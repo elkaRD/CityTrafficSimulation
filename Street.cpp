@@ -6,21 +6,42 @@ class Simulator;
 
 Vec3 Road::roadColor = Vec3(0.2, 0.2, 0.2);
 
+float Road::getLength()
+{
+    return length;
+}
+
 float Driveable::freeSpace(bool dir)
 {
     if (dir)
     {
-        if (vehiclesBeg.size() == 0) return length - reservedSpaceBeg;
+        if (vehiclesBeg.size() == 0) return getLength() - reservedSpaceBeg;
 
-        return vehiclesBeg.back()->xPos - reservedSpaceBeg;
+        return vehiclesBeg.back()->getXPos() - reservedSpaceBeg;
     }
 
-    if (vehiclesEnd.size() == 0) return length - reservedSpaceEnd;
+    if (vehiclesEnd.size() == 0) return getLength() - reservedSpaceEnd;
 
-    return vehiclesEnd.back()->xPos - reservedSpaceEnd;
+    return vehiclesEnd.back()->getXPos() - reservedSpaceEnd;
 }
 
-Vec3 Driveable::getBegJoint(bool dir)
+Vec3 Driveable::getJointPoint(bool dir)
+{
+    if (dir) return begJoint;
+    return endJoint;
+}
+
+Vec3 Driveable::getNormal()
+{
+    return normal;
+}
+
+Vec3 Driveable::getDirection()
+{
+    return direction;
+}
+
+Vec3 Driveable::getBegJointWidth(bool dir)
 {
     if (dir)
     {
@@ -30,7 +51,7 @@ Vec3 Driveable::getBegJoint(bool dir)
     return begJoint - normal * 0.1;
 }
 
-Vec3 Driveable::getEndJoint(bool dir)
+Vec3 Driveable::getEndJointWidth(bool dir)
 {
     if (dir)
     {
@@ -116,7 +137,7 @@ void Cross::tryPassVehiclesWithPriority()
         if (streets[i].vehicles.size() > 0)
         {
             if (dontCheckStreet(i)) continue;
-            if (streets[i].vehicles[0]->dstToCross > 1.2) continue;
+            if (streets[i].vehicles[0]->getDstToCross() > 1.2) continue;
 
             int which = streets[i].vehicles[0]->desiredTurn;
             bool isOK = true;
@@ -268,8 +289,9 @@ void Cross::setDefaultPriority(Driveable *s0, Driveable *s1, Driveable *s2, Driv
 
 Vec3 Cross::OneStreet::getJointPos()
 {
-    if (!direction) return street->endJoint;
-    return street->begJoint;
+    //if (!direction) return street->endJoint;
+    //return street->begJoint;
+    return street->getJointPoint(direction);
 }
 
 void CrossLights::setDefaultPriority(Driveable *s0, Driveable *s1, Driveable *s2, Driveable *s3)
@@ -469,18 +491,18 @@ void CrossLights::draw()
         translate(0,0.35,0);
 
         if (!streets[i].direction)
-            translate(streets[i].street->normal / 10.0);
+            translate(streets[i].street->getNormal() / 10.0);
         else
-            translate(-streets[i].street->normal / 10.0);
+            translate(-streets[i].street->getNormal() / 10.0);
 
         translate(streets[i].getJointPos());
         if (defaultPriority[i]) setColor(color1.x, color1.y, color1.z);
         else setColor(color2.x, color2.y, color2.z);
 
         if (streets[i].direction)
-            rotateY(streets[i].street->normal.angleXZ());
+            rotateY(streets[i].street->getNormal().angleXZ());
         else
-            rotateY(streets[i].street->normal.angleXZ() + 180);
+            rotateY(streets[i].street->getNormal().angleXZ() + 180);
 
         drawCube(0.05,0.1,0.05);
 
@@ -678,7 +700,7 @@ Vehicle* Garage::spotVeh()
     temp->direction = true;
 
     temp->isFirstVeh = vehiclesBeg.size() == 0;
-    temp->idnumber = Vehicle::numVeh;
+    //temp->idnumber = Vehicle::numVeh;
     vehiclesBeg.push(temp);
 //    gameEngine->registerObject(temp);
     //registerNewObject(gameEngine, temp);

@@ -2,18 +2,24 @@
 #define VEHICLE_H
 
 #include "GameObject.h"
-//#include "Street.h"
+#include "Street.h"
 
 
+class Road;
 class Driveable;
 class Cross;
 //class GameObject;
+class Garage;
 
 class Vehicle : public GameObject
 {
 public:
     Vehicle(Driveable *spawnRoad);
-//protected:
+    float getXPos();
+    float getDstToCross();
+    static int getNumberId();
+
+protected:
     float maxV;
     float minV;
     float velocity;
@@ -23,6 +29,7 @@ public:
     float xPos;
     float vehicleLength;
     float remainDst;
+    float maxAcceleration;
     //float timeCorner;
     bool isBraking;
     //Vec3 direction;
@@ -31,43 +38,34 @@ public:
     float getDst();
     bool isEnoughSpace();
 
-    float dstToCross;
-
-    bool direction;
-
-    int desiredTurn;
-    Driveable *nextRoad;
-    bool allowedToCross;
-
     bool isChanging;
     bool didReachCross;
     bool isLeavingRoad;
-
-    Vec3 nextRoadJoint;
 
     float begRot;
     float endRot;
     float crossProgress;
 
     int blinker;
-    float blinkerTime;
-    float blinkerDuration;
     bool blinkerLight;
 
-    Driveable *curRoad;
-    Cross *curCross;
-    Vehicle *frontVeh;
-    Vehicle *backVeh;
-    bool isFirstVeh;
+
 
     Vec3 vehicleColor;
 
-    int idnumber;
+    //int idnumber;
     //bool debugstop;
     //int idnum;
-    static int numVeh;
+
 
     void initRandValues();
+
+private:
+    static int numVeh;
+
+    float blinkerTime;
+    float blinkerDuration;
+
     void initBlinkers();
     void initPointers(Driveable *spawnRoad);
 
@@ -82,6 +80,25 @@ public:
     void enterNewRoad();
 
     void updateBlinkers(float delta);
+
+    float dstToCross;
+
+    bool direction;
+
+    int desiredTurn;
+    Driveable *nextRoad;
+    bool allowedToCross;
+
+    Vec3 nextRoadJoint;
+
+    Driveable *curRoad;
+    Cross *curCross;
+    Vehicle *frontVeh;
+    Vehicle *backVeh;
+    bool isFirstVeh;
+
+    friend Garage;
+    friend Cross;
 };
 
 class Car : public Vehicle
@@ -100,6 +117,8 @@ class Bus : public Vehicle
 public:
 
     Bus(Driveable *spawnRoad);
+
+private:
 
     float busAngle;
 
