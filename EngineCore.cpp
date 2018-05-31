@@ -186,13 +186,13 @@ void EngineCore::run()
 
             case ButtonPress:
 
-                /*XButtonEvent *bevent;
+                XButtonEvent *bevent;
                 bevent = (XButtonEvent*) &event;
 
                 prevMouseX = bevent->x;
                 prevMouseY = bevent->y;
 
-                switch (event.xbutton.button)
+                /*switch (event.xbutton.button)
                 {
                     case 1: xAngle += 10.0;
                             break;
@@ -201,6 +201,7 @@ void EngineCore::run()
                     case 3: zAngle += 10.0;
                             break;
                 }*/
+                cout<<"BUTTON"<<endl;
                 break;
 
             case MotionNotify:

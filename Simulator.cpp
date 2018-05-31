@@ -118,9 +118,13 @@ void Simulator::mouseMove(int dx, int dy)
     cameraRot.y += dy * 0.2;
 
     if (cameraRot.y > 90) cameraRot.y = 90;
-    if (cameraRot.y < -90) cameraRot.y = -90;
+    else if (cameraRot.y < -90) cameraRot.y = -90;
 
-    cout<<cameraRot.x<<"   "<<cameraRot.y<<endl;
+    //while (cameraRot.x >= 360) cameraRot.x -= 360;
+    //while(cameraRot.x < 0) cameraRot.x += 360;
+
+    //cout<<cameraRot.x<<"   "<<cameraRot.y<<endl;
+    //cout <<dx<<"   "<<dy<<endl;
 }
 
 void Simulator::loadRoad(string fileName)
@@ -147,8 +151,8 @@ void Simulator::loadRoad(string fileName)
             string type;
             string id;
 
-
             ss >> type >> id;
+
             if (type.compare("SK") == 0)
             {
                 float x1,y1,z1;
