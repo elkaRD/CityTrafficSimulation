@@ -6,12 +6,12 @@ GameObject::GameObject()
     rot = Vec3(0,0,0);
 }
 
-GameObject::GameObject(Simulator *engine)
+/*GameObject::GameObject(Simulator *engine)
 {
     pos = Vec3(0,0,0);
     rot = Vec3(0,0,0);
     gameEngine = engine;
-}
+}*/
 
 float GameObject::randFloat(float minV, float maxV)
 {

@@ -170,7 +170,7 @@ private:
 class Garage : public Driveable
 {
 public:
-    Garage(Simulator *engine, Vec3 p, Cross *c);
+    Garage(Vec3 p, Cross *c);
 
     //Cross *cross;
     //std::queue<Vehicle*> vehicles;

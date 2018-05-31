@@ -578,7 +578,7 @@ void Street::draw()
     endDraw();
 }
 
-Garage::Garage(Simulator *engine, Vec3 p, Cross *c) : Driveable()
+Garage::Garage(Vec3 p, Cross *c) : Driveable()
 {
     pos = p;
     crossEnd = c;
@@ -601,7 +601,7 @@ Garage::Garage(Simulator *engine, Vec3 p, Cross *c) : Driveable()
     begJoint = begPos;
     endJoint = crossEnd->getPos() - direction * 0.3;
 
-    gameEngine = engine;
+    //gameEngine = engine;
 
     crossEnd->streets.push_back(temp);
 

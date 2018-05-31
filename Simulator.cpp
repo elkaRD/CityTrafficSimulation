@@ -163,7 +163,7 @@ void Simulator::loadRoad(string fileName)
 
                 Cross *temp;
                 temp = new Cross(v1);
-                temp->gameEngine = this;
+                //temp->gameEngine = this;
                 temp->id = id;
                 objects.push_back(temp);
                 crosses.push_back(temp);
@@ -197,7 +197,7 @@ void Simulator::loadRoad(string fileName)
 
                 GameObject *temp;
                 temp = new Street(crossB, crossE);
-                temp->gameEngine = this;
+                //temp->gameEngine = this;
                 temp->id = id;
                 objects.push_back(temp);
 
@@ -220,7 +220,7 @@ void Simulator::loadRoad(string fileName)
                     }
                 }
                 Garage *temp;
-                temp = new Garage(this, v, cross);
+                temp = new Garage(v, cross);
                 temp->id = id;
 
                 if (vehType.compare("C") == 0) temp->vehType = 0;
@@ -242,7 +242,7 @@ void Simulator::loadRoad(string fileName)
 
                 Cross *temp;
                 temp = new CrossLights(v1);
-                temp->gameEngine = this;
+                //temp->gameEngine = this;
                 temp->id = id;
                 objects.push_back(temp);
                 crosses.push_back(temp);

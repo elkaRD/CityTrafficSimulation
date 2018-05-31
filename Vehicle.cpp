@@ -26,7 +26,7 @@ Vehicle::Vehicle(Driveable *spawnRoad)
 
     initBlinkers();
 
-    gameEngine = spawnRoad->gameEngine;
+    //gameEngine = spawnRoad->gameEngine;
 
     initPointers(spawnRoad);
 
