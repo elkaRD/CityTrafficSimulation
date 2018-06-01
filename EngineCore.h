@@ -36,7 +36,7 @@ class EngineCore
 {
 public:
 
-    static int init(int argc, char **argv);
+    int init(int argc, char **argv);
     static bool didInit;
 
     virtual ~EngineCore(){};
@@ -55,24 +55,24 @@ public:
     timeval startTime;
     timeval lastTime;
 
-    static int snglBuf[];// = {GLX_RGBA, GLX_DEPTH_SIZE, 16, None};
-    static int dblBuf[];//  = {GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
+    //int snglBuf[];// = {GLX_RGBA, GLX_DEPTH_SIZE, 16, None};
+    //int dblBuf[];//  = {GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
 
     static int width;
     static int height;
-    static bool updateRatio;
+    bool updateRatio;
 
     bool pressedKey[256];
     bool pressedShift;
 
-    static Display   *dpy;
-    static Window     win;
+    Display   *dpy;
+    Window     win;
     //GLfloat    xAngle = 0.0, yAngle = 82.0, zAngle = 112.0;
-    static GLboolean  doubleBuffer;// = GL_TRUE;
+    GLboolean  doubleBuffer;// = GL_TRUE;
     //static XSetWindowAttributes swa;
-    static long eventMask;
+    long eventMask;
 
-    static void initLight();
+    void initLight();
 };
 
 #endif // ENGINECORE_H

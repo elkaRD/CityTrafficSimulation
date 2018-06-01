@@ -15,9 +15,19 @@ Simulator* Simulator::getInstance()
 {
     if (instance == NULL)
     {
-        instance = new Simulator();
+        //instance = new Simulator();
     }
     return instance;
+}
+
+Simulator* Simulator::getInstance(int argc, char **argv)
+{
+    if (instance == NULL)
+    {
+        instance = new Simulator(argc, argv);
+    }
+
+    return getInstance();
 }
 
 void Simulator::redraw()
@@ -41,12 +51,22 @@ void Simulator::redraw()
     glPopMatrix();
 }
 
-Simulator::Simulator()
+/*Simulator::Simulator()
 {
     if (!didInit)
     {
         //todo throw
     }
+
+    cameraPos = Vec3(0,20,0);
+    cameraRot = Vec3(180,70,0);
+
+    cameraDirection = STAY;
+}*/
+
+Simulator::Simulator(int argc, char **argv)
+{
+    init(argc, argv);
 
     cameraPos = Vec3(0,20,0);
     cameraRot = Vec3(180,70,0);

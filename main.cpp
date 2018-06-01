@@ -11,8 +11,8 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-    Simulator::init(argc, argv);
-    Simulator *simulator = Simulator::getInstance();
+    //Simulator::init(argc, argv);
+    Simulator *simulator = Simulator::getInstance(argc, argv);
 
     simulator->loadRoad("e4.txt");
     simulator->loadPriority("p2.txt");

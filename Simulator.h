@@ -28,6 +28,7 @@ class Simulator : public EngineCore
 
 public:
     static Simulator *getInstance();
+    static Simulator *getInstance(int argc, char **argv);
 
     void loadRoad(const std::string fileName);
     void loadPriority(const std::string fileName);
@@ -37,7 +38,8 @@ public:
 
 private:
     static Simulator *instance;
-    Simulator();
+    //Simulator();
+    Simulator(int argc, char **argv);
 
     void registerObject(GameObject *go);
     void destroyObject(GameObject *go);

@@ -11,7 +11,7 @@ using namespace std;
 
 int EngineCore::width = 1280;
 int EngineCore::height = 720;
-bool EngineCore::updateRatio = true;
+/*bool EngineCore::updateRatio = true;
 
 int EngineCore::snglBuf[] = {GLX_RGBA, GLX_DEPTH_SIZE, 16, None};
 int EngineCore::dblBuf[]  = {GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
@@ -20,7 +20,7 @@ Display   *EngineCore::dpy = NULL;
 Window    EngineCore::win = (Window) NULL;
 GLboolean EngineCore::doubleBuffer = GL_TRUE;
 //XSetWindowAttributes Simulator::swa = NULL;
-long EngineCore::eventMask = 0;
+long EngineCore::eventMask = 0;*/
 
 void fatalError(char *message)
 {
@@ -30,6 +30,17 @@ void fatalError(char *message)
 
 int EngineCore::init(int argc, char **argv)
 {
+    updateRatio = true;
+
+    int snglBuf[] = {GLX_RGBA, GLX_DEPTH_SIZE, 16, None};
+    int dblBuf[]  = {GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
+
+    dpy = NULL;
+    win = (Window) NULL;
+    doubleBuffer = GL_TRUE;
+    //XSetWindowAttributes Simulator::swa = NULL;
+    eventMask = 0;
+
     XVisualInfo         *vi;
     Colormap             cmap;
     XSetWindowAttributes swa;
