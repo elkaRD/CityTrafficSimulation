@@ -1,3 +1,11 @@
+///   Projekt PROI 18L
+///   Symulator ruchu miejskiego
+///
+///   Copyright (C) Robert Dudzinski 2018
+///
+///   File: Street.cpp
+
+
 #include "Street.h"
 #include<iostream>
 using namespace std;
@@ -67,7 +75,7 @@ void Driveable::commonConstructor()
     reservedSpaceEnd = 0;
 }
 
-float Driveable::freeSpace(bool dir) const
+float Driveable::freeSpace(const bool dir) const
 {
     if (dir)
     {
@@ -81,7 +89,7 @@ float Driveable::freeSpace(bool dir) const
     return vehiclesEnd.back()->getXPos() - reservedSpaceEnd;
 }
 
-Vec3 Driveable::getJointPoint(bool dir) const
+Vec3 Driveable::getJointPoint(const bool dir) const
 {
     if (dir) return begJoint;
     return endJoint;
@@ -97,7 +105,7 @@ Vec3 Driveable::getDirection() const
     return direction;
 }
 
-Vec3 Driveable::getBegJointWidth(bool dir) const
+Vec3 Driveable::getBegJointWidth(const bool dir) const
 {
     if (dir)
     {
@@ -107,7 +115,7 @@ Vec3 Driveable::getBegJointWidth(bool dir) const
     return begJoint - normal * 0.1;
 }
 
-Vec3 Driveable::getEndJointWidth(bool dir) const
+Vec3 Driveable::getEndJointWidth(const bool dir) const
 {
     if (dir)
     {
@@ -125,12 +133,12 @@ Cross::Cross(Vec3 position)
     isSet = false;
 }
 
-void Cross::update(float delta)
+void Cross::update(const float delta)
 {
     updateCross(delta);
 }
 
-bool Cross::dontCheckStreet(int which)
+bool Cross::dontCheckStreet(const int which)
 {
     return false;
 }
@@ -157,7 +165,7 @@ bool Cross::checkSet()
     return !isSet;
 }
 
-void Cross::updateCross(float delta)
+void Cross::updateCross(const float delta)
 {
     if (checkSet()) return;
 
@@ -352,7 +360,7 @@ void CrossLights::setDefaultPriority(Driveable *s0, Driveable *s1, Driveable *s2
     setDefaultLights(s0, s1, s2, s3);
 }
 
-bool CrossLights::dontCheckStreet(int which)
+bool CrossLights::dontCheckStreet(const int which)
 {
     return !curPriority[which];
 }
@@ -482,7 +490,7 @@ void CrossLights::getNextState()
     }
 }
 
-void CrossLights::update(float delta)
+void CrossLights::update(const float delta)
 {
     updateCross(delta);
 
@@ -626,7 +634,7 @@ void Garage::draw()
     endDraw();
 }
 
-void Garage::update(float delta)
+void Garage::update(const float delta)
 {
     if (vehiclesBeg.size() == 0 || (vehiclesBeg.size() > 0 && vehiclesBeg.back()->xPos > 1))
         curTimeSpot += delta;
@@ -648,10 +656,7 @@ void Garage::update(float delta)
     }
 }
 
-void registerNewObject(Simulator *engine, GameObject *go);
-void destroyNextObject(Simulator *engine, GameObject *go);
-
-string Garage::itos(int x)
+string Garage::itos(const int x)
 {
     ostringstream ss;
     ss << x;
@@ -704,6 +709,8 @@ Vehicle* Garage::deleteVeh()
 
         return temp;
     }
+
+    return NULL;
 }
 
 bool Garage::checkReadyToSpot() const

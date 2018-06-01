@@ -1,3 +1,11 @@
+///   Projekt PROI 18L
+///   Symulator ruchu miejskiego
+///
+///   Copyright (C) Robert Dudzinski 2018
+///
+///   File: Simulator.h
+
+
 #ifndef SIMULATOR_H
 #define SIMULATOR_H
 
@@ -21,8 +29,8 @@ class Simulator : public EngineCore
 public:
     static Simulator *getInstance();
 
-    void loadRoad(std::string fileName);
-    void loadPriority(std::string fileName);
+    void loadRoad(const std::string fileName);
+    void loadPriority(const std::string fileName);
 
     Vec3 cameraPos;
     Vec3 cameraRot;
@@ -36,16 +44,16 @@ private:
 
     void cleanSimulation();
 
-    GameObject* findObjectByName(std::string on) const;
+    GameObject* findObjectByName(const std::string on) const;
 
     std::vector<GameObject*> objects;
     std::vector<Garage*> spots;
 
     void keyPressed(char k);
-    void update(float delta);
-    void singleUpdate(float delta);
+    void update(const float delta);
+    void singleUpdate(const float delta);
     void redraw();
-    void mouseMove(int dx, int dy);
+    void mouseMove(const int dx, const int dy);
 
     enum DirectionMove
     {
@@ -61,7 +69,7 @@ private:
     DirectionMove cameraDirection;
     float cameraVelocity;
 
-    void cameraMove(float delta);
+    void cameraMove(const float delta);
 };
 
 #endif // SIMULTOR_H

@@ -1,3 +1,11 @@
+///   Projekt PROI 18L
+///   Symulator ruchu miejskiego
+///
+///   Copyright (C) Robert Dudzinski 2018
+///
+///   File: main.cpp
+
+
 #include "Simulator.h"
 using namespace std;
 

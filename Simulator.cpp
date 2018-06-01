@@ -1,3 +1,11 @@
+///   Projekt PROI 18L
+///   Symulator ruchu miejskiego
+///
+///   Copyright (C) Robert Dudzinski 2018
+///
+///   File: Simulator.cpp
+
+
 #include"Simulator.h"
 using namespace std;
 
@@ -76,7 +84,7 @@ void Simulator::keyPressed(char k)
     }
 }
 
-void Simulator::cameraMove(float delta)
+void Simulator::cameraMove(const float delta)
 {
     float multiplyMove = cameraVelocity * delta;
     float multiplyMoveHorizontal = cos(-cameraRot.y * M_PI / 180) * multiplyMove;
@@ -123,7 +131,7 @@ void Simulator::cameraMove(float delta)
     cameraDirection = STAY;
 }
 
-void Simulator::mouseMove(int dx, int dy)
+void Simulator::mouseMove(const int dx, const int dy)
 {
     cameraRot.x += dx * 0.2;
     cameraRot.y += dy * 0.2;
@@ -132,7 +140,7 @@ void Simulator::mouseMove(int dx, int dy)
     else if (cameraRot.y < -90) cameraRot.y = -90;
 }
 
-void Simulator::loadRoad(string fileName)
+void Simulator::loadRoad(const string fileName)
 {
     fstream file;
     file.open(fileName.c_str(), ios::app | ios::in);
@@ -246,7 +254,7 @@ void Simulator::loadRoad(string fileName)
     file.close();
 }
 
-void Simulator::loadPriority(string fileName)
+void Simulator::loadPriority(const string fileName)
 {
     fstream file;
     file.open(fileName.c_str(), ios::app | ios::in);
@@ -286,12 +294,12 @@ void Simulator::loadPriority(string fileName)
     file.close();
 }
 
-void Simulator::singleUpdate(float delta)
+void Simulator::singleUpdate(const float delta)
 {
     cameraMove(delta);
 }
 
-void Simulator::update(float delta)
+void Simulator::update(const float delta)
 {
     for (auto &spot : spots)
     {
@@ -344,7 +352,7 @@ void Simulator::cleanSimulation()
     }
 }
 
-GameObject* Simulator::findObjectByName(string no) const
+GameObject* Simulator::findObjectByName(const string no) const
 {
     for (const auto &object : objects)
     {

@@ -1,3 +1,11 @@
+///   Projekt PROI 18L
+///   Symulator ruchu miejskiego
+///
+///   Copyright (C) Robert Dudzinski 2018
+///
+///   File: Street.h
+
+
 #ifndef STREET_H
 #define STREET_H
 
@@ -22,7 +30,7 @@ protected:
 class Driveable : public Road
 {
 public:
-    Vec3 getJointPoint(bool dir) const;
+    Vec3 getJointPoint(const bool dir) const;
     Vec3 getNormal() const;
     Vec3 getDirection() const;
 
@@ -39,13 +47,13 @@ protected:
     Vec3 begJoint;
     Vec3 endJoint;
 
-    Vec3 getBegJointWidth(bool dir) const;
-    Vec3 getEndJointWidth(bool dir) const;
+    Vec3 getBegJointWidth(const bool dir) const;
+    Vec3 getEndJointWidth(const bool dir) const;
 
     Vec3 direction;
     Vec3 normal;
 
-    virtual float freeSpace(bool dir) const;
+    virtual float freeSpace(const bool dir) const;
 
     Cross* crossBeg;
     Cross* crossEnd;
@@ -87,8 +95,8 @@ protected:
     };
     std::vector<OneStreet> streets;
 
-    virtual void updateCross(float delta);
-    virtual bool dontCheckStreet(int which);
+    virtual void updateCross(const float delta);
+    virtual bool dontCheckStreet(const int which);
 
     virtual void tryPassVehiclesWithPriority();
     virtual void tryPassAnyVehicle();
@@ -100,7 +108,7 @@ private:
     int allowedVeh;
 
     bool checkSet();
-    void update(float delta);
+    void update(const float delta);
 
     friend Driveable;
     friend Vehicle;
@@ -134,9 +142,9 @@ private:
     State curState;
     void getNextState();
 
-    bool dontCheckStreet(int which);
+    bool dontCheckStreet(const int which);
 
-    void update(float delta);
+    void update(const float delta);
     void draw();
 };
 
@@ -158,8 +166,8 @@ private:
     float curTimeDelete;
 
     void draw();
-    void update(float delta);
-    std::string itos(int x);
+    void update(const float delta);
+    std::string itos(const int x);
     Vehicle* spotVeh();
     Vehicle* deleteVeh();
 

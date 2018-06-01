@@ -1,3 +1,11 @@
+///   Projekt PROI 18L
+///   Symulator ruchu miejskiego
+///
+///   Copyright (C) Robert Dudzinski 2018
+///
+///   File: Graphics.cpp
+
+
 #include "Graphics.h"
 using namespace std;
 
@@ -6,14 +14,14 @@ Vec3::Vec3()
 
 }
 
-Vec3::Vec3(float a, float b, float c)
+Vec3::Vec3(const float a, const float b, const float c)
 {
     x=a;
     y=b;
     z=c;
 }
 
-float Vec3::dst(Vec3 b, Vec3 e)
+float Vec3::dst(const Vec3 b, const Vec3 e)
 {
     float dx = e.x-b.x;
     float dy = e.y-b.y;
@@ -22,17 +30,17 @@ float Vec3::dst(Vec3 b, Vec3 e)
     return sqrt(dx*dx + dy*dy + dz*dz);
 }
 
-float Vec3::length(Vec3 a)
+float Vec3::length(const Vec3 a)
 {
     return sqrt(a.x*a.x + a.y*a.y + a.z*a.z);
 }
 
-Vec3 Vec3::lerp(Vec3 b, Vec3 e, float s)
+Vec3 Vec3::lerp(const Vec3 b, const Vec3 e, const float s)
 {
     return b+(e-b)*s;
 }
 
-Vec3 Vec3::cross(Vec3 u, Vec3 v)
+Vec3 Vec3::cross(const Vec3 u, const Vec3 v)
 {
     return Vec3(u.y*v.z - u.z*v.y, u.z*v.x - u.x*v.z, u.x*v.y - u.y*v.x);
 }
@@ -51,7 +59,7 @@ float Vec3::angleDiff(float b, float e)
     return d;
 }
 
-float Vec3::angleXZ()
+float Vec3::angleXZ() const
 {
     float t = atan2(z, x) * 180 / M_PI;
     if (t >= 360) t -= 360;
@@ -137,22 +145,22 @@ ostream& operator << (ostream& out, const Vec3& right)
     return out;
 }
 
-unsigned int Graphics::QUADS = GL_QUADS;
-unsigned int Graphics::TRIANGLES = GL_TRIANGLES;
-unsigned int Graphics::POLYGON = GL_POLYGON;
-unsigned int Graphics::LINES = GL_LINES;
+const unsigned int Graphics::QUADS = GL_QUADS;
+const unsigned int Graphics::TRIANGLES = GL_TRIANGLES;
+const unsigned int Graphics::POLYGON = GL_POLYGON;
+const unsigned int Graphics::LINES = GL_LINES;
 
 void Graphics::draw()
 {
 
 }
 
-void Graphics::drawCube(float a)
+void Graphics::drawCube(float a) const
 {
     drawCube(a,a,a);
 }
 
-void Graphics::drawCube(float x, float y, float z)
+void Graphics::drawCube(float x, float y, float z) const
 {
     glPushMatrix();
 
@@ -202,7 +210,7 @@ void Graphics::drawCube(float x, float y, float z)
     glPopMatrix();
 }
 
-void Graphics::drawLine(Vec3 b, Vec3 e)
+void Graphics::drawLine(const Vec3 b, const Vec3 e) const
 {
     glBegin(GL_LINES);
     glVertex3f(b.x,b.y,b.z);
@@ -210,7 +218,7 @@ void Graphics::drawLine(Vec3 b, Vec3 e)
     glEnd();
 }
 
-void Graphics::drawTile(float a)
+void Graphics::drawTile(float a) const
 {
     a /= 2;
     glBegin(GL_QUADS);
@@ -222,32 +230,32 @@ void Graphics::drawTile(float a)
     glEnd();
 }
 
-void Graphics::setColor(float r, float g, float b)
+void Graphics::setColor(const float r, const float g, const float b)
 {
     glColor3f(r,g,b);
 }
 
-void Graphics::setColor(Vec3 c)
+void Graphics::setColor(const Vec3 c)
 {
     glColor3f(c.x, c.y, c.z);
 }
 
-void Graphics::drawVertex(Vec3 a)
+void Graphics::drawVertex(const Vec3 a) const
 {
     glVertex3f(a.x,a.y,a.z);
 }
 
-void Graphics::setNormal(float x, float y, float z)
+void Graphics::setNormal(const float x, const float y, const float z)
 {
     glNormal3f(x, y, z);
 }
 
-void Graphics::setNormal(Vec3 a)
+void Graphics::setNormal(const Vec3 a)
 {
     glNormal3f(a.x, a.y, a.z);
 }
 
-void Graphics::drawQuad(Vec3 a1, Vec3 a2, Vec3 a3, Vec3 a4)
+void Graphics::drawQuad(const Vec3 a1, const Vec3 a2, const Vec3 a3, const Vec3 a4) const
 {
     drawVertex(a1);
     drawVertex(a2);
@@ -284,13 +292,13 @@ void Graphics::drawRoof()
     glPopMatrix();
 }
 
-float Graphics::lerp(float a, float b, float s)
+float Graphics::lerp(const float a, const float b, const float s) const
 {
     float d = b - a;
     return a + d * s;
 }
 
-float Graphics::lerpAngle(float a, float b, float s)
+float Graphics::lerpAngle(float a, float b, float s) const
 {
     while (a<0) a+=360;
     while (b<0) b+=360;
@@ -312,7 +320,7 @@ float Graphics::lerpAngle(float a, float b, float s)
     return a + temp * s;
 }
 
-int Graphics::rotateDirection(float a, float b)
+int Graphics::rotateDirection(float a, float b) const
 {
     while (a<0) a+=360;
     while (b<0) b+=360;
@@ -336,7 +344,7 @@ int Graphics::rotateDirection(float a, float b)
     return -1;
 }
 
-void Graphics::beginDraw(int mode)
+void Graphics::beginDraw(const int mode)
 {
     glBegin(mode);
 }
@@ -346,7 +354,7 @@ void Graphics::endDraw()
     glEnd();
 }
 
-void Graphics::drawTriangle(Vec3 a1, Vec3 a2, Vec3 a3)
+void Graphics::drawTriangle(const Vec3 a1, const Vec3 a2, const Vec3 a3) const
 {
     drawVertex(a1);
     drawVertex(a2);
@@ -363,37 +371,37 @@ void Graphics::popMatrix()
     glPopMatrix();
 }
 
-void Graphics::rotateX(float x)
+void Graphics::rotateX(const float x)
 {
     glRotatef(x,1,0,0);
 }
 
-void Graphics::rotateY(float y)
+void Graphics::rotateY(const float y)
 {
     glRotatef(y,0,1,0);
 }
 
-void Graphics::rotateZ(float z)
+void Graphics::rotateZ(const float z)
 {
     glRotatef(z,0,0,1);
 }
 
-void Graphics::translate(float x, float y, float z)
+void Graphics::translate(const float x, const float y, const float z)
 {
     glTranslatef(x,y,z);
 }
 
-void Graphics::translate(Vec3 t)
+void Graphics::translate(const Vec3 t)
 {
     glTranslatef(t.x,t.y,t.z);
 }
 
-void Graphics::scale(float x, float y, float z)
+void Graphics::scale(const float x, const float y, const float z)
 {
     glScalef(x,y,z);
 }
 
-void Graphics::scale(Vec3 s)
+void Graphics::scale(const Vec3 s)
 {
     glScalef(s.x,s.y,s.z);
 }

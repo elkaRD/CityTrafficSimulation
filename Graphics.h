@@ -1,3 +1,11 @@
+///   Projekt PROI 18L
+///   Symulator ruchu miejskiego
+///
+///   Copyright (C) Robert Dudzinski 2018
+///
+///   File: Graphics.h
+
+
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
@@ -10,16 +18,16 @@ class Vec3
 public:
 
     Vec3();
-    Vec3(float a, float b, float c);
+    Vec3(const float a, const float b, const float c);
 
     float x,y,z;
-    static float dst(Vec3 b, Vec3 e);
-    static float length(Vec3 a);
+    static float dst(const Vec3 b, const Vec3 e);
+    static float length(const Vec3 a);
     static Vec3 lerp(Vec3 b, Vec3 e, float s);
-    static Vec3 cross(Vec3 u, Vec3 v);
+    static Vec3 cross(const Vec3 u, const Vec3 v);
     static float angleDiff(float b, float e);
 
-    float angleXZ();
+    float angleXZ() const;
 
     void normalize();
 
@@ -42,40 +50,40 @@ class Graphics
 {
 protected: public:
     virtual void draw();
-    void drawCube(float a);
-    void drawCube(float x, float y, float z);
-    void drawLine(Vec3 begP, Vec3 endP);
-    void drawTile(float a);
-    void setColor(float r, float g, float b);
-    void setColor(Vec3 c);
+    void drawCube(float a) const;
+    void drawCube(float x, float y, float z) const;
+    void drawLine(const Vec3 begP, const Vec3 endP) const;
+    void drawTile(float a) const;
+    void setColor(const float r, const float g, const float b);
+    void setColor(const Vec3 c);
 
-    void drawVertex(Vec3 a);
-    void setNormal(Vec3 a);
-    void setNormal(float x, float y, float z);
-    void drawQuad(Vec3 a1, Vec3 a2, Vec3 a3, Vec3 a4);
+    void drawVertex(const Vec3 a) const;
+    void setNormal(const Vec3 a);
+    void setNormal(const float x, const float y, const float z);
+    void drawQuad(const Vec3 a1, const Vec3 a2, const Vec3 a3, const Vec3 a4) const;
     void drawRoof();
 
-    float lerp(float a, float b, float s);
-    float lerpAngle(float a, float b, float s);
-    int rotateDirection(float a, float b);
+    float lerp(float a, float b, float s) const;
+    float lerpAngle(float a, float b, float s) const;
+    int rotateDirection(float a, float b) const;
 
-    static unsigned int QUADS;
-    static unsigned int TRIANGLES;
-    static unsigned int LINES;
-    static unsigned int POLYGON;
+    static const unsigned int QUADS;
+    static const unsigned int TRIANGLES;
+    static const unsigned int LINES;
+    static const unsigned int POLYGON;
 
-    void beginDraw(int mode);
+    void beginDraw(const int mode);
     void endDraw();
-    void drawTriangle(Vec3 a1, Vec3 a2, Vec3 a3);
+    void drawTriangle(const Vec3 a1, const Vec3 a2, const Vec3 a3) const;
     void pushMatrix();
     void popMatrix();
-    void rotateX(float x);
-    void rotateY(float y);
-    void rotateZ(float z);
-    void translate(float x, float y, float z);
-    void translate(Vec3 t);
-    void scale(float x, float y, float z);
-    void scale(Vec3 s);
+    void rotateX(const float x);
+    void rotateY(const float y);
+    void rotateZ(const float z);
+    void translate(const float x, const float y, const float z);
+    void translate(const Vec3 t);
+    void scale(const float x, const float y, const float z);
+    void scale(const Vec3 s);
 };
 
 #endif // GRAPHICS_H

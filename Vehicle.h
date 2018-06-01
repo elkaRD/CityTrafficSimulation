@@ -1,3 +1,11 @@
+///   Projekt PROI 18L
+///   Symulator ruchu miejskiego
+///
+///   Copyright (C) Robert Dudzinski 2018
+///
+///   File: Vehicle.h
+
+
 #ifndef VEHICLE_H
 #define VEHICLE_H
 
@@ -34,7 +42,7 @@ protected:
     float xPos;
     bool isBraking;
 
-    void update(float delta);
+    void update(const float delta);
 
     float getDst() const;
     bool isEnoughSpace() const;
@@ -60,7 +68,7 @@ protected:
         float duration;
 
         void init();
-        void updateBlinkers(float delta);
+        void updateBlinkers(const float delta);
 
         friend Vehicle;
     } blinker;
@@ -75,7 +83,7 @@ private:
     void initPointers(Driveable *spawnRoad);
 
     void setVelocity();
-    void checkVelocity(float delta, float prevVelocity);
+    void checkVelocity(const float delta, float prevVelocity);
     void setNewPos();
     void registerToCross();
 
@@ -110,7 +118,7 @@ public:
     Car(Driveable *spawnRoad);
 
 private:
-    void update(float delta);
+    void update(const float delta);
     void draw();
 };
 
@@ -122,7 +130,7 @@ public:
 private:
     float busAngle;
 
-    void update(float delta);
+    void update(const float delta);
     void draw();
 };
 
