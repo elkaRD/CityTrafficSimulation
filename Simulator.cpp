@@ -30,6 +30,11 @@ Simulator* Simulator::getInstance(int argc, char **argv)
     return getInstance();
 }
 
+void Simulator::run()
+{
+    EngineCore::run();
+}
+
 void Simulator::redraw()
 {
     glRotatef(cameraRot.y, 1,0,0);

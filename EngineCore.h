@@ -34,7 +34,7 @@
 
 class EngineCore
 {
-public:
+protected:
 
     int init(int argc, char **argv);
     static bool didInit;
@@ -49,17 +49,13 @@ public:
     virtual void redraw() = 0;
     virtual void mouseMove(int dx, int dy) = 0;
 
+private:
     int prevMouseX;
     int prevMouseY;
 
     timeval startTime;
     timeval lastTime;
 
-    //int snglBuf[];// = {GLX_RGBA, GLX_DEPTH_SIZE, 16, None};
-    //int dblBuf[];//  = {GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
-
-    static int width;
-    static int height;
     bool updateRatio;
 
     bool pressedKey[256];
@@ -67,12 +63,15 @@ public:
 
     Display   *dpy;
     Window     win;
-    //GLfloat    xAngle = 0.0, yAngle = 82.0, zAngle = 112.0;
-    GLboolean  doubleBuffer;// = GL_TRUE;
+    GLboolean  doubleBuffer;
     //static XSetWindowAttributes swa;
     long eventMask;
 
     void initLight();
+
+public:
+    static int width;
+    static int height;
 };
 
 #endif // ENGINECORE_H

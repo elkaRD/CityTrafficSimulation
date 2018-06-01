@@ -36,6 +36,8 @@ public:
     Vec3 cameraPos;
     Vec3 cameraRot;
 
+    void run();
+
 private:
     static Simulator *instance;
     //Simulator();
