@@ -58,8 +58,8 @@ private:
 
     bool updateRatio;
 
-    bool pressedKey[256];
-    bool pressedShift;
+    //bool pressedKey[256];
+    //bool pressedShift;
 
     Display   *dpy;
     Window     win;

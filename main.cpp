@@ -7,16 +7,25 @@
 
 
 #include "Simulator.h"
+#include <iostream>
 using namespace std;
 
 int main(int argc, char** argv)
 {
     //Simulator::init(argc, argv);
-    Simulator *simulator = Simulator::getInstance(argc, argv);
+    try
+    {
+        Simulator *simulator = Simulator::getInstance(argc, argv);
+        //Simulator *simulator = Simulator::getInstance();
 
-    simulator->loadRoad("e4.txt");
-    simulator->loadPriority("p2.txt");
-    simulator->run();
+        simulator->loadRoad("e4.txt");
+        simulator->loadPriority("p2.txt");
+        simulator->run();
+    }
+    catch (string e)
+    {
+        cout << "ERROR: " << e;
+    }
 
     return 0;
 }

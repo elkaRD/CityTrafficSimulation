@@ -11,16 +11,6 @@ using namespace std;
 
 int EngineCore::width = 1280;
 int EngineCore::height = 720;
-/*bool EngineCore::updateRatio = true;
-
-int EngineCore::snglBuf[] = {GLX_RGBA, GLX_DEPTH_SIZE, 16, None};
-int EngineCore::dblBuf[]  = {GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
-
-Display   *EngineCore::dpy = NULL;
-Window    EngineCore::win = (Window) NULL;
-GLboolean EngineCore::doubleBuffer = GL_TRUE;
-//XSetWindowAttributes Simulator::swa = NULL;
-long EngineCore::eventMask = 0;*/
 
 void fatalError(char *message)
 {
@@ -38,7 +28,6 @@ int EngineCore::init(int argc, char **argv)
     dpy = NULL;
     win = (Window) NULL;
     doubleBuffer = GL_TRUE;
-    //XSetWindowAttributes Simulator::swa = NULL;
     eventMask = 0;
 
     XVisualInfo         *vi;
@@ -151,57 +140,27 @@ void EngineCore::run()
 
     while (1)
     {
-
-        if (XCheckWindowEvent(dpy, win, eventMask, &event))
-        {
-            //   cout<<"event"<<endl;
-        }
+        XCheckWindowEvent(dpy, win, eventMask, &event);
 
         switch (event.type)
         {
             case KeyPress:
             {
                 KeySym     keysym;
-                XKeyEvent *kevent;
-                char       buffer[10];
+                //XKeyEvent *kevent;
+                char       buffer[4];
 
-                kevent = (XKeyEvent *) &event;
-                if (   (XLookupString((XKeyEvent *)&event,buffer,10,&keysym,NULL) == 1) && (keysym == (KeySym)XK_Escape) )
-                {
-                    keyPressed(27);
-                }
-
-                if (buffer[0] < 256)
-                    pressedKey[buffer[0]]=true;
-
-                cout<<"key pressed           sdfdsf"<<endl;
-
-                for(int i =0;i<10;i++)cout<<buffer[i];
-                cout<<endl;
+                //kevent = (XKeyEvent *) &event;
+                XLookupString((XKeyEvent *)&event,buffer,4,&keysym,NULL);
                 keyPressed(buffer[0]);
-
-                if(buffer[0] >= 'a' && buffer[0] <= 'z')
-                    pressedKey[buffer[0] - 32] = true;
-
-                if(buffer[0] >= 'A' && buffer[0] <= 'Z')
-                    pressedKey[buffer[0] + 32] = true;
-
-                if (keysym == (KeySym)XK_Shift_L) pressedShift = true;
 
                 break;
             }
 
             case KeyRelease:
             {
-                KeySym     keysym;
-                XKeyEvent *kevent;
-                char       buffer[1];
-
-                kevent = (XKeyEvent *) &event;
-
                 break;
             }
-
 
             case ButtonPress:
 
@@ -211,16 +170,6 @@ void EngineCore::run()
                 prevMouseX = bevent->x;
                 prevMouseY = bevent->y;
 
-                /*switch (event.xbutton.button)
-                {
-                    case 1: xAngle += 10.0;
-                            break;
-                    case 2: yAngle += 10.0;
-                            break;
-                    case 3: zAngle += 10.0;
-                            break;
-                }*/
-                cout<<"BUTTON"<<endl;
                 break;
 
             case MotionNotify:
@@ -230,8 +179,6 @@ void EngineCore::run()
 
                 int dx = mevent->x - prevMouseX;
                 int dy = mevent->y - prevMouseY;
-
-                cout<<".";
 
                 mouseMove(dx, dy);
 
