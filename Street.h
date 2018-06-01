@@ -118,8 +118,8 @@ class CrossLights : public Cross
 {
 public:
     CrossLights(Vec3 position);
+    void setLightsDurations();
 
-private:
     struct LightsDuration
     {
         float durationGreen1;
@@ -129,6 +129,7 @@ private:
         float durationBreak;
     } durLight;
 
+private:
     std::vector<bool> defaultPriority;
     std::vector<bool> curPriority;
 

@@ -5,6 +5,7 @@
 ///
 ///   File: EngineCore.cpp
 
+//klasa silnika gry jest oparta na przykladowym projekcie OpenGL z Code::Blocks'a (OpenGL + X11)
 
 #include"EngineCore.h"
 using namespace std;
@@ -12,10 +13,9 @@ using namespace std;
 int EngineCore::width = 1280;
 int EngineCore::height = 720;
 
-void fatalError(char *message)
+void fatalError(string e)
 {
-    fprintf(stderr, "main: %s\n", message);
-    exit(1);
+    throw "ENGINE CORE ERROR: " + e;
 }
 
 int EngineCore::init(int argc, char **argv)

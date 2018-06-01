@@ -385,13 +385,17 @@ void CrossLights::setDefaultLights(Driveable *s0, Driveable *s1, Driveable *s2, 
         }
     }
 
-    if (streets.size() == 4)
+    else if (streets.size() == 4)
     {
         for (unsigned int i=0;i<streets.size();i++)
         {
             if (streets[i].street == s0) defaultPriority[i] = true;
             if (streets[i].street == s2) defaultPriority[i] = true;
         }
+    }
+    else
+    {
+        throw "zla ilosc ulic na skrzyzowaniu ze swiatlami " + id;
     }
 }
 
@@ -430,15 +434,20 @@ void Cross::draw()
 
 CrossLights::CrossLights(Vec3 position) : Cross(position)
 {
+    setLightsDurations();
+
+    curState = B1;
+    curTime = durLight.durationBreak;
+    setLightsPriority();
+}
+
+void CrossLights::setLightsDurations()
+{
     durLight.durationGreen1 = randFloat(10, 20);
     durLight.durationYellow1 = randFloat(2, 6);
     durLight.durationGreen2 = randFloat(10, 20);
     durLight.durationYellow2 = randFloat(2, 6);
     durLight.durationBreak = randFloat(1, 6);
-
-    curState = B1;
-    curTime = durLight.durationBreak;
-    setLightsPriority();
 }
 
 void CrossLights::getNextState()

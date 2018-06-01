@@ -26,7 +26,7 @@ public:
     float getDstToCross() const;
     static int getNumberId();
 
-protected:
+    void initRandValues();
     struct Adjustable
     {
         float maxV;
@@ -38,6 +38,7 @@ protected:
         float remainDst;
     } specs;
 
+protected:
     float velocity;
     float xPos;
     bool isBraking;
@@ -74,8 +75,6 @@ protected:
     } blinker;
 
     Vec3 vehicleColor;
-
-    void initRandValues();
 
 private:
     static int numVeh;

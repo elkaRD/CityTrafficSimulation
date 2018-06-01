@@ -38,6 +38,8 @@ public:
 
     void run();
 
+    GameObject* findObjectByName(const std::string on) const;
+
 private:
     static Simulator *instance;
     //Simulator();
@@ -47,8 +49,6 @@ private:
     void destroyObject(GameObject *go);
 
     void cleanSimulation();
-
-    GameObject* findObjectByName(const std::string on) const;
 
     std::vector<GameObject*> objects;
     std::vector<Garage*> spots;

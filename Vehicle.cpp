@@ -576,8 +576,8 @@ void Bus::draw()
 
     setColor(0.7,0.7,0);
     pushMatrix();
-    //glRotatef(busAngle, 0,-1,0);
-    rotateY(-busAngle / 2);
+
+    rotateY(-busAngle / 1.3);
     translate(-0.2,0,0);
     drawCube(0.3,0.13,0.135);
     setColor(0,0.8,0.8);
@@ -587,8 +587,8 @@ void Bus::draw()
 
     setColor(0.7,0.7,0);
     pushMatrix();
-    //glRotatef(busAngle , 0,1,0);
-    //rotateY(busAngle);
+
+    rotateY(busAngle / 4);
     translate(0.2,0,0);
     drawCube(0.3, 0.13, 0.135);
     setColor(0,0.8,0.8);
@@ -618,7 +618,7 @@ void Bus::draw()
     {
         pushMatrix();
         setColor(1,0,0);
-        rotateY(-busAngle / 2);
+        rotateY(-busAngle / 1.3);
 
         pushMatrix();
         translate(-0.3,0.05,0);
