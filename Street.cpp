@@ -7,7 +7,6 @@
 
 
 #include "Street.h"
-#include<iostream>
 using namespace std;
 
 class Simulator;
@@ -79,14 +78,14 @@ float Driveable::freeSpace(const bool dir) const
 {
     if (dir)
     {
-        if (vehiclesBeg.size() == 0) return getLength() - reservedSpaceBeg;
+        if (vehiclesBeg.size() == 0) return getLength() - reservedSpaceBeg - 0.2;
 
-        return vehiclesBeg.back()->getXPos() - reservedSpaceBeg;
+        return vehiclesBeg.back()->getXPos() - reservedSpaceBeg - 0.2;
     }
 
-    if (vehiclesEnd.size() == 0) return getLength() - reservedSpaceEnd;
+    if (vehiclesEnd.size() == 0) return getLength() - reservedSpaceEnd - 0.2;
 
-    return vehiclesEnd.back()->getXPos() - reservedSpaceEnd;
+    return vehiclesEnd.back()->getXPos() - reservedSpaceEnd - 0.2;
 }
 
 Vec3 Driveable::getJointPoint(const bool dir) const
@@ -261,8 +260,6 @@ void Cross::setDefaultPriority(Driveable *s0, Driveable *s1, Driveable *s2, Driv
         streets[i].yield.clear();
     }
 
-    cout<<id<<"   number of streets: "<<streets.size()<<endl;
-
     if (streets.size() == 2)
     {
         vector<int> yield;
@@ -272,11 +269,9 @@ void Cross::setDefaultPriority(Driveable *s0, Driveable *s1, Driveable *s2, Driv
 
         streets[0].yield = finalVec;
         streets[1].yield = finalVec;
-
-        cout<<id<<"   "<<streets[0].yield.size();
     }
 
-    if (streets.size() == 3)
+    else if (streets.size() == 3)
     {
         vector<int> yield0;
         yield0.push_back(1);
@@ -311,7 +306,7 @@ void Cross::setDefaultPriority(Driveable *s0, Driveable *s1, Driveable *s2, Driv
         }
     }
 
-    if (streets.size() == 4)
+    else if (streets.size() == 4)
     {
         vector<int> yield[4];
 
@@ -346,6 +341,10 @@ void Cross::setDefaultPriority(Driveable *s0, Driveable *s1, Driveable *s2, Driv
                 }
             }
         }
+    }
+    else
+    {
+        throw "zla liczba ulic na skrzyzowaniu " + id;
     }
 }
 
@@ -615,6 +614,9 @@ Garage::Garage(Vec3 p, Cross *c) : Driveable(p, c)
 
     isReadyToSpot = false;
     isReadyToDelete = false;
+
+    spottedVehicles = 0;
+    maxVehicles = 30;
 }
 
 void Garage::draw()
@@ -648,7 +650,7 @@ void Garage::update(const float delta)
     if (vehiclesBeg.size() == 0 || (vehiclesBeg.size() > 0 && vehiclesBeg.back()->xPos > 1))
         curTimeSpot += delta;
 
-    if (curTimeSpot > frecSpot)
+    if (curTimeSpot > frecSpot && spottedVehicles < maxVehicles)
     {
         isReadyToSpot = true;
     }
@@ -694,7 +696,7 @@ Vehicle* Garage::spotVeh()
 
     vehiclesBeg.push(temp);
 
-    cout<<"spotted " << temp->id << " by "<<id<<endl;
+    spottedVehicles++;
 
     return temp;
 }
@@ -715,6 +717,8 @@ Vehicle* Garage::deleteVeh()
             temp->backVeh->frontVeh = NULL;
         }
         delete temp;
+
+        spottedVehicles--;
 
         return temp;
     }

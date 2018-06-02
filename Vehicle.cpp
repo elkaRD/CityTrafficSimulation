@@ -43,7 +43,7 @@ void Vehicle::initRandValues()
     specs.cornerVelocity = 1;
     specs.stopTime = randFloat(0.5, 0.8);
     specs.acceleration = randFloat(0.1,0.2);
-    specs.remainDst = randFloat(0.1, 0.2);
+    specs.remainDst = randFloat(0.05, 0.08);
 }
 
 void Vehicle::Blinker::init()
@@ -408,7 +408,7 @@ void Vehicle::enterNewRoad()
 
     if (direction)
     {
-        if (curRoad->vehiclesBeg.size() > 0 /*&& !curRoad->vehiclesBeg.back()->isChanging*/)
+        if (curRoad->vehiclesBeg.size() > 0)
         {
             isFirstVeh = false;
             frontVeh = curRoad->vehiclesBeg.back();
@@ -417,7 +417,7 @@ void Vehicle::enterNewRoad()
     }
     else
     {
-        if (curRoad->vehiclesEnd.size() > 0 /*&& !curRoad->vehiclesEnd.back()->isChanging*/)
+        if (curRoad->vehiclesEnd.size() > 0)
         {
             isFirstVeh = false;
             frontVeh = curRoad->vehiclesEnd.back();
@@ -513,25 +513,7 @@ void Car::draw()
         popMatrix();
     }
     setColor(0,1,0);
-    /*if (curCross != NULL)
-    {
-        setColor(0,0,1);
-    }
-    if (isChanging)
-    {
-        setColor(1,1,0);
-    }
-    if (isLeavingRoad)
-    {
-        setColor(0,1,1);
-    }*/
 
-    /*if (curCross != NULL)
-    {
-        setColor(0,0,0);
-    }*/
-
-    //drawCube(0.2,4,0.2);
     pushMatrix();
     translate(0,0.05,0);
     drawCube(0.2,0.05,0.1);
@@ -540,11 +522,41 @@ void Car::draw()
     popMatrix();
 }
 
+void Car::drawRoof()
+{
+    Vec3 a1(0,0,-0.05);
+    Vec3 a2(0.025,0.05,-0.0375);
+    Vec3 a3(0.075,0.05,-0.0375);
+    Vec3 a4(0.1125,0,-0.05);
+    Vec3 a5(0,0,0.05);
+    Vec3 a6(0.025,0.05,0.0375);
+    Vec3 a7(0.075,0.05,0.0375);
+    Vec3 a8(0.1125,0,0.05);
+
+    pushMatrix();
+    translate(-0.075, 0.025, 0);
+    beginDraw(QUADS);
+
+    drawQuad(a2,a6,a7,a3);
+
+    setColor(0,1,1);
+
+    drawQuad(a1,a2,a3,a4);
+    drawQuad(a1,a5,a6,a2);
+    drawQuad(a5,a8,a7,a6);
+    drawQuad(a8,a4,a3,a7);
+
+    endDraw();
+    popMatrix();
+}
+
 Bus::Bus(Driveable *spawnRoad) : Vehicle(spawnRoad)
 {
     specs.maxV = randFloat(0.8, 1.1);
     velocity = randFloat(2,5);
+
     specs.vehicleLength = 0.65;
+    specs.remainDst += 0.07;
 }
 
 void Bus::update(const float delta)
@@ -553,12 +565,10 @@ void Bus::update(const float delta)
 
     if (crossState.didReachCross)
     {
-        //busAngle = (begRot - endRot) * crossProgress;
         float s = crossState.crossProgress * 2.0 - 1.0;
         s = 1 - abs(s);
         float a = Vec3::angleDiff(crossState.begRot, crossState.endRot);
         a /= 4.0;
-        //cout<<"BUS ANG   "<<begRot<<"  "<<endRot<<"    "<<a*2.3<<endl;
 
         busAngle = lerpAngle(0, a, s);
     }

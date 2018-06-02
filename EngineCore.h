@@ -30,7 +30,7 @@
 #define MULTIPLY_TIME       1
 #define MAX_DELTA           0.15
 #define MIN_DELTA           0.007
-#define REAL_INT_MULTIPLY   2
+#define REAL_INT_MULTIPLY   200
 
 class EngineCore
 {
@@ -58,13 +58,10 @@ private:
 
     bool updateRatio;
 
-    //bool pressedKey[256];
-    //bool pressedShift;
-
     Display   *dpy;
     Window     win;
     GLboolean  doubleBuffer;
-    //static XSetWindowAttributes swa;
+
     long eventMask;
 
     void initLight();

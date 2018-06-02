@@ -175,6 +175,9 @@ private:
     bool isReadyToSpot;
     bool isReadyToDelete;
 
+    int spottedVehicles;
+    int maxVehicles;
+
     friend Simulator;
 };
 

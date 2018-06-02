@@ -60,8 +60,8 @@ Simulator::Simulator(int argc, char **argv)
 {
     init(argc, argv);
 
-    cameraPos = Vec3(0,20,0);
-    cameraRot = Vec3(180,70,0);
+    cameraPos = Vec3(12.3, 2.4, 16.3);
+    cameraRot = Vec3(-36.2, 9.8, 0);
 
     cameraDirection = STAY;
 }
@@ -199,7 +199,7 @@ void Simulator::loadRoad(const string fileName)
                     objects.push_back(temp);
                     crosses.push_back(temp);
 
-                    cout<<"dodano cross: "<<id<<endl;
+                    //cout<<"dodano cross: "<<id<<endl;
                 }
                 if (type.compare("ST") == 0)
                 {
@@ -235,7 +235,7 @@ void Simulator::loadRoad(const string fileName)
                     temp->id = id;
                     objects.push_back(temp);
 
-                    cout<<"dodano street: "<<id<<endl;
+                    //cout<<"dodano street: "<<id<<endl;
                 }
                 if (type.compare("GA") == 0)
                 {
@@ -267,7 +267,7 @@ void Simulator::loadRoad(const string fileName)
                     objects.push_back(temp);
                     spots.push_back(temp);
 
-                    cout<<"dodano garage: "<<id<<endl;
+                    //cout<<"dodano garage: "<<id<<endl;
                 }
                 if (type.compare("CL") == 0)
                 {
@@ -282,7 +282,7 @@ void Simulator::loadRoad(const string fileName)
                     objects.push_back(temp);
                     crosses.push_back(temp);
 
-                    cout<<"dodano crossLights: "<<id<<endl;
+                    //cout<<"dodano crossLights: "<<id<<endl;
                 }
             }
             catch (string e)

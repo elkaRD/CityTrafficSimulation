@@ -48,7 +48,7 @@ std::ostream& operator << (std::ostream& out, const Vec3& right);
 
 class Graphics
 {
-protected: public:
+protected:
     virtual void draw();
     void drawCube(float a) const;
     void drawCube(float x, float y, float z) const;
@@ -61,7 +61,6 @@ protected: public:
     void setNormal(const Vec3 a);
     void setNormal(const float x, const float y, const float z);
     void drawQuad(const Vec3 a1, const Vec3 a2, const Vec3 a3, const Vec3 a4) const;
-    void drawRoof();
 
     float lerp(float a, float b, float s) const;
     float lerpAngle(float a, float b, float s) const;

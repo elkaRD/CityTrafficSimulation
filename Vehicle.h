@@ -119,6 +119,7 @@ public:
 private:
     void update(const float delta);
     void draw();
+    void drawRoof();
 };
 
 class Bus : public Vehicle
