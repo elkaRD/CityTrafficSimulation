@@ -476,6 +476,8 @@ void Car::update(float delta)
 
 void Car::draw()
 {
+    translate(0, -0.02, 0);
+
     if (blinker.which < 0 && blinker.isLighting)
     {
         pushMatrix();
@@ -515,7 +517,7 @@ void Car::draw()
     setColor(0,1,0);
 
     pushMatrix();
-    translate(0,0.03,0);
+    translate(0,0.05,0);
     drawCube(0.2,0.05,0.1);
     drawRoof();
 
