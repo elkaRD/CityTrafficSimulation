@@ -387,7 +387,7 @@ void Vehicle::enterNewRoad()
 
     direction = curCross->streets[desiredTurn].direction;
 
-    dstToCross = curCross->getLength();
+    //dstToCross = curCross->getLength();
 
     if (direction)
     {

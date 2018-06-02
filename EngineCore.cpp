@@ -133,7 +133,7 @@ void EngineCore::initLight()
 
 void EngineCore::run()
 {
-    XEvent               event;
+    XEvent event;
 
     gettimeofday(&startTime, 0);
     lastTime = startTime;

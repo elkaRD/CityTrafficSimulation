@@ -21,10 +21,6 @@ class Road : public GameObject
 {
 public:
     static Vec3 roadColor;
-    float getLength() const;
-
-protected:
-    float length;
 };
 
 class Driveable : public Road
@@ -33,6 +29,7 @@ public:
     Vec3 getJointPoint(const bool dir) const;
     Vec3 getNormal() const;
     Vec3 getDirection() const;
+    float getLength() const;
 
 protected:
     Driveable(Cross *begCross, Cross *endCross);
@@ -52,6 +49,8 @@ protected:
 
     Vec3 direction;
     Vec3 normal;
+
+    float length;
 
     virtual float freeSpace(const bool dir) const;
 

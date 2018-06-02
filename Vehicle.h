@@ -74,8 +74,6 @@ protected:
         friend Vehicle;
     } blinker;
 
-    Vec3 vehicleColor;
-
 private:
     static int numVeh;
 

@@ -13,7 +13,7 @@ class Simulator;
 
 Vec3 Road::roadColor = Vec3(0.2, 0.2, 0.2);
 
-float Road::getLength() const
+float Driveable::getLength() const
 {
     return length;
 }
@@ -173,14 +173,18 @@ bool Cross::checkSet()
         setDefaultPriority(streets[0].street, streets[1].street, streets[2].street, streets[3].street);
     }
 
-    if (streets.size() == 2)
+    else if (streets.size() == 2)
     {
         setDefaultPriority();
     }
 
-    if (streets.size() == 3)
+    else if (streets.size() == 3)
     {
         setDefaultPriority(streets[0].street, streets[1].street, streets[2].street);
+    }
+    else
+    {
+        throw "nie udalo sie przypisac domyslnego pierwszenstwa na skrzyzowaniu " + id;
     }
 
     return !isSet;
