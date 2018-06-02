@@ -515,7 +515,7 @@ void Car::draw()
     setColor(0,1,0);
 
     pushMatrix();
-    translate(0,0.05,0);
+    translate(0,0.03,0);
     drawCube(0.2,0.05,0.1);
     drawRoof();
 
@@ -582,7 +582,7 @@ void Bus::draw()
 {
     pushMatrix();
 
-    translate(0,0.1,0);
+    translate(0,0.09,0);
 
     setColor(0.7,0.7,0);
     pushMatrix();

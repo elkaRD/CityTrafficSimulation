@@ -126,7 +126,7 @@ Vec3 Driveable::getEndJointWidth(const bool dir) const
 
 void Driveable::draw()
 {
-    /*setColor(roadColor);
+    setColor(roadColor);
 
     Vec3 szer = Vec3::cross(Vec3(0,1,0), direction);
     szer.normalize();
@@ -143,7 +143,7 @@ void Driveable::draw()
     drawVertex(b);
     drawVertex(d);
     drawVertex(c);
-    endDraw();*/
+    endDraw();
 }
 
 Cross::Cross(Vec3 position)
@@ -605,25 +605,7 @@ Street::Street(Cross *begCross, Cross *endCross) : Driveable(begCross, endCross)
 
 void Street::draw()
 {
-    setColor(roadColor);
-    //drawLine(crossBeg->getPos(), crossEnd->getPos());
-
-    Vec3 szer = Vec3::cross(Vec3(0,1,0), direction);
-    szer.normalize();
-    szer *= 0.3;
-
-    Vec3 a = endPos + szer;
-    Vec3 b = endPos - szer;
-    Vec3 c = begPos + szer;
-    Vec3 d = begPos - szer;
-
-    beginDraw(POLYGON);
-    setNormal(0, -1, 0);
-    drawVertex(a);
-    drawVertex(b);
-    drawVertex(d);
-    drawVertex(c);
-    endDraw();
+    Driveable::draw();
 }
 
 Garage::Garage(Vec3 p, Cross *c) : Driveable(p, c)
@@ -643,28 +625,14 @@ Garage::Garage(Vec3 p, Cross *c) : Driveable(p, c)
 
 void Garage::draw()
 {
-    setColor(0,0,1);
-    drawCube(0.3);
-
-    setColor(roadColor);
-
-    Vec3 szer = Vec3::cross(Vec3(0,1,0), direction);
-    szer.normalize();
-    szer *= 0.3;
-
-    Vec3 a = endPos + szer;
-    Vec3 b = endPos - szer;
-    Vec3 c = begPos + szer;
-    Vec3 d = begPos - szer;
+    setColor(0.5, 0 ,0);
+    pushMatrix();
+    translate(0,0.2,0);
+    drawCube(0.7, 0.4, 1);
+    popMatrix();
 
     translate(-pos);
-
-    beginDraw(POLYGON);
-    drawVertex(a);
-    drawVertex(b);
-    drawVertex(d);
-    drawVertex(c);
-    endDraw();
+    Driveable::draw();
 }
 
 void Garage::update(const float delta)
