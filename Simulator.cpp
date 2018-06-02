@@ -242,7 +242,9 @@ void Simulator::loadRoad(const string fileName)
                     string jointCross;
                     string vehType;
                     float x,y,z;
-                    ss >> vehType >> jointCross >> x >> y >> z;
+                    float spotFrec;
+                    int maxVehicles;
+                    ss >> vehType >> jointCross >> x >> y >> z >> spotFrec >> maxVehicles;
                     if (ss.fail()) throw "nie udalo sie wczytac danych dla garazu " + id;
 
                     Vec3 v(x,y,z);
@@ -260,6 +262,8 @@ void Simulator::loadRoad(const string fileName)
                     Garage *temp;
                     temp = new Garage(v, cross);
                     temp->id = id;
+                    temp->maxVehicles = maxVehicles;
+                    temp->frecSpot = spotFrec;
 
                     if (vehType.compare("C") == 0) temp->vehType = 0;
                     if (vehType.compare("B") == 0) temp->vehType = 1;

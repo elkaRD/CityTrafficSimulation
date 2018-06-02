@@ -58,6 +58,8 @@ protected:
     Cross* crossBeg;
     Cross* crossEnd;
 
+    void draw();
+
 private:
     float reservedSpaceBeg;
     float reservedSpaceEnd;

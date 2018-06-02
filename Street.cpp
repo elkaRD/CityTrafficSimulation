@@ -124,6 +124,28 @@ Vec3 Driveable::getEndJointWidth(const bool dir) const
     return endJoint - normal * 0.1;
 }
 
+void Driveable::draw()
+{
+    /*setColor(roadColor);
+
+    Vec3 szer = Vec3::cross(Vec3(0,1,0), direction);
+    szer.normalize();
+    szer *= 0.3;
+
+    Vec3 a = endPos + szer;
+    Vec3 b = endPos - szer;
+    Vec3 c = begPos + szer;
+    Vec3 d = begPos - szer;
+
+    beginDraw(POLYGON);
+    setNormal(0, -1, 0);
+    drawVertex(a);
+    drawVertex(b);
+    drawVertex(d);
+    drawVertex(c);
+    endDraw();*/
+}
+
 Cross::Cross(Vec3 position)
 {
     pos = position;
@@ -584,7 +606,7 @@ Street::Street(Cross *begCross, Cross *endCross) : Driveable(begCross, endCross)
 void Street::draw()
 {
     setColor(roadColor);
-    drawLine(crossBeg->getPos(), crossEnd->getPos());
+    //drawLine(crossBeg->getPos(), crossEnd->getPos());
 
     Vec3 szer = Vec3::cross(Vec3(0,1,0), direction);
     szer.normalize();
