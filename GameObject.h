@@ -10,13 +10,8 @@
 #define GAMEOBJECT_H
 
 #include <cmath>
-#include <cstdio>
-#include <string>
-#include <cstdlib>
 #include <queue>
 #include "Graphics.h"
-
-class Simulator;
 
 class GameObject : public Graphics
 {

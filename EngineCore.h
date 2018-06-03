@@ -9,9 +9,6 @@
 #ifndef ENGINECORE_H
 #define ENGINECORE_H
 
-#include <cstdio>
-#include <cstdlib>
-
 #include <GL/glx.h>    /* this includes the necessary X headers */
 #include <GL/gl.h>
 
@@ -19,12 +16,7 @@
 #include <X11/keysym.h>
 
 #include <vector>
-#include <fstream>
 #include <string>
-#include <sstream>
-#include <ctime>
-#include <iostream>
-#include <unistd.h>
 #include <sys/time.h>
 
 #define MULTIPLY_TIME       1

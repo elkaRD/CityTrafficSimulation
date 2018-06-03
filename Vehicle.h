@@ -12,8 +12,6 @@
 #include "GameObject.h"
 #include "Street.h"
 
-
-class Road;
 class Driveable;
 class Cross;
 class Garage;
@@ -22,6 +20,7 @@ class Vehicle : public GameObject
 {
 public:
     Vehicle(Driveable *spawnRoad);
+    virtual ~Vehicle(){};
     float getXPos() const;
     float getDstToCross() const;
     static int getNumberId();

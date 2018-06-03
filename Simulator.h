@@ -9,11 +9,10 @@
 #ifndef SIMULATOR_H
 #define SIMULATOR_H
 
-#include"EngineCore.h"
+#include <fstream>
 
-class Simulator;
-class GameObject;
-
+#include "EngineCore.h"
+#include "Graphics.h"
 #include "GameObject.h"
 #include "Street.h"
 #include "Vehicle.h"
@@ -22,7 +21,7 @@ class GameObject;
 
 class GameObject;
 
-class Simulator : public EngineCore
+class Simulator : public EngineCore, public Graphics
 {
     friend GameObject;
 

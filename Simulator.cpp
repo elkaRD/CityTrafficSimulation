@@ -37,23 +37,23 @@ void Simulator::run()
 
 void Simulator::redraw()
 {
-    glRotatef(cameraRot.y, 1,0,0);
-    glRotatef(cameraRot.x, 0,1,0);
+    rotateX(cameraRot.y);
+    rotateY(cameraRot.x);
 
-    glScalef(10, 10, 10);
+    scale(10, 10, 10);
 
-    glTranslatef(-cameraPos.x, -cameraPos.y, -cameraPos.z);
+    translate(-cameraPos);
 
-    glScalef(1,1,-1);
+    scale(1, 1, -1);
 
-    glPushMatrix();
+    pushMatrix();
 
     for (const auto &object : objects)
     {
         object->drawObject();
     }
 
-    glPopMatrix();
+    popMatrix();
 }
 
 Simulator::Simulator(int argc, char **argv)
@@ -201,7 +201,7 @@ void Simulator::loadRoad(const string fileName)
 
                     //cout<<"dodano cross: "<<id<<endl;
                 }
-                if (type.compare("ST") == 0 || type.compare("STREET") == 0)
+                else if (type.compare("ST") == 0 || type.compare("STREET") == 0)
                 {
                     string begCrossID;
                     string endCrossID;
@@ -237,7 +237,7 @@ void Simulator::loadRoad(const string fileName)
 
                     //cout<<"dodano street: "<<id<<endl;
                 }
-                if (type.compare("GA") == 0 || type.compare("GARAGE") == 0)
+                else if (type.compare("GA") == 0 || type.compare("GARAGE") == 0)
                 {
                     string jointCross;
                     string vehType;
@@ -273,7 +273,7 @@ void Simulator::loadRoad(const string fileName)
 
                     //cout<<"dodano garage: "<<id<<endl;
                 }
-                if (type.compare("CL") == 0 || type.compare("CROSSLIGHTS") == 0)
+                else if (type.compare("CL") == 0 || type.compare("CROSSLIGHTS") == 0)
                 {
                     float x1,y1,z1;
                     ss >> x1 >> y1 >> z1;
@@ -287,6 +287,10 @@ void Simulator::loadRoad(const string fileName)
                     crosses.push_back(temp);
 
                     //cout<<"dodano crossLights: "<<id<<endl;
+                }
+                else
+                {
+                    throw "nie udalo sie znalezc typu " + type;
                 }
             }
             catch (string e)
@@ -324,11 +328,11 @@ void Simulator::loadPriority(const string fileName)
                 string id;
                 int number; //of streets in the cross
 
-                ss >> id;// >> mode;
+                ss >> id;
                 if (ss.fail()) throw 0;
 
                 ss >> number;
-                if (ss.fail() || number > 4) throw "blad w czytaniu ilosci ulic na skrzyzowaniu " + id;
+                if (ss.fail() || number > 4 || number < 2) throw "blad w czytaniu ilosci ulic na skrzyzowaniu " + id;
 
                 Driveable *ptrs[4];
 
@@ -345,6 +349,7 @@ void Simulator::loadPriority(const string fileName)
                 Cross *cross = dynamic_cast<Cross*>(findObjectByName(id));
                 if (cross != NULL)
                 {
+                    if (number != (int)cross->streets.size()) throw "niepoprawna ilosc ulic na " + id;
                     cross->setDefaultPriority(ptrs[0], ptrs[1], ptrs[2], ptrs[3]);
                 }
                 else

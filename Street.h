@@ -21,6 +21,8 @@ class Road : public GameObject
 {
 public:
     static Vec3 roadColor;
+protected:
+    virtual ~Road(){};
 };
 
 class Driveable : public Road
@@ -34,6 +36,7 @@ public:
 protected:
     Driveable(Cross *begCross, Cross *endCross);
     Driveable(Vec3 p, Cross *endCross);
+    virtual ~Driveable(){};
 
     std::queue<Vehicle*> vehiclesBeg;
     std::queue<Vehicle*> vehiclesEnd;
@@ -84,6 +87,7 @@ public:
     virtual void setDefaultPriority(Driveable *s0 = NULL, Driveable *s1 = NULL, Driveable *s2 = NULL, Driveable *s3 = NULL);
 
 protected:
+    virtual ~Cross(){};
 
     struct OneStreet
     {
@@ -113,6 +117,7 @@ private:
 
     friend Driveable;
     friend Vehicle;
+    friend Simulator;
 };
 
 class CrossLights : public Cross
