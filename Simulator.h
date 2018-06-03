@@ -42,7 +42,7 @@ public:
 
 private:
     static Simulator *instance;
-    //Simulator();
+
     Simulator(int argc, char **argv);
 
     void registerObject(GameObject *go);

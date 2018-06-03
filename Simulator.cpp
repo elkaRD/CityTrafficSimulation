@@ -182,7 +182,7 @@ void Simulator::loadRoad(const string fileName)
 
                 if (findObjectByName(id) != NULL) throw "obiekt o id " + id + " juz istnieje";
 
-                if (type.compare("SK") == 0)
+                if (type.compare("CR") == 0 || type.compare("CROSS") == 0)
                 {
                     float x1,y1,z1;
 
@@ -201,7 +201,7 @@ void Simulator::loadRoad(const string fileName)
 
                     //cout<<"dodano cross: "<<id<<endl;
                 }
-                if (type.compare("ST") == 0)
+                if (type.compare("ST") == 0 || type.compare("STREET") == 0)
                 {
                     string begCrossID;
                     string endCrossID;
@@ -237,7 +237,7 @@ void Simulator::loadRoad(const string fileName)
 
                     //cout<<"dodano street: "<<id<<endl;
                 }
-                if (type.compare("GA") == 0)
+                if (type.compare("GA") == 0 || type.compare("GARAGE") == 0)
                 {
                     string jointCross;
                     string vehType;
@@ -273,7 +273,7 @@ void Simulator::loadRoad(const string fileName)
 
                     //cout<<"dodano garage: "<<id<<endl;
                 }
-                if (type.compare("CL") == 0)
+                if (type.compare("CL") == 0 || type.compare("CROSSLIGHTS") == 0)
                 {
                     float x1,y1,z1;
                     ss >> x1 >> y1 >> z1;
@@ -321,7 +321,7 @@ void Simulator::loadPriority(const string fileName)
                 stringstream ss;
                 ss << data;
 
-                string id;//, mode;
+                string id;
                 int number; //of streets in the cross
 
                 ss >> id;// >> mode;
@@ -330,7 +330,6 @@ void Simulator::loadPriority(const string fileName)
                 ss >> number;
                 if (ss.fail() || number > 4) throw "blad w czytaniu ilosci ulic na skrzyzowaniu " + id;
 
-                //string ids[4];
                 Driveable *ptrs[4];
 
                 for(int i=0;i<number;i++)
@@ -346,16 +345,10 @@ void Simulator::loadPriority(const string fileName)
                 Cross *cross = dynamic_cast<Cross*>(findObjectByName(id));
                 if (cross != NULL)
                 {
-                    /*cout<<"set priority on "<<cross->id<<endl;
-                    cross->setDefaultPriority(dynamic_cast<Driveable*>(findObjectByName(ids[0])),
-                                              dynamic_cast<Driveable*>(findObjectByName(ids[1])),
-                                              dynamic_cast<Driveable*>(findObjectByName(ids[2])),
-                                              dynamic_cast<Driveable*>(findObjectByName(ids[3])));*/
                     cross->setDefaultPriority(ptrs[0], ptrs[1], ptrs[2], ptrs[3]);
                 }
                 else
                 {
-                    //cout<<"unable to set priority on "<<name<<endl;
                     throw "nie udalo sie znalezc skrzyzowania " + id;
                 }
             }

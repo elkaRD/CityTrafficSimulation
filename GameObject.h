@@ -34,7 +34,7 @@ public:
     void drawObject();
 
 protected:
-    Vec3 pos;        //debug
+    Vec3 pos;
     Vec3 rot;
 
     virtual void update(const float delta);
