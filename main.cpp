@@ -26,8 +26,8 @@ int main(int argc, char** argv)
     {
         Simulator *simulator = Simulator::getInstance(argc, argv);
 
-        simulator->loadRoad("e4.txt");
-        simulator->loadPriority("p2.txt");
+        simulator->loadRoad("exampleRoad.txt");
+        simulator->loadPriority("examplePriority.txt");
         simulator->run();
     }
     catch (string e)
