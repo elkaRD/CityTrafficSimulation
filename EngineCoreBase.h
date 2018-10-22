@@ -9,15 +9,8 @@
 #ifndef ENGINECOREBASE_H
 #define ENGINECOREBASE_H
 
-#include <GL/glx.h>    /* this includes the necessary X headers */
-#include <GL/gl.h>
-
-#include <X11/X.h>    /* X11 constant (e.g. TrueColor) */
-#include <X11/keysym.h>
-
 #include <vector>
 #include <string>
-#include <sys/time.h>
 
 #define MULTIPLY_TIME       1
 #define MAX_DELTA           0.15

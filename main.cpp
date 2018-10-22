@@ -16,14 +16,15 @@ int main(int argc, char** argv)
     EngineCore::argv = argv;
 
     cout<<"      Projekt PROI 18L"<<endl;
-    cout<<"      Symulator ruchu ulicznego"<<endl;
-    cout<<"      Autor: Robert Dudzinski"<<endl;
+    cout<<"      EN: Simulator of city traffic"<<endl;
+    cout<<"      PL: Symulator ruchu ulicznego"<<endl;
+    cout<<"      by Robert Dudzinski"<<endl;
     cout<<endl<<endl;
-    cout<<"   Sterowanie: "<<endl<<endl;
-    cout<<" W,A,S,D - poruszanie się przdd, lewo, tyl, prawo"<<endl;
-    cout<<" Q, E    - poruszanie się dol, gora"<<endl;
-    cout<<" przeciaganie myszy - obracanie kamera"<<endl;
-    cout<<" ESC - wyjscie"<<endl;
+    cout<<"   Steering: "<<endl<<endl;
+    cout<<" W,A,S,D - movement"<<endl;
+    cout<<" Q, E    - vertical movement"<<endl;
+    cout<<" dragging mouse cursor - rotating camera"<<endl;
+    cout<<" ESC - exit"<<endl;
 
     try
     {

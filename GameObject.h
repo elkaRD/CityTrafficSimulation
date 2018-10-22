@@ -10,6 +10,7 @@
 #define GAMEOBJECT_H
 
 #include <cmath>
+#include <cstdlib>
 #include <queue>
 #include "Graphics.h"
 

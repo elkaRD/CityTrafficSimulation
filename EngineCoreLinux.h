@@ -5,9 +5,10 @@
 ///
 ///   File: EngineCoreLinux.h
 
-
 #ifndef ENGINECORELINUX_H
 #define ENGINECORELINUX_H
+
+#ifndef _WIN32
 
 #include <GL/glx.h>    /* this includes the necessary X headers */
 #include <GL/gl.h>
@@ -61,5 +62,6 @@ public:
     static char **argv;
 };
 
+#endif // _WIN32
 #endif // ENGINECORE_H
 
