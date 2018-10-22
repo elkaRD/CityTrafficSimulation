@@ -18,6 +18,8 @@ wielo: $(OBJS)
 
 main.o: main.cpp
 
+EngineCore.o: EngineCoreBase.cpp
+
 EngineCore.o: EngineCore.cpp
 
 GameObject.o: GameObject.cpp

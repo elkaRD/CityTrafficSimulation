@@ -12,6 +12,9 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
+    EngineCore::argc = argc;
+    EngineCore::argv = argv;
+
     cout<<"      Projekt PROI 18L"<<endl;
     cout<<"      Symulator ruchu ulicznego"<<endl;
     cout<<"      Autor: Robert Dudzinski"<<endl;
@@ -24,7 +27,7 @@ int main(int argc, char** argv)
 
     try
     {
-        Simulator *simulator = Simulator::getInstance(argc, argv);
+        Simulator *simulator = Simulator::getInstance();
 
         simulator->loadRoad("exampleRoad.txt");
         simulator->loadPriority("examplePriority.txt");

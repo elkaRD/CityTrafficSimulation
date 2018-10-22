@@ -18,7 +18,10 @@ void fatalError(string e)
     throw "ENGINE CORE ERROR: " + e;
 }
 
-int EngineCore::init(int argc, char **argv)
+int EngineCore::argc = 0;
+char **EngineCore::argv = NULL;
+
+int EngineCore::init()
 {
     updateRatio = true;
 

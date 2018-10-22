@@ -15,19 +15,10 @@ Simulator* Simulator::getInstance()
 {
     if (instance == NULL)
     {
-        throw "Symulator nie zostal zainicjonowany";
+        instance = new Simulator();
     }
+
     return instance;
-}
-
-Simulator* Simulator::getInstance(int argc, char **argv)
-{
-    if (instance == NULL)
-    {
-        instance = new Simulator(argc, argv);
-    }
-
-    return getInstance();
 }
 
 void Simulator::run()
@@ -56,9 +47,9 @@ void Simulator::redraw()
     popMatrix();
 }
 
-Simulator::Simulator(int argc, char **argv)
+Simulator::Simulator() : CAMERA_VELOCITY(3)
 {
-    init(argc, argv);
+    init();
 
     cameraPos = Vec3(12.3, 2.4, 16.3);
     cameraRot = Vec3(-36.2, 9.8, 0);

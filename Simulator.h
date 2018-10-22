@@ -17,7 +17,7 @@
 #include "Street.h"
 #include "Vehicle.h"
 
-#define CAMERA_VELOCITY     3
+//#define CAMERA_VELOCITY     3
 
 class GameObject;
 
@@ -27,7 +27,6 @@ class Simulator : public EngineCore, public Graphics
 
 public:
     static Simulator *getInstance();
-    static Simulator *getInstance(int argc, char **argv);
 
     void loadRoad(const std::string fileName);
     void loadPriority(const std::string fileName);
@@ -42,7 +41,7 @@ public:
 private:
     static Simulator *instance;
 
-    Simulator(int argc, char **argv);
+    Simulator();
 
     void registerObject(GameObject *go);
     void destroyObject(GameObject *go);
@@ -73,6 +72,8 @@ private:
     float cameraVelocity;
 
     void cameraMove(const float delta);
+
+    const float CAMERA_VELOCITY = 3;
 };
 
 #endif // SIMULTOR_H
