@@ -165,6 +165,7 @@ void EngineCore::run()
         if (delta < MIN_DELTA * MULTIPLY_TIME) delta = MIN_DELTA * MULTIPLY_TIME;
         if (delta > 0.4) delta = 0.4;
 
+        updateRatio = true; //todo: temp solution; fix in the future
         if (updateRatio)
         {
             updateRatio = false;

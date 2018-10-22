@@ -190,7 +190,7 @@ void Simulator::loadRoad(const string fileName)
                     objects.push_back(temp);
                     crosses.push_back(temp);
 
-                    //cout<<"dodano cross: "<<id<<endl;
+                    cout<<"dodano cross: "<<id<<endl;
                 }
                 else if (type.compare("ST") == 0 || type.compare("STREET") == 0)
                 {
@@ -226,7 +226,7 @@ void Simulator::loadRoad(const string fileName)
                     temp->id = id;
                     objects.push_back(temp);
 
-                    //cout<<"dodano street: "<<id<<endl;
+                    cout<<"dodano street: "<<id<<endl;
                 }
                 else if (type.compare("GA") == 0 || type.compare("GARAGE") == 0)
                 {
@@ -262,7 +262,7 @@ void Simulator::loadRoad(const string fileName)
                     objects.push_back(temp);
                     spots.push_back(temp);
 
-                    //cout<<"dodano garage: "<<id<<endl;
+                    cout<<"dodano garage: "<<id<<endl;
                 }
                 else if (type.compare("CL") == 0 || type.compare("CROSSLIGHTS") == 0)
                 {
@@ -277,7 +277,7 @@ void Simulator::loadRoad(const string fileName)
                     objects.push_back(temp);
                     crosses.push_back(temp);
 
-                    //cout<<"dodano crossLights: "<<id<<endl;
+                    cout<<"dodano crossLights: "<<id<<endl;
                 }
                 else
                 {
