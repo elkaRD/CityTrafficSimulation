@@ -9,6 +9,8 @@
 #ifndef ENGINECOREBASE_H
 #define ENGINECOREBASE_H
 
+#include <GL/gl.h>
+
 #include <vector>
 #include <string>
 
@@ -19,11 +21,14 @@
 
 class EngineCoreBase
 {
+
 protected:
 
     //int init(int argc, char **argv);
     virtual int init() = 0;
     static bool didInit;
+
+    void initLight();
 
     virtual ~EngineCoreBase(){};
 
@@ -35,9 +40,9 @@ protected:
     virtual void redraw() = 0;
     virtual void mouseMove(int dx, int dy) = 0;
 
-private:
+    //static EngineCoreBase *GetBaseInstance() {return baseInstance;};
 
-    void initLight();
+
 
 public:
     static int width;

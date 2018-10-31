@@ -84,7 +84,7 @@ class Cross : public Road
 {
 public:
     Cross(Vec3 position);
-    virtual void setDefaultPriority(Driveable *s0 = NULL, Driveable *s1 = NULL, Driveable *s2 = NULL, Driveable *s3 = NULL);
+    virtual void setDefaultPriority(Driveable *s0 = nullptr, Driveable *s1 = nullptr, Driveable *s2 = nullptr, Driveable *s3 = nullptr);
 
 protected:
     virtual ~Cross(){};

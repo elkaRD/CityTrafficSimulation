@@ -29,10 +29,12 @@ class EngineCore : public EngineCoreBase
 protected:
 
     int init();
-
     virtual ~EngineCore(){};
 
     void run();
+
+    int width;
+    int height;
 
 private:
     clock_t prevTime;
@@ -50,16 +52,19 @@ private:
     void EnableOpenGL(HWND hwnd, HDC*, HGLRC*);
     void DisableOpenGL(HWND, HDC, HGLRC);
 
-    void initLight();
-
     static LRESULT CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
 
-public:
-    static int width;
-    static int height;
+    void CheckKeyboard();
+    void CheckMouse();
 
-    static int argc;
-    static char **argv;
+    //static int argc;
+    //static char **argv;
+
+    static EngineCore *instance;
+
+public:
+
+    static void SetCmdArgs(int argC, char **argV);
 };
 
 #endif // _WIN32

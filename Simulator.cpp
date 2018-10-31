@@ -9,11 +9,11 @@
 #include"Simulator.h"
 using namespace std;
 
-Simulator* Simulator::instance = NULL;
+Simulator* Simulator::instance = nullptr;
 
 Simulator* Simulator::getInstance()
 {
-    if (instance == NULL)
+    if (instance == nullptr)
     {
         instance = new Simulator();
     }
@@ -171,7 +171,7 @@ void Simulator::loadRoad(const string fileName)
                 ss >> id;
                 if (ss.fail()) throw "nie udalo sie wczytac wybranego id obiektu";
 
-                if (findObjectByName(id) != NULL) throw "obiekt o id " + id + " juz istnieje";
+                if (findObjectByName(id) != nullptr) throw "obiekt o id " + id + " juz istnieje";
 
                 if (type.compare("CR") == 0 || type.compare("CROSS") == 0)
                 {
@@ -198,8 +198,8 @@ void Simulator::loadRoad(const string fileName)
                     string endCrossID;
                     ss >> begCrossID >> endCrossID;
                     if (ss.fail()) throw "nie udalo sie wczytac info o ulicy " + id;
-                    Cross *crossB = NULL;
-                    Cross *crossE = NULL;
+                    Cross *crossB = nullptr;
+                    Cross *crossE = nullptr;
 
                     for (unsigned int i=0;i<crosses.size();i++)
                     {
@@ -209,7 +209,7 @@ void Simulator::loadRoad(const string fileName)
                             break;
                         }
                     }
-                    if (crossB == NULL) throw "nie znaleziono skrzyzowania " + begCrossID + " dla ulicy " + id;
+                    if (crossB == nullptr) throw "nie znaleziono skrzyzowania " + begCrossID + " dla ulicy " + id;
 
                     for (unsigned int i=0;i<crosses.size();i++)
                     {
@@ -219,7 +219,7 @@ void Simulator::loadRoad(const string fileName)
                             break;
                         }
                     }
-                    if (crossE == NULL) throw "nie znaleziono skrzyzowania " + endCrossID + " dla ulicy " + id;
+                    if (crossE == nullptr) throw "nie znaleziono skrzyzowania " + endCrossID + " dla ulicy " + id;
 
                     GameObject *temp;
                     temp = new Street(crossB, crossE);
@@ -239,7 +239,7 @@ void Simulator::loadRoad(const string fileName)
                     if (ss.fail()) throw "nie udalo sie wczytac danych dla garazu " + id;
 
                     Vec3 v(x,y,z);
-                    Cross *cross = NULL;
+                    Cross *cross = nullptr;
                     for(unsigned int i=0;i<objects.size();i++)
                     {
                         if (crosses[i]->id.compare(jointCross) == 0)
@@ -248,7 +248,7 @@ void Simulator::loadRoad(const string fileName)
                             break;
                         }
                     }
-                    if (cross == NULL) throw "nie udalo sie znalezc skrzyzowania " + jointCross + " dla garazu " + id;
+                    if (cross == nullptr) throw "nie udalo sie znalezc skrzyzowania " + jointCross + " dla garazu " + id;
 
                     Garage *temp;
                     temp = new Garage(v, cross);
@@ -334,11 +334,11 @@ void Simulator::loadPriority(const string fileName)
                     if (ss.fail()) throw "nie udalo sie wczytac ulic na skrzyzowaniu " + id;
 
                     ptrs[i] = dynamic_cast<Driveable*>(findObjectByName(ids));
-                    if (ptrs[i] == NULL) throw "blad wczytywania ulicy " + ids + " na skrzyzowaniu " + id;
+                    if (ptrs[i] == nullptr) throw "blad wczytywania ulicy " + ids + " na skrzyzowaniu " + id;
                 }
 
                 Cross *cross = dynamic_cast<Cross*>(findObjectByName(id));
-                if (cross != NULL)
+                if (cross != nullptr)
                 {
                     if (number != (int)cross->streets.size()) throw "niepoprawna ilosc ulic na " + id;
                     cross->setDefaultPriority(ptrs[0], ptrs[1], ptrs[2], ptrs[3]);
@@ -386,7 +386,7 @@ void Simulator::update(const float delta)
 
     for (unsigned int i=0;i<objects.size();i++)
     {
-        if (objects[i] == NULL)
+        if (objects[i] == nullptr)
         {
             objects.erase(objects.begin() + i);
             continue;
@@ -433,5 +433,5 @@ GameObject* Simulator::findObjectByName(const string no) const
         }
     }
 
-    return NULL;
+    return nullptr;
 }

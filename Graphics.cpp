@@ -61,7 +61,7 @@ float Vec3::angleDiff(float b, float e)
 
 float Vec3::angleXZ() const
 {
-    float t = atan2(z, x) * 180 / M_PI;
+    float t = atan2(z, x) * 57.2958;
     if (t >= 360) t -= 360;
     return -t;
 }

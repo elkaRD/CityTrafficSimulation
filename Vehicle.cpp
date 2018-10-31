@@ -57,10 +57,10 @@ void Vehicle::Blinker::init()
 void Vehicle::initPointers(Driveable *spawnRoad)
 {
     curRoad = spawnRoad;
-    curCross = NULL;
-    nextRoad = NULL;
+    curCross = nullptr;
+    nextRoad = nullptr;
 
-    backVeh = NULL;
+    backVeh = nullptr;
 
     allowedToCross = false;
     crossState.isChanging = false;
@@ -90,13 +90,13 @@ void Vehicle::update(const float delta)
         checkVelocity(delta, prevVelocity);
         setNewPos();
 
-        if (curRoad->getLength() - xPos < 1.5 && curCross == NULL)
+        if (curRoad->getLength() - xPos < 1.5 && curCross == nullptr)
         {
             registerToCross();
         }
     }
 
-    if (!crossState.isLeavingRoad && curCross != NULL && nextRoad != NULL && allowedToCross/* && nextRoad->freeSpace(direction) > vehicleLength + remainDst*/)
+    if (!crossState.isLeavingRoad && curCross != nullptr && nextRoad != nullptr && allowedToCross/* && nextRoad->freeSpace(direction) > vehicleLength + remainDst*/)
     {
         tryBeAllowedToEnterCross();
     }
@@ -236,7 +236,7 @@ void Vehicle::registerToCross()
 
     blinker.which = 0;
 
-    if (curCross != NULL)
+    if (curCross != nullptr)
     {
         for (unsigned int i=0;i<curCross->streets.size();i++)
         {
@@ -312,10 +312,10 @@ void Vehicle::leaveRoad()
         nextRoadJoint = nextRoad->getEndJointWidth(curCross->streets[desiredTurn].direction);
     }
 
-    if(backVeh != NULL)
+    if(backVeh != nullptr)
     {
         backVeh->isFirstVeh = true;
-        backVeh->frontVeh = NULL;
+        backVeh->frontVeh = nullptr;
     }
 
     crossState.begRot = curRoad->direction.angleXZ();
@@ -357,10 +357,10 @@ void Vehicle::enterNewRoad()
 {
     blinker.which = 0;
 
-    if(backVeh != NULL)
+    if(backVeh != nullptr)
     {
         backVeh->isFirstVeh = true;
-        backVeh->frontVeh = NULL;
+        backVeh->frontVeh = nullptr;
     }
 
     if (direction)
@@ -401,9 +401,9 @@ void Vehicle::enterNewRoad()
     curCross->allowedVeh--;
     desiredTurn = 0;
 
-    backVeh = NULL;
+    backVeh = nullptr;
 
-    frontVeh = NULL;
+    frontVeh = nullptr;
     isFirstVeh = true;
 
     if (direction)
@@ -434,8 +434,8 @@ void Vehicle::enterNewRoad()
         curRoad->vehiclesEnd.push(this);
     }
 
-    nextRoad = NULL;
-    curCross = NULL;
+    nextRoad = nullptr;
+    curCross = nullptr;
 }
 
 void Vehicle::Blinker::updateBlinkers(const float delta)
@@ -451,7 +451,7 @@ void Vehicle::Blinker::updateBlinkers(const float delta)
 
 float Vehicle::getDst() const
 {
-    if (frontVeh != NULL)
+    if (frontVeh != nullptr)
         return frontVeh->xPos - xPos - frontVeh->specs.vehicleLength/2.0;
 
     return curRoad->getLength() - xPos;
@@ -459,7 +459,7 @@ float Vehicle::getDst() const
 
 bool Vehicle::isEnoughSpace() const
 {
-    if (nextRoad == NULL || curCross == NULL || desiredTurn >= (int)curCross->streets.size()) return false;
+    if (nextRoad == nullptr || curCross == nullptr || desiredTurn >= (int)curCross->streets.size()) return false;
 
     return nextRoad->freeSpace(curCross->streets[desiredTurn].direction) > specs.vehicleLength + specs.remainDst;
 }

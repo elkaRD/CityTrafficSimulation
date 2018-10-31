@@ -12,19 +12,27 @@
 #include "EngineCoreWindows.h"
 using namespace std;
 
-int EngineCore::width = 1280;
-int EngineCore::height = 720;
-
 void fatalError(string e)
 {
     throw "ENGINE CORE ERROR: " + e;
 }
 
-int EngineCore::argc = 0;
-char **EngineCore::argv = NULL;
+//int EngineCore::argc = 0;
+//char **EngineCore::argv = NULL;
+EngineCore *EngineCore::instance = nullptr;
+
+void EngineCore::SetCmdArgs(int argC, char **argV)
+{
+
+}
 
 int EngineCore::init()
 {
+    instance = this;
+
+    width = 1280;
+    height = 720;
+
     hInstance = GetModuleHandle(NULL);
 
     WNDCLASSEX wcex;
@@ -56,7 +64,7 @@ int EngineCore::init()
     /* create main window */
     hwnd = CreateWindowEx(0,
                           "GLSample",
-                          "OpenGL Sample",
+                          "City traffic",
                           WS_OVERLAPPEDWINDOW,
                           CW_USEDEFAULT,
                           CW_USEDEFAULT,
@@ -75,38 +83,29 @@ int EngineCore::init()
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
     glClearDepth(1.0);
-
     initLight();
 
     return 0;
 }
 
-void EngineCore::initLight()
+void EngineCore::CheckKeyboard()
 {
-    const GLfloat lambient[]  = { 0.3,0.3,0.3, 1.0f };
-    const GLfloat ldiffuse[]  = { 1,1,1, 1.0f };
-    const GLfloat lspecular[] = { 0,0,0, 1.0f };
-    const GLfloat lposition[] = { 30,30,30, 0.0f };
+    for (int i=0; i < 128; i++)
+    {
+        if (GetAsyncKeyState(i) != 0) keyPressed(i);
+    }
+}
 
-    const GLfloat mambient[]    = { 0.7f, 0.7f, 0.7f, 1.0f };
-    const GLfloat mdiffuse[]    = { 0.8f, 0.8f, 0.8f, 1.0f };
-    const GLfloat mspecular[]   = { 0,0,0, 1.0f };
-    const GLfloat shininess[] = { 100 };
+void EngineCore::CheckMouse()
+{
+    POINT cursorPos;
+    GetCursorPos(&cursorPos);
 
-    glEnable(GL_LIGHT0);
-    glEnable(GL_NORMALIZE);
-    glEnable(GL_COLOR_MATERIAL);
-    glEnable(GL_LIGHTING);
+    if((GetKeyState(VK_LBUTTON) & 0x100) != 0)
+        mouseMove(cursorPos.x - prevMouseX, cursorPos.y - prevMouseY);
 
-    glLightfv(GL_LIGHT0, GL_AMBIENT,  lambient);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE,  ldiffuse);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, lspecular);
-    glLightfv(GL_LIGHT0, GL_POSITION, lposition);
-
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   mambient);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   mdiffuse);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  mspecular);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+    prevMouseX = cursorPos.x;
+    prevMouseY = cursorPos.y;
 }
 
 void EngineCore::run()
@@ -116,6 +115,9 @@ void EngineCore::run()
     while (true)
     {
         /* check for messages */
+        CheckKeyboard();
+        CheckMouse();
+
         if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {
             /* handle or dispatch messages */
@@ -131,28 +133,6 @@ void EngineCore::run()
         }
         else
         {
-            /* OpenGL animation code goes here */
-
-            /*glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-            glClear(GL_COLOR_BUFFER_BIT);
-
-            glPushMatrix();
-            glRotatef(theta, 0.0f, 0.0f, 1.0f);
-
-            glBegin(GL_TRIANGLES);
-
-                glColor3f(1.0f, 0.0f, 0.0f);   glVertex2f(0.0f,   1.0f);
-                glColor3f(0.0f, 1.0f, 0.0f);   glVertex2f(0.87f,  -0.5f);
-                glColor3f(0.0f, 0.0f, 1.0f);   glVertex2f(-0.87f, -0.5f);
-
-            glEnd();
-
-            glPopMatrix();
-
-            SwapBuffers(hDC);
-
-            theta += 1.0f;
-            Sleep (1);*/
 
 
         clock_t newTime = clock();
@@ -199,7 +179,8 @@ void EngineCore::run()
         }
     }
 }
-
+#include<iostream>
+using namespace std;
 LRESULT CALLBACK EngineCore::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -217,10 +198,25 @@ LRESULT CALLBACK EngineCore::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
             {
                 case VK_ESCAPE:
                     PostQuitMessage(0);
-                break;
+                    break;
+
+                //default:
+                    //Simulator::getInstance().keyPressed(wParam);
+                    //GetBaseInstance()->keyPressed(wParam);
+                   //instance->keyPressed(wParam);
             }
         }
         break;
+
+                case WM_SIZE:
+                    {
+                        instance->width = (int)LOWORD(lParam);
+                        instance->height = (int)HIWORD(lParam);
+
+                        cout << instance->height<<"  x  "<<instance->width<<endl;
+
+                        break;
+                    }
 
         default:
             return DefWindowProc(hwnd, uMsg, wParam, lParam);

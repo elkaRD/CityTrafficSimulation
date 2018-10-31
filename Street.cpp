@@ -42,7 +42,7 @@ Driveable::Driveable(Cross *begCross, Cross *endCross)
 
 Driveable::Driveable(Vec3 p, Cross *endCross)
 {
-    crossBeg = NULL;
+    crossBeg = nullptr;
     crossEnd = endCross;
 
     pos = p;
@@ -705,10 +705,10 @@ Vehicle* Garage::deleteVeh()
         Vehicle *temp = vehiclesEnd.front();
         vehiclesEnd.pop();
 
-        if(temp->backVeh != NULL)
+        if(temp->backVeh != nullptr)
         {
             temp->backVeh->isFirstVeh = true;
-            temp->backVeh->frontVeh = NULL;
+            temp->backVeh->frontVeh = nullptr;
         }
         delete temp;
 
@@ -717,7 +717,7 @@ Vehicle* Garage::deleteVeh()
         return temp;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 bool Garage::checkReadyToSpot() const
