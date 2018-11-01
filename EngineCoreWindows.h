@@ -22,6 +22,8 @@
 
 #include "EngineCoreBase.h"
 
+//This class bases on Code::Blocks OpenGL template (OpenGL + WinAPI)
+
 class EngineCore : protected EngineCoreBase
 {
 protected:

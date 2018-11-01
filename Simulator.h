@@ -12,7 +12,6 @@
 #ifndef SIMULATOR_H
 #define SIMULATOR_H
 
-#include <fstream>
 #include <cmath>
 #include <algorithm>
 
@@ -20,30 +19,31 @@
 
 #include "EngineCore.h"
 #include "Graphics.h"
-#include "GameObject.h"
-#include "Street.h"
-#include "Vehicle.h"
+#include "ObjectsLoader.h"
+
 
 //#define CAMERA_VELOCITY     3
 
 class GameObject;
 
-class Simulator : private EngineCore, private Graphics
+class Simulator : private EngineCore, private Graphics, public ObjectsLoader
 {
     friend GameObject;
 
 public:
     static Simulator &getInstance();
 
-    void loadRoad(const std::string fileName);
-    void loadPriority(const std::string fileName);
-
     Vec3 cameraPos;
     Vec3 cameraRot;
 
     void run();
 
+    //GameObject* findObjectByName(const std::string on) const;
+
+protected:
     GameObject* findObjectByName(const std::string on) const;
+    void LoadedNewObject(GameObject *newGameObject);
+    void LoadedNewFactory(Garage *newFactory);
 
 private:
     Simulator();
@@ -69,8 +69,7 @@ private:
         LEFT,
         RIGHT,
         UP,
-        DOWN,
-        STAY
+        DOWN
     };
 
     unsigned int cameraDirection;

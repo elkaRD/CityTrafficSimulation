@@ -8,7 +8,7 @@
 ///
 ///   File: EngineCoreWindows.cpp
 
-//klasa silnika gry jest oparta na przykladowym projekcie OpenGL z Code::Blocks'a (OpenGL + X11)
+//This class bases on Code::Blocks OpenGL template (OpenGL + WinAPI)
 
 #ifdef _WIN32
 
@@ -19,6 +19,8 @@ EngineCore *EngineCore::instance = nullptr;
 
 int EngineCore::init()
 {
+    SetConsoleTitle("City traffic simulation");
+
     instance = this;
 
     width = 1280;
@@ -51,7 +53,7 @@ int EngineCore::init()
     /* create main window */
     hwnd = CreateWindowEx(0,
                           "GLSample",
-                          "City traffic",
+                          "City traffic simulation",
                           WS_OVERLAPPEDWINDOW,
                           CW_USEDEFAULT,
                           CW_USEDEFAULT,

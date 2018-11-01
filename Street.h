@@ -19,6 +19,7 @@
 class Cross;
 class Vehicle;
 class Simulator;
+class ObjectsLoader;
 
 class Road : public GameObject
 {
@@ -120,7 +121,7 @@ private:
 
     friend Driveable;
     friend Vehicle;
-    friend Simulator;
+    friend ObjectsLoader;
 };
 
 class CrossLights : public Cross
@@ -188,6 +189,7 @@ private:
     int maxVehicles;
 
     friend Simulator;
+    friend ObjectsLoader;
 };
 
 #endif // STREET_H

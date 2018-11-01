@@ -8,7 +8,7 @@
 ///
 ///   File: EngineCoreLinux.cpp
 
-//klasa silnika gry jest oparta na przykladowym projekcie OpenGL z Code::Blocks'a (OpenGL + X11)
+//This class bases on Code::Blocks OpenGL template (OpenGL + X11)
 
 #ifndef _WIN32
 
