@@ -19,11 +19,6 @@
 
 #include "EngineCoreBase.h"
 
-#define MULTIPLY_TIME       1
-#define MAX_DELTA           0.15
-#define MIN_DELTA           0.007
-#define REAL_INT_MULTIPLY   2
-
 class EngineCore : public EngineCoreBase
 {
 protected:
@@ -31,10 +26,9 @@ protected:
     int init();
     virtual ~EngineCore(){};
 
-    void run();
-
-    int width;
-    int height;
+    float getDeltaTime();
+    void checkEvents();
+    void swapBuffers();
 
 private:
     clock_t prevTime;
@@ -42,29 +36,21 @@ private:
     int prevMouseX;
     int prevMouseY;
 
-
-    bool updateRatio;
-
-    HINSTANCE hInstance;
     HDC hDC;
 
-    //LRESULT CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
-    void EnableOpenGL(HWND hwnd, HDC*, HGLRC*);
-    void DisableOpenGL(HWND, HDC, HGLRC);
+    void enableOpenGL(HWND hwnd, HDC*, HGLRC*);
+    void disableOpenGL(HWND, HDC, HGLRC);
 
     static LRESULT CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
 
-    void CheckKeyboard();
-    void CheckMouse();
-
-    //static int argc;
-    //static char **argv;
+    void checkKeyboard();
+    void checkMouse();
 
     static EngineCore *instance;
 
 public:
 
-    static void SetCmdArgs(int argC, char **argV);
+    static void SetCmdArgs(int argC, char **argV) {};
 };
 
 #endif // _WIN32

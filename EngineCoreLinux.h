@@ -25,7 +25,7 @@
 #define MULTIPLY_TIME       1
 #define MAX_DELTA           0.15
 #define MIN_DELTA           0.007
-#define REAL_INT_MULTIPLY   2
+#define updatesPerFrame   2
 
 class EngineCore : public EngineCoreBase
 {

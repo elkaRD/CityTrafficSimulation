@@ -5,20 +5,14 @@
 ///
 ///   File: Simulator.cpp
 
-
 #include"Simulator.h"
 using namespace std;
 
-Simulator* Simulator::instance = nullptr;
-
-Simulator* Simulator::getInstance()
+Simulator &Simulator::getInstance()
 {
-    if (instance == nullptr)
-    {
-        instance = new Simulator();
-    }
+    static Simulator instanceSimulator;
 
-    return instance;
+    return instanceSimulator;
 }
 
 void Simulator::run()
@@ -77,13 +71,12 @@ void Simulator::keyPressed(char k)
 
     switch (k)
     {
-        case 'w': cameraDirection = FORWARD;    break;
-        case 's': cameraDirection = BACK;       break;
-        case 'a': cameraDirection = LEFT;       break;
-        case 'd': cameraDirection = RIGHT;      break;
-        case 'e': cameraDirection = UP;         break;
-        case 'q': cameraDirection = DOWN;       break;
-        default:  cameraDirection = STAY;
+        case 'w': cameraDirection |= (1 << FORWARD);    break;
+        case 's': cameraDirection |= (1 << BACK);       break;
+        case 'a': cameraDirection |= (1 << LEFT);       break;
+        case 'd': cameraDirection |= (1 << RIGHT);      break;
+        case 'e': cameraDirection |= (1 << UP);         break;
+        case 'q': cameraDirection |= (1 << DOWN);       break;
     }
 }
 
@@ -92,46 +85,46 @@ void Simulator::cameraMove(const float delta)
     float multiplyMove = cameraVelocity * delta;
     float multiplyMoveHorizontal = cos(-cameraRot.y * M_PI / 180) * multiplyMove;
 
-    switch (cameraDirection)
+    if ((cameraDirection >> FORWARD) & 1)
     {
-    case FORWARD:
         cameraPos.z -=cos( cameraRot.x * M_PI / 180 )*multiplyMoveHorizontal;
         cameraPos.x +=sin( cameraRot.x * M_PI / 180 )*multiplyMoveHorizontal;
         cameraPos.y +=sin((-cameraRot.y)*M_PI/180)*multiplyMove;
-        break;
+    }
 
-    case BACK:
+    if ((cameraDirection >> BACK) & 1)
+    {
         cameraPos.z +=cos( cameraRot.x * M_PI / 180 )*multiplyMoveHorizontal;
         cameraPos.x -=sin( cameraRot.x * M_PI / 180 )*multiplyMoveHorizontal;
         cameraPos.y -=sin((-cameraRot.y)*M_PI/180)*multiplyMove;
-        break;
+    }
 
-    case LEFT:
+    if ((cameraDirection >> LEFT) & 1)
+    {
         cameraPos.z +=cos( (cameraRot.x + 90.0) * M_PI / 180 )*multiplyMove;
         cameraPos.x -=sin( (cameraRot.x + 90.0) * M_PI / 180 )*multiplyMove;
-        break;
+    }
 
-    case RIGHT:
+    if ((cameraDirection >> RIGHT) & 1)
+    {
         cameraPos.z -=cos( (cameraRot.x + 90.0) * M_PI / 180 )*multiplyMove;
         cameraPos.x +=sin( (cameraRot.x + 90.0) * M_PI / 180 )*multiplyMove;
-        break;
+    }
 
-    case UP:
+    if ((cameraDirection >> UP) & 1)
+    {
         cameraPos.z -=cos( cameraRot.x * M_PI / 180 )*multiplyMoveHorizontal;
         cameraPos.x +=sin( cameraRot.x * M_PI / 180 )*multiplyMoveHorizontal;
         cameraPos.y +=sin((-cameraRot.y + 90)*M_PI/180)*multiplyMove;
-        break;
+    }
 
-    case DOWN:
+    if ((cameraDirection >> DOWN) & 1)
+    {
         cameraPos.z +=cos( cameraRot.x * M_PI / 180 )*multiplyMoveHorizontal;
         cameraPos.x -=sin( cameraRot.x * M_PI / 180 )*multiplyMoveHorizontal;
         cameraPos.y +=sin((-cameraRot.y - 90)*M_PI/180)*multiplyMove;
-        break;
-
-    default: break;
     }
-
-    cameraDirection = STAY;
+    cameraDirection = 0;
 }
 
 void Simulator::mouseMove(const int dx, const int dy)
@@ -384,14 +377,9 @@ void Simulator::update(const float delta)
         }
     }
 
-    for (unsigned int i=0;i<objects.size();i++)
+    for (auto &object : objects)
     {
-        if (objects[i] == nullptr)
-        {
-            objects.erase(objects.begin() + i);
-            continue;
-        }
-        objects[i]->updateObject(delta);
+        object->updateObject(delta);
     }
 }
 
@@ -402,14 +390,9 @@ void Simulator::registerObject(GameObject *go)
 
 void Simulator::destroyObject(GameObject *go)
 {
-    for(unsigned int i=0;i<objects.size();i++)
-    {
-        if (objects[i] == go)
-        {
-            objects.erase(objects.begin() + i);
-            break;
-        }
-    }
+     auto objectToRemove = find_if(objects.begin(), objects.end(), [&go] (GameObject *item) {return item == go;});
+     iter_swap(objectToRemove, objects.end() - 1);
+     objects.pop_back();
 }
 
 void Simulator::cleanSimulation()

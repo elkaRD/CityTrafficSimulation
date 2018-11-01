@@ -12,19 +12,7 @@
 #include "EngineCoreWindows.h"
 using namespace std;
 
-void fatalError(string e)
-{
-    throw "ENGINE CORE ERROR: " + e;
-}
-
-//int EngineCore::argc = 0;
-//char **EngineCore::argv = NULL;
 EngineCore *EngineCore::instance = nullptr;
-
-void EngineCore::SetCmdArgs(int argC, char **argV)
-{
-
-}
 
 int EngineCore::init()
 {
@@ -33,15 +21,12 @@ int EngineCore::init()
     width = 1280;
     height = 720;
 
-    hInstance = GetModuleHandle(NULL);
+    HINSTANCE hInstance = GetModuleHandle(NULL);
 
     WNDCLASSEX wcex;
     HWND hwnd;
 
     HGLRC hRC;
-    //MSG msg;
-    BOOL bQuit = FALSE;
-    float theta = 0.0f;
 
     /* register window class */
     wcex.cbSize = sizeof(WNDCLASSEX);
@@ -56,7 +41,6 @@ int EngineCore::init()
     wcex.lpszMenuName = NULL;
     wcex.lpszClassName = "GLSample";
     wcex.hIconSm = LoadIcon(NULL, IDI_APPLICATION);;
-
 
     if (!RegisterClassEx(&wcex))
         return 0;
@@ -78,7 +62,7 @@ int EngineCore::init()
     ShowWindow(hwnd, SW_SHOWDEFAULT);
 
     /* enable OpenGL for the window */
-    EnableOpenGL(hwnd, &hDC, &hRC);
+    enableOpenGL(hwnd, &hDC, &hRC);
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -88,99 +72,65 @@ int EngineCore::init()
     return 0;
 }
 
-void EngineCore::CheckKeyboard()
+void EngineCore::checkKeyboard()
 {
+    bool isShiftPressed = GetAsyncKeyState(VK_LSHIFT) != 0;
     for (int i=0; i < 128; i++)
     {
-        if (GetAsyncKeyState(i) != 0) keyPressed(i);
+        if (GetAsyncKeyState(i) != 0)
+        {
+            if (i >= 'A' && i <= 'Z' && !isShiftPressed) keyPressed(i + 32);
+            else keyPressed(i);
+        }
     }
 }
 
-void EngineCore::CheckMouse()
+void EngineCore::checkMouse()
 {
     POINT cursorPos;
     GetCursorPos(&cursorPos);
 
     if((GetKeyState(VK_LBUTTON) & 0x100) != 0)
-        mouseMove(cursorPos.x - prevMouseX, cursorPos.y - prevMouseY);
+        mouseMove((cursorPos.x - prevMouseX) / 2.0, (cursorPos.y - prevMouseY) / 2.0);
 
     prevMouseX = cursorPos.x;
     prevMouseY = cursorPos.y;
 }
 
-void EngineCore::run()
+float EngineCore::getDeltaTime()
 {
+    clock_t newTime = clock();
+    float realDelta = clock() - newTime;
+    realDelta /= CLOCKS_PER_SEC;
+    prevTime = newTime;
+
+    return realDelta;
+}
+
+void EngineCore::checkEvents()
+{
+    checkKeyboard();
+    checkMouse();
+
     MSG msg;
 
-    while (true)
+    /* check for messages */
+    while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
     {
-        /* check for messages */
-        CheckKeyboard();
-        CheckMouse();
-
-        if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+        /* handle or dispatch messages */
+        if (msg.message != WM_QUIT)
         {
-            /* handle or dispatch messages */
-            if (msg.message == WM_QUIT)
-            {
-                break;
-            }
-            else
-            {
-                TranslateMessage(&msg);
-                DispatchMessage(&msg);
-            }
-        }
-        else
-        {
-
-
-        clock_t newTime = clock();
-        float delta = clock() - newTime;
-        delta /= CLOCKS_PER_SEC;
-        prevTime = newTime;
-
-        delta *= MULTIPLY_TIME;
-        if (delta > MAX_DELTA * MULTIPLY_TIME) delta = MAX_DELTA * MULTIPLY_TIME;
-        if (delta < MIN_DELTA * MULTIPLY_TIME) delta = MIN_DELTA * MULTIPLY_TIME;
-        if (delta > 0.4) delta = 0.4;
-
-        updateRatio = true; //todo: temp solution; fix in the future
-        if (updateRatio)
-        {
-            updateRatio = false;
-
-            glMatrixMode(GL_PROJECTION);
-            glLoadIdentity();
-
-            float screenRatio = width / height * 2.0;
-            glViewport(0,0,width,height);
-            glFrustum(-1.0 * screenRatio, 1.0 * screenRatio, -1.0, 1.0, 5.0, 1000.0);
-        }
-
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        glClearColor(1,1,1,1);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glTranslatef(0,0,5);
-
-        singleUpdate(delta);
-
-        for(int i=0;i<REAL_INT_MULTIPLY;i++)
-        {
-            update(delta);
-        }
-
-        redraw();
-
-        SwapBuffers(hDC);
-        glFlush();
-
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
         }
     }
 }
-#include<iostream>
-using namespace std;
+
+void EngineCore::swapBuffers()
+{
+    SwapBuffers(hDC);
+}
+
 LRESULT CALLBACK EngineCore::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -192,31 +142,16 @@ LRESULT CALLBACK EngineCore::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
         case WM_DESTROY:
             return 0;
 
-        case WM_KEYDOWN:
-        {
-            switch (wParam)
-            {
-                case VK_ESCAPE:
-                    PostQuitMessage(0);
-                    break;
-
-                //default:
-                    //Simulator::getInstance().keyPressed(wParam);
-                    //GetBaseInstance()->keyPressed(wParam);
-                   //instance->keyPressed(wParam);
-            }
-        }
         break;
 
-                case WM_SIZE:
-                    {
-                        instance->width = (int)LOWORD(lParam);
-                        instance->height = (int)HIWORD(lParam);
+        case WM_SIZE:
+        {
+            instance->width = (int)LOWORD(lParam);
+            instance->height = (int)HIWORD(lParam);
+            instance->updateRatio();
 
-                        cout << instance->height<<"  x  "<<instance->width<<endl;
-
-                        break;
-                    }
+            break;
+        }
 
         default:
             return DefWindowProc(hwnd, uMsg, wParam, lParam);
@@ -225,7 +160,7 @@ LRESULT CALLBACK EngineCore::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
     return 0;
 }
 
-void EngineCore::EnableOpenGL(HWND hwnd, HDC* hDC, HGLRC* hRC)
+void EngineCore::enableOpenGL(HWND hwnd, HDC* hDC, HGLRC* hRC)
 {
     PIXELFORMATDESCRIPTOR pfd;
 
@@ -256,7 +191,7 @@ void EngineCore::EnableOpenGL(HWND hwnd, HDC* hDC, HGLRC* hRC)
     wglMakeCurrent(*hDC, *hRC);
 }
 
-void EngineCore::DisableOpenGL (HWND hwnd, HDC hDC, HGLRC hRC)
+void EngineCore::disableOpenGL (HWND hwnd, HDC hDC, HGLRC hRC)
 {
     wglMakeCurrent(NULL, NULL);
     wglDeleteContext(hRC);

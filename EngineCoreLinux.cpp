@@ -235,7 +235,7 @@ void EngineCore::run()
 
         singleUpdate(delta);
 
-        for(int i=0;i<REAL_INT_MULTIPLY;i++)
+        for(int i=0;i<updatesPerFrame;i++)
         {
             update(delta);
         }

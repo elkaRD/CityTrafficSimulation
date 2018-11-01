@@ -11,6 +11,7 @@
 
 #include <fstream>
 #include <cmath>
+#include <algorithm>
 
 #define M_PI 3.14159265358979323846
 
@@ -29,7 +30,7 @@ class Simulator : public EngineCore, public Graphics
     friend GameObject;
 
 public:
-    static Simulator *getInstance();
+    static Simulator &getInstance();
 
     void loadRoad(const std::string fileName);
     void loadPriority(const std::string fileName);
@@ -42,8 +43,6 @@ public:
     GameObject* findObjectByName(const std::string on) const;
 
 private:
-    static Simulator *instance;
-
     Simulator();
 
     void registerObject(GameObject *go);
@@ -71,12 +70,12 @@ private:
         STAY
     };
 
-    DirectionMove cameraDirection;
+    unsigned int cameraDirection;
     float cameraVelocity;
 
     void cameraMove(const float delta);
 
-    const float CAMERA_VELOCITY = 3;
+    const float CAMERA_VELOCITY;
 };
 
 #endif // SIMULTOR_H
