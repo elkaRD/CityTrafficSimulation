@@ -1,9 +1,12 @@
-///   Projekt PROI 18L
-///   Symulator ruchu miejskiego
+///   EN: Project for OOP subject at Warsaw University of Technology
+///       City traffic simulation
+///
+///   PL: Projekt PROI (Programowanie obiektowe) PW WEiTI 18L
+///       Symulacja ruchu miejskiego
 ///
 ///   Copyright (C) Robert Dudzinski 2018
 ///
-///   File: EngineCoreLinux.h
+///   File: EngineCoreWindows.h
 
 #ifndef ENGINECOREWINDOWS_H
 #define ENGINECOREWINDOWS_H
@@ -19,7 +22,7 @@
 
 #include "EngineCoreBase.h"
 
-class EngineCore : public EngineCoreBase
+class EngineCore : protected EngineCoreBase
 {
 protected:
 

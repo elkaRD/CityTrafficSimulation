@@ -1,5 +1,8 @@
-///   Projekt PROI 18L
-///   Symulator ruchu miejskiego
+///   EN: Project for OOP subject at Warsaw University of Technology
+///       City traffic simulation
+///
+///   PL: Projekt PROI (Programowanie obiektowe) PW WEiTI 18L
+///       Symulacja ruchu miejskiego
 ///
 ///   Copyright (C) Robert Dudzinski 2018
 ///
@@ -13,7 +16,7 @@
 #include <cmath>
 #include <algorithm>
 
-#define M_PI 3.14159265358979323846
+#define M_PI 3.14159
 
 #include "EngineCore.h"
 #include "Graphics.h"
@@ -25,7 +28,7 @@
 
 class GameObject;
 
-class Simulator : public EngineCore, public Graphics
+class Simulator : private EngineCore, private Graphics
 {
     friend GameObject;
 

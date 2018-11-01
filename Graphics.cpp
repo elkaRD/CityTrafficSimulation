@@ -1,5 +1,8 @@
-///   Projekt PROI 18L
-///   Symulator ruchu miejskiego
+///   EN: Project for OOP subject at Warsaw University of Technology
+///       City traffic simulation
+///
+///   PL: Projekt PROI (Programowanie obiektowe) PW WEiTI 18L
+///       Symulacja ruchu miejskiego
 ///
 ///   Copyright (C) Robert Dudzinski 2018
 ///

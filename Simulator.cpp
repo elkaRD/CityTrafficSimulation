@@ -1,5 +1,8 @@
-///   Projekt PROI 18L
-///   Symulator ruchu miejskiego
+///   EN: Project for OOP subject at Warsaw University of Technology
+///       City traffic simulation
+///
+///   PL: Projekt PROI (Programowanie obiektowe) PW WEiTI 18L
+///       Symulacja ruchu miejskiego
 ///
 ///   Copyright (C) Robert Dudzinski 2018
 ///
@@ -153,7 +156,7 @@ void Simulator::loadRoad(const string fileName)
                 stringstream ss;
                 ss << data;
 
-                if (ss.fail()) throw "blad wczytywania linijki tekstu";
+                if (ss.fail()) throw "failed to read line of text";
 
                 string type;
                 string id;
@@ -162,19 +165,20 @@ void Simulator::loadRoad(const string fileName)
                 if (ss.fail()) throw 0;
 
                 ss >> id;
-                if (ss.fail()) throw "nie udalo sie wczytac wybranego id obiektu";
+                if (ss.fail()) throw "failed to read object ID";//"nie udalo sie wczytac wybranego id obiektu";
 
-                if (findObjectByName(id) != nullptr) throw "obiekt o id " + id + " juz istnieje";
+                if (findObjectByName(id) != nullptr) throw "object with ID " + id + " already exists";//"obiekt o id " + id + " juz istnieje";
 
                 if (type.compare("CR") == 0 || type.compare("CROSS") == 0)
                 {
                     float x1,y1,z1;
 
                     ss >> x1 >> y1 >> z1;
-                    if (ss.fail())
-                    {
-                        throw "nie udalo sie wczytac pozycji skrzyzowania " + id;
-                    }
+                    if (ss.fail()) throw "failed to load intersection position " + id;
+                    /*{
+                        //throw "nie udalo sie wczytac pozycji skrzyzowania " + id;
+                        throw "failed to load intersection position " + id;
+                    }*/
                     Vec3 v1(x1,y1,z1);
 
                     Cross *temp;
@@ -190,7 +194,7 @@ void Simulator::loadRoad(const string fileName)
                     string begCrossID;
                     string endCrossID;
                     ss >> begCrossID >> endCrossID;
-                    if (ss.fail()) throw "nie udalo sie wczytac info o ulicy " + id;
+                    if (ss.fail()) throw "failed to load info about street " + id;//"nie udalo sie wczytac info o ulicy " + id;
                     Cross *crossB = nullptr;
                     Cross *crossE = nullptr;
 
@@ -202,7 +206,7 @@ void Simulator::loadRoad(const string fileName)
                             break;
                         }
                     }
-                    if (crossB == nullptr) throw "nie znaleziono skrzyzowania " + begCrossID + " dla ulicy " + id;
+                    if (crossB == nullptr) throw "could not find intersection " + begCrossID + " for street " + id;//throw "nie znaleziono skrzyzowania " + begCrossID + " dla ulicy " + id;
 
                     for (unsigned int i=0;i<crosses.size();i++)
                     {
@@ -212,7 +216,7 @@ void Simulator::loadRoad(const string fileName)
                             break;
                         }
                     }
-                    if (crossE == nullptr) throw "nie znaleziono skrzyzowania " + endCrossID + " dla ulicy " + id;
+                    if (crossE == nullptr) throw "could not find intersection " + begCrossID + " for street " + id;
 
                     GameObject *temp;
                     temp = new Street(crossB, crossE);
@@ -229,7 +233,7 @@ void Simulator::loadRoad(const string fileName)
                     float spotFrec;
                     int maxVehicles;
                     ss >> vehType >> jointCross >> x >> y >> z >> spotFrec >> maxVehicles;
-                    if (ss.fail()) throw "nie udalo sie wczytac danych dla garazu " + id;
+                    if (ss.fail()) throw "failed to load info about garage " + id;//"nie udalo sie wczytac danych dla garazu " + id;
 
                     Vec3 v(x,y,z);
                     Cross *cross = nullptr;
@@ -241,7 +245,7 @@ void Simulator::loadRoad(const string fileName)
                             break;
                         }
                     }
-                    if (cross == nullptr) throw "nie udalo sie znalezc skrzyzowania " + jointCross + " dla garazu " + id;
+                    if (cross == nullptr) throw "could not find intersection " + jointCross + " for garage " + id;//throw "nie udalo sie znalezc skrzyzowania " + jointCross + " dla garazu " + id;
 
                     Garage *temp;
                     temp = new Garage(v, cross);
@@ -261,7 +265,7 @@ void Simulator::loadRoad(const string fileName)
                 {
                     float x1,y1,z1;
                     ss >> x1 >> y1 >> z1;
-                    if (ss.fail()) throw "nie udalo sie wczytac danych dla skrzyzowania ze swiatlami " + id;
+                    if (ss.fail()) throw "failed to load info about intersection with lights " + id;//"nie udalo sie wczytac danych dla skrzyzowania ze swiatlami " + id;
                     Vec3 v1(x1,y1,z1);
 
                     Cross *temp;
@@ -274,12 +278,12 @@ void Simulator::loadRoad(const string fileName)
                 }
                 else
                 {
-                    throw "nie udalo sie znalezc typu " + type;
+                    throw "could not find type " + type;//"nie udalo sie znalezc typu " + type;
                 }
             }
             catch (string e)
             {
-                cout << "ERROR podczas wczytywania obiektu: " << e <<endl;
+                cout << "ERROR while loading object: " << e <<endl;
             }
             catch (int e)
             {
