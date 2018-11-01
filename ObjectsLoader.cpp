@@ -116,13 +116,13 @@ void ObjectsLoader::loadRoad(const string fileName)
                     if (cross == nullptr) throw "could not find intersection " + jointCross + " for garage " + id;
 
                     Garage *temp;
-                    temp = new Garage(v, cross);
+
+                         if (vehType.compare("C") == 0) temp = new GarageCar(v, cross);
+                    else if (vehType.compare("B") == 0) temp = new GarageBus(v, cross);
+
                     temp->id = id;
                     temp->maxVehicles = maxVehicles;
                     temp->frecSpot = spotFrec;
-
-                    if (vehType.compare("C") == 0) temp->vehType = 0;
-                    if (vehType.compare("B") == 0) temp->vehType = 1;
 
                     LoadedNewObject(temp);
                     LoadedNewFactory(temp);

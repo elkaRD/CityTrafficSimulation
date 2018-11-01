@@ -6,7 +6,7 @@
 ///
 ///   Copyright (C) Robert Dudzinski 2018
 ///
-///   File: EngineCoreWindows.h
+///   File: EngineCoreWindowes.h
 
 #ifndef ENGINECOREWINDOWS_H
 #define ENGINECOREWINDOWS_H
@@ -21,8 +21,6 @@
 #include <windows.h>
 
 #include "EngineCoreBase.h"
-
-//This class bases on Code::Blocks OpenGL template (OpenGL + WinAPI)
 
 class EngineCore : protected EngineCoreBase
 {

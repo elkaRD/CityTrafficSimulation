@@ -187,7 +187,7 @@ bool Cross::checkSet()
     }
     else
     {
-        throw "nie udalo sie przypisac domyslnego pierwszenstwa na skrzyzowaniu " + id;
+        throw "failed to set default right of way at intersection " + id;
     }
 
     return !isSet;
@@ -373,7 +373,7 @@ void Cross::setDefaultPriority(Driveable *s0, Driveable *s1, Driveable *s2, Driv
     }
     else
     {
-        throw "zla liczba ulic na skrzyzowaniu " + id;
+        throw "incorrect number of streets at intersection " + id;
     }
 }
 
@@ -423,7 +423,7 @@ void CrossLights::setDefaultLights(Driveable *s0, Driveable *s1, Driveable *s2, 
     }
     else
     {
-        throw "zla ilosc ulic na skrzyzowaniu ze swiatlami " + id;
+        throw "incorrect number of streets at intersection " + id;
     }
 }
 
@@ -615,6 +615,8 @@ void Street::draw()
     Driveable::draw();
 }
 
+int Garage::vehiclesCounter = 0;
+
 Garage::Garage(Vec3 p, Cross *c) : Driveable(p, c)
 {
     curTimeSpot = 0;
@@ -676,17 +678,8 @@ Vehicle* Garage::spotVeh()
     curTimeSpot = 0;
     isReadyToSpot = false;
 
-    Vehicle *temp;
-    if (vehType == 0)
-    {
-        temp = new Car(this);
-        temp->id = "CAR_" + itos(Vehicle::numVeh);
-    }
-    else
-    {
-        temp = new Bus(this);
-        temp->id = "BUS_" + itos(Vehicle::numVeh);
-    }
+    Vehicle *temp = createVehicle();
+
     temp->curRoad = this;
     temp->direction = true;
     temp->isFirstVeh = vehiclesBeg.size() == 0;
@@ -694,6 +687,7 @@ Vehicle* Garage::spotVeh()
     vehiclesBeg.push(temp);
 
     spottedVehicles++;
+    vehiclesCounter++;
 
     return temp;
 }
@@ -731,4 +725,28 @@ bool Garage::checkReadyToSpot() const
 bool Garage::checkReadyToDelete() const
 {
     return isReadyToDelete;
+}
+
+GarageCar::GarageCar(Vec3 p, Cross *c) : Garage(p, c)
+{
+
+}
+
+Vehicle *GarageCar::createVehicle()
+{
+    Vehicle *temp = new Car(this);
+    temp->id = "CAR_" + id + "_" + itos(Garage::vehiclesCounter);
+    return temp;
+}
+
+GarageBus::GarageBus(Vec3 p, Cross *c) : Garage(p, c)
+{
+
+}
+
+Vehicle *GarageBus::createVehicle()
+{
+    Vehicle *temp = new Bus(this);
+    temp->id = "BUS_" + id + "_" + itos(Garage::vehiclesCounter);
+    return temp;
 }

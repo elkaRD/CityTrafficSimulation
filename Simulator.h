@@ -38,10 +38,8 @@ public:
 
     void run();
 
-    //GameObject* findObjectByName(const std::string on) const;
-
 protected:
-    GameObject* findObjectByName(const std::string on) const;
+    GameObject* findObjectByName(const std::string objectName) const;
     void LoadedNewObject(GameObject *newGameObject);
     void LoadedNewFactory(Garage *newFactory);
 

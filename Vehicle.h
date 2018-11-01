@@ -77,8 +77,6 @@ protected:
     } blinker;
 
 private:
-    static int numVeh;
-
     void initPointers(Driveable *spawnRoad);
 
     void setVelocity();

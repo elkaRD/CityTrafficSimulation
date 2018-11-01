@@ -14,12 +14,8 @@
 
 class Driveable;
 
-int Vehicle::numVeh = 0;
-
 Vehicle::Vehicle(Driveable *spawnRoad)
 {
-    numVeh++;
-
     initRandValues();
 
     velocity = 0;
@@ -190,11 +186,6 @@ float Vehicle::getXPos() const
 float Vehicle::getDstToCross() const
 {
     return dstToCross;
-}
-
-int Vehicle::getNumberId()
-{
-    return numVeh;
 }
 
 void Vehicle::setNewPos()

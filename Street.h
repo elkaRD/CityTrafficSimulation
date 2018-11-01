@@ -162,10 +162,6 @@ private:
 class Garage : public Driveable
 {
 public:
-    Garage(Vec3 p, Cross *c);
-
-    int vehType;
-
     bool checkReadyToSpot() const;
     bool checkReadyToDelete() const;
 
@@ -178,7 +174,7 @@ private:
 
     void draw();
     void update(const float delta);
-    std::string itos(const int x);
+
     Vehicle* spotVeh();
     Vehicle* deleteVeh();
 
@@ -190,6 +186,32 @@ private:
 
     friend Simulator;
     friend ObjectsLoader;
+
+protected:
+    Garage(Vec3 p, Cross *c);
+
+    std::string itos(const int x);
+    virtual Vehicle *createVehicle() = 0;
+
+    static int vehiclesCounter;
+};
+
+class GarageCar : public Garage
+{
+public:
+    GarageCar(Vec3 p, Cross *c);
+
+protected:
+    Vehicle *createVehicle();
+};
+
+class GarageBus : public Garage
+{
+public:
+    GarageBus(Vec3 p, Cross *c);
+
+protected:
+    Vehicle *createVehicle();
 };
 
 #endif // STREET_H

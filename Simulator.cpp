@@ -188,16 +188,11 @@ void Simulator::cleanSimulation()
     }
 }
 
-GameObject* Simulator::findObjectByName(const string no) const
+GameObject* Simulator::findObjectByName(const string objectName) const
 {
-    for (const auto &object : objects)
-    {
-        if (object->id.compare(no) == 0)
-        {
-            return object;
-        }
-    }
+    auto foundObject = find_if(objects.begin(), objects.end(), [&objectName] (GameObject *item) {return item->id.compare(objectName) == 0;} );
 
+    if (foundObject != objects.end()) return *foundObject;
     return nullptr;
 }
 
