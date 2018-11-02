@@ -16,8 +16,6 @@
 #include <GL/gl.h>
 
 #include <ctime>
-#include <vector>
-#include <string>
 #include <windows.h>
 
 #include "EngineCoreBase.h"

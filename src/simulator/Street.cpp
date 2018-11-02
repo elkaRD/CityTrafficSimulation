@@ -594,12 +594,12 @@ void CrossLights::draw()
 
         translate(-0.2,0,0);
 
-        setColor(0,0,0);
+        setColor(0.5, 0.5, 0.5);
         translate(0,-0.35/2,0);
         drawCube(0.025,0.35,0.025);
 
         translate(0.1,0.35/2,0);
-        drawCube(0.2,0.025,0.025);
+        drawCube(0.225,0.025,0.025);
 
         popMatrix();
     }
@@ -637,6 +637,7 @@ void Garage::draw()
     setColor(0.5, 0 ,0);
     pushMatrix();
     translate(0,0.2,0);
+    rotateY(direction.angleXZ());
     drawCube(0.7, 0.4, 1);
     popMatrix();
 

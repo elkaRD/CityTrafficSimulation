@@ -20,7 +20,7 @@
 #endif
 
 #include "EngineCore/EngineCore.h"
-#include "Graphics.h"
+#include "EngineCore/Graphics.h"
 #include "ObjectsLoader.h"
 
 class GameObject;

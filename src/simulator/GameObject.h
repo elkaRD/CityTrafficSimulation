@@ -15,7 +15,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <queue>
-#include "Graphics.h"
+#include "EngineCore/Graphics.h"
 
 class GameObject : public Graphics
 {

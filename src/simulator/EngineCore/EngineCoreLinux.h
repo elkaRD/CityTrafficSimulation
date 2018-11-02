@@ -18,9 +18,6 @@
 
 #include <X11/X.h>    /* X11 constant (e.g. TrueColor) */
 #include <X11/keysym.h>
-
-#include <vector>
-#include <string>
 #include <sys/time.h>
 
 #include "EngineCoreBase.h"

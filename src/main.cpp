@@ -9,7 +9,7 @@
 ///   File: main.cpp
 
 
-#include "Simulator/Simulator.h"
+#include "simulator/Simulator.h"
 #include <iostream>
 using namespace std;
 
