@@ -14,6 +14,7 @@
 #ifndef _WIN32
 
 #include <GL/glx.h>    /* this includes the necessary X headers */
+#include <GL/gl.h>
 
 #include <X11/X.h>    /* X11 constant (e.g. TrueColor) */
 #include <X11/keysym.h>
@@ -31,10 +32,11 @@ class EngineCore : protected EngineCoreBase
 protected:
 
     int init();
-
     virtual ~EngineCore(){};
 
-    void run();
+    float getDeltaTime();
+    void checkEvents();
+    void swapBuffers();
 
 private:
     int prevMouseX;
@@ -43,22 +45,17 @@ private:
     timeval startTime;
     timeval lastTime;
 
-    bool updateRatio;
-
     Display   *dpy;
     Window     win;
     GLboolean  doubleBuffer;
 
     long eventMask;
 
-    void initLight();
-
-public:
-    static int width;
-    static int height;
-
     static int argc;
     static char **argv;
+
+public:
+    static void SetCmdArgs(int argC, char **argV);
 };
 
 #endif // _WIN32

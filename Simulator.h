@@ -15,14 +15,9 @@
 #include <cmath>
 #include <algorithm>
 
-#define M_PI 3.14159
-
 #include "EngineCore.h"
 #include "Graphics.h"
 #include "ObjectsLoader.h"
-
-
-//#define CAMERA_VELOCITY     3
 
 class GameObject;
 

@@ -5,7 +5,7 @@ CPPFLAGS= -std=c++11 -g
 LDFLAGS=
 LDLIBS= -lm -lGL -lX11
 
-SRCS=main.cpp EngineCore.cpp GameObject.cpp Graphics.cpp Simulator.cpp Street.cpp Vehicle.cpp
+SRCS=main.cpp EngineCoreBase.cpp EngineCoreWindows.cpp EngineCoreLinux.cpp ObjectsLoader.cpp Vec3.cpp GameObject.cpp Graphics.cpp Simulator.cpp Street.cpp Vehicle.cpp 
 OBJS=$(subst .cpp,.o,$(SRCS))
 
 all: wielo
@@ -18,19 +18,18 @@ wielo: $(OBJS)
 
 main.o: main.cpp
 
-EngineCore.o: EngineCoreBase.cpp
-
-EngineCore.o: EngineCore.cpp
-
+EngineCoreBase.o: EngineCoreBase.cpp
+EngineCoreWindows: EngineCoreWindows.cpp
+EngineCoreLinux: EngineCoreLinux.cpp
+ObjectsLoader: ObjectsLoader.cpp
+Vec3: Vec3.cpp
 GameObject.o: GameObject.cpp
-
 Graphics.o: Graphics.cpp
-
 Simulator.o: Simulator.cpp
-
 Street.o: Street.cpp
-
 Vehicle.o: Vehicle.cpp
+
+
 
 clean:
 	$(RM) $(OBJS)

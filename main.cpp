@@ -17,15 +17,15 @@ int main(int argc, char** argv)
 {
     EngineCore::SetCmdArgs(argc, argv);
 
-    cout << "      Project for OOP subject at Warsaw University of Technology"<<endl;
-    cout << "      City traffic simulation"<<endl;
-    cout << "      Copyright (C) Robert Dudzinski 2018"<<endl;
-    cout << endl<<endl;
-    cout << "   Steering: "<<endl<<endl;
-    cout << " W,A,S,D - movement"<<endl;
-    cout << " Q, E    - vertical movement"<<endl;
-    cout << " dragging mouse cursor - rotating camera"<<endl;
-    cout << " ESC - exit"<<endl;
+    cout << "      Project for OOP subject at Warsaw University of Technology" << endl;
+    cout << "      City traffic simulation" << endl;
+    cout << "      Copyright (C) Robert Dudzinski 2018" << endl;
+    cout << endl << endl;
+    cout << "   Steering: " << endl << endl;
+    cout << " W,A,S,D - movement" << endl;
+    cout << " Q, E    - vertical movement" << endl;
+    cout << " dragging mouse cursor - rotating camera" << endl;
+    cout << " ESC - exit" << endl;
 
     try
     {

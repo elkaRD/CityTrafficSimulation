@@ -33,14 +33,12 @@ protected:
     const float MAX_DELTA;
 
     EngineCoreBase();
+    virtual ~EngineCoreBase(){};
 
     virtual int init() = 0;
-    static bool didInit;
 
     void initLight();
     void updateRatio();
-
-    virtual ~EngineCoreBase(){};
 
     void run();
 
@@ -54,14 +52,15 @@ protected:
     virtual void redraw() = 0;
     virtual void mouseMove(const int dx, const int dy) = 0;
 
-    void updateWindowRatio();
-    void performFrame(const float realUnscaledDelta);
-
     int width;
     int height;
 
 private:
     bool goingToUpdateRatio;
+
+    void updateWindowRatio();
+    void performFrame(const float realUnscaledDelta);
+    void drawFrame();
 };
 
 #endif // ENGINECORE_H

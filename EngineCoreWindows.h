@@ -52,7 +52,6 @@ private:
     static EngineCore *instance;
 
 public:
-
     static void SetCmdArgs(int argC, char **argV) {};
 };
 
