@@ -14,9 +14,11 @@
 
 #include <fstream>
 #include <vector>
+#include <algorithm>
 
 #include "GameObject.h"
-#include "Street.h"
+#include "Road.h"
+#include "Garage.h"
 #include "Vehicle.h"
 
 class ObjectsLoader

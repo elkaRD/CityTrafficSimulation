@@ -13,7 +13,7 @@
 #define VEHICLE_H
 
 #include "GameObject.h"
-#include "Street.h"
+#include "Road.h"
 
 class Driveable;
 class Cross;

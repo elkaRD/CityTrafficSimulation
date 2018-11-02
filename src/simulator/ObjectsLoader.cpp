@@ -36,13 +36,14 @@ void ObjectsLoader::loadRoad(const string fileName)
 
                 ss >> type;
                 if (ss.fail()) throw 0;
+                transform(type.begin(), type.end(), type.begin(), [] (unsigned char c) -> unsigned char {return toupper(c);});
 
                 ss >> id;
                 if (ss.fail()) throw "failed to read object ID";
 
                 if (findObjectByName(id) != nullptr) throw "object with ID " + id + " already exists";
 
-                if (type.compare("CR") == 0 || type.compare("CROSS") == 0)
+                if (type.compare("CR") == 0 || type.compare("CROSS") == 0 || type.compare("IN") == 0 || type.compare("INTERSECTION") == 0)
                 {
                     float x1,y1,z1;
 
@@ -117,10 +118,10 @@ void ObjectsLoader::loadRoad(const string fileName)
 
                     Garage *temp = nullptr;
 
-                         if (vehType.compare("C") == 0) temp = new GarageCar(v, cross);
-                    else if (vehType.compare("B") == 0) temp = new GarageBus(v, cross);
+                         if (vehType.compare("C") == 0 || vehType.compare("CAR") == 0) temp = new GarageCar(v, cross);
+                    else if (vehType.compare("B") == 0 || vehType.compare("BUS") == 0) temp = new GarageBus(v, cross);
 
-                    if (temp == nullptr) throw "failed to create vehicle " + id + " of type " + vehType;
+                    if (temp == nullptr) throw "failed to create garage " + id + " of vehicle type " + vehType;
 
                     temp->id = id;
                     temp->maxVehicles = maxVehicles;
