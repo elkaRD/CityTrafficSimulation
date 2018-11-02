@@ -104,6 +104,8 @@ void ObjectsLoader::loadRoad(const string fileName)
                     ss >> vehType >> jointCross >> x >> y >> z >> spotFrec >> maxVehicles;
                     if (ss.fail()) throw "failed to load info about garage " + id;
 
+                    transform(vehType.begin(), vehType.end(), vehType.begin(), [] (unsigned char c) -> unsigned char {return toupper(c);});
+
                     Vec3 v(x,y,z);
                     Cross *cross = nullptr;
                     for(unsigned int i=0;i<crosses.size();i++)
@@ -130,7 +132,7 @@ void ObjectsLoader::loadRoad(const string fileName)
                     LoadedNewObject(temp);
                     LoadedNewFactory(temp);
                 }
-                else if (type.compare("CL") == 0 || type.compare("CROSSLIGHTS") == 0)
+                else if (type.compare("CL") == 0 || type.compare("CROSSLIGHTS") == 0 || type.compare("IL") == 0 || type.compare("INTERSECTIONLIGHTS") == 0)
                 {
                     float x1,y1,z1;
                     ss >> x1 >> y1 >> z1;
@@ -166,7 +168,7 @@ void ObjectsLoader::loadRoad(const string fileName)
     file.close();
 }
 
-void ObjectsLoader::loadPriority(const string fileName)
+void ObjectsLoader::loadRightOfWay(const string fileName)
 {
     fstream file;
     file.open(fileName.c_str(), ios::app | ios::in);

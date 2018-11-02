@@ -199,7 +199,7 @@ void Cross::updateCross(const float delta)
 
     if (allowedVeh == 0 || streets.size() <= 2)
     {
-        tryPassVehiclesWithPriority();
+        tryPassVehiclesWithRightOfWay();
 
         if (allowedVeh == 0)
         {
@@ -208,7 +208,7 @@ void Cross::updateCross(const float delta)
     }
 }
 
-void Cross::tryPassVehiclesWithPriority()
+void Cross::tryPassVehiclesWithRightOfWay()
 {
     vector<int> indexesToPass;
 
@@ -232,11 +232,12 @@ void Cross::tryPassVehiclesWithPriority()
             if (streets[i].vehicles[0]->getDstToCross() > 1.2) continue;
 
             int which = streets[i].vehicles[0]->desiredTurn;
+            vector<int> yielding = streets[i].yield[which];
             bool isOK = true;
 
-            for (unsigned int j=0;j<streets[i].yield[which].size();j++)
+            for (unsigned int j = 0; j < yielding.size(); j++)
             {
-                if (streets[streets[i].yield[which][j]].vehicles.size() > 0 && !dontCheckStreet(streets[i].yield[which][j]))
+                if (streets[yielding[j]].vehicles.size() > 0 && !dontCheckStreet(yielding[j]))
                 {
                     isOK = false;
                     break;

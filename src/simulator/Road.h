@@ -107,7 +107,7 @@ protected:
     virtual void updateCross(const float delta);
     virtual bool dontCheckStreet(const int which);
 
-    virtual void tryPassVehiclesWithPriority();
+    virtual void tryPassVehiclesWithRightOfWay();
     virtual void tryPassAnyVehicle();
 
     void draw();

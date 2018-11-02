@@ -25,7 +25,7 @@ class ObjectsLoader
 {
 public:
     void loadRoad(const std::string fileName);
-    void loadPriority(const std::string fileName);
+    void loadRightOfWay(const std::string fileName);
 
 protected:
     virtual GameObject* findObjectByName(const std::string on) const = 0;
