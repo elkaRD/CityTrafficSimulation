@@ -90,7 +90,7 @@ int EngineCore::init()
     win = XCreateWindow(dpy, RootWindow(dpy, vi->screen), 0, 0,
                           width, height, 0, vi->depth, InputOutput, vi->visual,
                           CWBorderPixel | CWColormap | CWEventMask, &swa);
-    XSetStandardProperties(dpy, win, "main", "main", None, argv, argc, NULL);
+    XSetStandardProperties(dpy, win, "City traffic simulation", "main", None, argv, argc, NULL);
 
     /*** (6) bind the rendering context to the window ***/
 

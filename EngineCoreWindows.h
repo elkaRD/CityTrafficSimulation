@@ -6,7 +6,7 @@
 ///
 ///   Copyright (C) Robert Dudzinski 2018
 ///
-///   File: EngineCoreWindowes.h
+///   File: EngineCoreWindows.h
 
 #ifndef ENGINECOREWINDOWS_H
 #define ENGINECOREWINDOWS_H
@@ -40,6 +40,7 @@ private:
     int prevMouseY;
 
     HDC hDC;
+    HWND hwnd;
 
     void enableOpenGL(HWND hwnd, HDC*, HGLRC*);
     void disableOpenGL(HWND, HDC, HGLRC);

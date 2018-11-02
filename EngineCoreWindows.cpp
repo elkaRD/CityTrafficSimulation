@@ -23,13 +23,9 @@ int EngineCore::init()
 
     instance = this;
 
-    width = 1280;
-    height = 720;
-
     HINSTANCE hInstance = GetModuleHandle(NULL);
 
     WNDCLASSEX wcex;
-    HWND hwnd;
 
     HGLRC hRC;
 
@@ -114,8 +110,11 @@ float EngineCore::getDeltaTime()
 
 void EngineCore::checkEvents()
 {
-    checkKeyboard();
-    checkMouse();
+    if (GetActiveWindow() == hwnd)
+    {
+        checkKeyboard();
+        checkMouse();
+    }
 
     MSG msg;
 
@@ -142,21 +141,23 @@ LRESULT CALLBACK EngineCore::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
     {
         case WM_CLOSE:
             PostQuitMessage(0);
-        break;
+            break;
 
         case WM_DESTROY:
             return 0;
 
-        break;
-
         case WM_SIZE:
-        {
             instance->width = (int)LOWORD(lParam);
             instance->height = (int)HIWORD(lParam);
             instance->updateRatio();
-
             break;
-        }
+
+        case WM_SETFOCUS:
+            POINT cursorPos;
+            GetCursorPos(&cursorPos);
+            instance->prevMouseX = cursorPos.x;
+            instance->prevMouseY = cursorPos.y;
+            break;
 
         default:
             return DefWindowProc(hwnd, uMsg, wParam, lParam);

@@ -15,7 +15,7 @@ EngineCoreBase::EngineCoreBase() :  MIN_TIME_SCALE(0.25),       MAX_TIME_SCALE(1
                                     MIN_DELTA(0.007),           MAX_DELTA(0.15)
 {
     timeScale = 2.0;
-    updatesPerFrame = 10;
+    updatesPerFrame = 5;
     goingToUpdateRatio = true;
 
     width = 1280;
