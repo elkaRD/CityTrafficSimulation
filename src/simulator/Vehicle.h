@@ -14,6 +14,7 @@
 
 #include "GameObject.h"
 #include "Road.h"
+#include "EngineCore/Colors.h"
 
 class Driveable;
 class Cross;
@@ -28,7 +29,7 @@ public:
     float getDstToCross() const;
     static int getNumberId();
 
-    void initRandValues();
+    virtual void initRandValues();
     struct Adjustable
     {
         float maxV;
@@ -75,6 +76,9 @@ protected:
 
         friend Vehicle;
     } blinker;
+
+    Vec3 color;
+    static const Vec3 blinkerColor;
 
 private:
     void initPointers(Driveable *spawnRoad);

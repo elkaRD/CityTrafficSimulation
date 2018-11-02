@@ -32,7 +32,7 @@ int main(int argc, char** argv)
         Simulator *simulator = &Simulator::getInstance();
 
         simulator->loadRoad("exampleRoad.txt");
-        simulator->loadPriority("exampleRightOfWay.txt");
+        simulator->loadRightOfWay("exampleRightOfWay.txt");
         simulator->run();
     }
     catch (string e)

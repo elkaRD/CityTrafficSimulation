@@ -292,15 +292,8 @@ void Cross::setDefaultPriority(Driveable *s0, Driveable *s1, Driveable *s2, Driv
 
     if (streets.size() == 2)
     {
-        vector<int> yield;
-        vector<vector<int> > finalVec;
-        finalVec.push_back(yield);
-        finalVec.push_back(yield);
 
-        streets[0].yield = finalVec;
-        streets[1].yield = finalVec;
     }
-
     else if (streets.size() == 3)
     {
         vector<int> yield0;
@@ -340,10 +333,10 @@ void Cross::setDefaultPriority(Driveable *s0, Driveable *s1, Driveable *s2, Driv
     {
         vector<int> yield[4];
 
-        yield[0].push_back(1);
-        yield[0].push_back(2);
-
+        //yield[0].push_back(1);
+        //yield[0].push_back(2);
         //yield[1].push_back(1);
+
         yield[2].push_back(1);
 
         yield[3].push_back(1);
@@ -351,24 +344,32 @@ void Cross::setDefaultPriority(Driveable *s0, Driveable *s1, Driveable *s2, Driv
 
         vector<vector<int> > finalVec;
 
-        for (int i=0;i<4;i++)
-        {
-            if (streets[i].street == s0) finalVec.push_back(yield[0]);
-            if (streets[i].street == s1) finalVec.push_back(yield[1]);
-            if (streets[i].street == s2) finalVec.push_back(yield[2]);
-            if (streets[i].street == s3) finalVec.push_back(yield[3]);
-        }
+        finalVec.push_back(yield[0]);
+        finalVec.push_back(yield[1]);
+        finalVec.push_back(yield[2]);
+        finalVec.push_back(yield[3]);
 
-        for (int i=0;i<4;i++)
+        vector<OneStreet> tempVector = streets;
+
+        for (int i = 0; i < 4; i++)
+        {
+            if (streets[i].street == s0) tempVector[0] = streets[i];
+            if (streets[i].street == s1) tempVector[1] = streets[i];
+            if (streets[i].street == s2) tempVector[2] = streets[i];
+            if (streets[i].street == s3) tempVector[3] = streets[i];
+        }
+        streets = tempVector;
+
+        for (int i = 0; i < 4; i++)
         {
             streets[i].yield = finalVec;
 
-            for(int j=0;j<4;j++)
+            rotate(streets[i].yield.begin(), streets[i].yield.begin() + (-i + 4)%4 , streets[i].yield.end());
+            for(int j = 0; j < 4; j++)
+            for(unsigned int k = 0; k < streets[i].yield[j].size(); k++)
             {
-                for(unsigned int k=0;k<finalVec[j].size();k++)
-                {
-                    finalVec[j][k] = (finalVec[j][k]+1) % 4;
-                }
+                streets[i].yield[j][k]+= i;
+                streets[i].yield[j][k]%=4;
             }
         }
     }

@@ -15,6 +15,7 @@
 #include "GameObject.h"
 #include "Vehicle.h"
 #include <sstream>
+#include <algorithm>
 
 class Cross;
 class Vehicle;

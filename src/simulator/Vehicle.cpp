@@ -14,6 +14,8 @@
 
 class Driveable;
 
+const Vec3 Vehicle::blinkerColor = Vec3(1, 0.647, 0);
+
 Vehicle::Vehicle(Driveable *spawnRoad)
 {
     initRandValues();
@@ -33,6 +35,8 @@ Vehicle::Vehicle(Driveable *spawnRoad)
     initPointers(spawnRoad);
 
     rot = Vec3(0, curRoad->getDirection().angleXZ(), 0);
+
+    color = Colors::getRandomColor();
 }
 
 void Vehicle::initRandValues()
@@ -42,7 +46,7 @@ void Vehicle::initRandValues()
     specs.cornerVelocity = 1;
     specs.stopTime = randFloat(0.5, 0.8);
     specs.acceleration = randFloat(0.1,0.2);
-    specs.remainDst = randFloat(0.05, 0.08);
+    specs.remainDst = randFloat(0.06, 0.08);
 }
 
 void Vehicle::Blinker::init()
@@ -89,7 +93,7 @@ void Vehicle::update(const float delta)
         checkVelocity(delta, prevVelocity);
         setNewPos();
 
-        if (curRoad->getLength() - xPos < 1.5 && curCross == nullptr)
+        if (curRoad->getLength() - xPos < 2.4 && curCross == nullptr)
         {
             registerToCross();
         }
@@ -476,7 +480,7 @@ void Car::draw()
     {
         pushMatrix();
         translate(0,0.05,-0.038);
-        setColor(1,0.647,0);
+        setColor(blinkerColor);
         drawCube(0.22,0.02,0.01);
         popMatrix();
     }
@@ -484,7 +488,7 @@ void Car::draw()
     {
         pushMatrix();
         translate(0,0.05,0.038);
-        setColor(1,0.647,0);
+        setColor(blinkerColor);
         drawCube(0.22,0.02,0.01);
         popMatrix();
     }
@@ -508,7 +512,11 @@ void Car::draw()
         drawCube(0.12,0.01,0.01);
         popMatrix();
     }
-    setColor(0,1,0);
+    setColor(color);
+
+    //todo debug remove
+    //if (curCross != nullptr) setColor(0,0,1);
+    //if (allowedToCross) setColor(1,0,0);
 
     pushMatrix();
     translate(0,0.05,0);
@@ -552,7 +560,9 @@ Bus::Bus(Driveable *spawnRoad) : Vehicle(spawnRoad)
     velocity = randFloat(2,5);
 
     specs.vehicleLength = 0.65;
-    specs.remainDst += 0.07;
+    specs.remainDst = randFloat(0.14, 0.15);
+
+    color = Vec3(0.7, 0.7, 0);
 }
 
 void Bus::update(const float delta)
@@ -578,11 +588,10 @@ void Bus::draw()
 {
     pushMatrix();
 
-    translate(0,0.09,0);
+    translate(0,0.07,0);
 
-    setColor(0.7,0.7,0);
+    setColor(color);
     pushMatrix();
-
     rotateY(-busAngle / 1.3);
     translate(-0.2,0,0);
     drawCube(0.3,0.13,0.135);
@@ -591,7 +600,7 @@ void Bus::draw()
     drawCube(0.25,0.07,0.14);
     popMatrix();
 
-    setColor(0.7,0.7,0);
+    setColor(color);
     pushMatrix();
 
     rotateY(busAngle / 4);
@@ -608,13 +617,13 @@ void Bus::draw()
     pushMatrix();
     if (blinker.which < 0 && blinker.isLighting)
     {
-        setColor(1,0.647,0);
+        setColor(blinkerColor);
         translate(0, -0.031,-0.046);
         drawCube(0.73,0.01,0.01);
     }
     if (blinker.which > 0 && blinker.isLighting)
     {
-        setColor(1,0.647,0);
+        setColor(blinkerColor);
         translate(0, -0.031,0.046);
         drawCube(0.73,0.01,0.01);
     }
