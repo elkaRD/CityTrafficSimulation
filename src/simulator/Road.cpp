@@ -187,7 +187,7 @@ bool Cross::checkSet()
     }
     else
     {
-        throw "failed to set default right of way at intersection " + id;
+        throw ExceptionClass("failed to set default right of way at intersection " + id);
     }
 
     return !isSet;
@@ -375,7 +375,7 @@ void Cross::setDefaultPriority(Driveable *s0, Driveable *s1, Driveable *s2, Driv
     }
     else
     {
-        throw "incorrect number of streets at intersection " + id;
+        throw ExceptionClass("incorrect number of streets at intersection " + id);
     }
 }
 
@@ -431,7 +431,7 @@ void CrossLights::setDefaultLights(Driveable *s0, Driveable *s1, Driveable *s2, 
     }
     else
     {
-        throw "incorrect number of streets at intersection " + id;
+        throw ExceptionClass("incorrect number of streets at intersection " + id);
     }
 }
 

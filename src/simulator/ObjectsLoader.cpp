@@ -29,7 +29,7 @@ void ObjectsLoader::loadRoad(const string fileName)
                 stringstream ss;
                 ss << data;
 
-                if (ss.fail()) throw "failed to read line of text";
+                if (ss.fail()) throw ExceptionClass("failed to read line of text");
 
                 string type;
                 string id;
@@ -39,16 +39,16 @@ void ObjectsLoader::loadRoad(const string fileName)
                 transform(type.begin(), type.end(), type.begin(), [] (unsigned char c) -> unsigned char {return toupper(c);});
 
                 ss >> id;
-                if (ss.fail()) throw "failed to read object ID";
+                if (ss.fail()) throw ExceptionClass("failed to read object ID");
 
-                if (findObjectByName(id) != nullptr) throw "object with ID " + id + " already exists";
+                if (findObjectByName(id) != nullptr) throw ExceptionClass("object with ID " + id + " already exists");
 
                 if (type.compare("CR") == 0 || type.compare("CROSS") == 0 || type.compare("IN") == 0 || type.compare("INTERSECTION") == 0)
                 {
                     float x1,y1,z1;
 
                     ss >> x1 >> y1 >> z1;
-                    if (ss.fail()) throw "failed to load position of intersection " + id;
+                    if (ss.fail()) throw ExceptionClass("failed to load position of intersection " + id);
 
                     Vec3 v1(x1,y1,z1);
 
@@ -64,7 +64,7 @@ void ObjectsLoader::loadRoad(const string fileName)
                     string begCrossID;
                     string endCrossID;
                     ss >> begCrossID >> endCrossID;
-                    if (ss.fail()) throw "failed to load info about street " + id;
+                    if (ss.fail()) throw ExceptionClass("failed to load info about street " + id);
                     Cross *crossB = nullptr;
                     Cross *crossE = nullptr;
 
@@ -76,7 +76,7 @@ void ObjectsLoader::loadRoad(const string fileName)
                             break;
                         }
                     }
-                    if (crossB == nullptr) throw "could not find intersection " + begCrossID + " for street " + id;
+                    if (crossB == nullptr) throw ExceptionClass("could not find intersection " + begCrossID + " for street " + id);
 
                     for (unsigned int i=0;i<crosses.size();i++)
                     {
@@ -86,7 +86,7 @@ void ObjectsLoader::loadRoad(const string fileName)
                             break;
                         }
                     }
-                    if (crossE == nullptr) throw "could not find intersection " + begCrossID + " for street " + id;
+                    if (crossE == nullptr) throw ExceptionClass("could not find intersection " + begCrossID + " for street " + id);
 
                     GameObject *temp;
                     temp = new Street(crossB, crossE);
@@ -102,7 +102,7 @@ void ObjectsLoader::loadRoad(const string fileName)
                     float spotFrec;
                     int maxVehicles;
                     ss >> vehType >> jointCross >> x >> y >> z >> spotFrec >> maxVehicles;
-                    if (ss.fail()) throw "failed to load info about garage " + id;
+                    if (ss.fail()) throw ExceptionClass("failed to load info about garage " + id);
 
                     transform(vehType.begin(), vehType.end(), vehType.begin(), [] (unsigned char c) -> unsigned char {return toupper(c);});
 
@@ -116,14 +116,14 @@ void ObjectsLoader::loadRoad(const string fileName)
                             break;
                         }
                     }
-                    if (cross == nullptr) throw "could not find intersection " + jointCross + " for garage " + id;
+                    if (cross == nullptr) throw ExceptionClass("could not find intersection " + jointCross + " for garage " + id);
 
                     Garage *temp = nullptr;
 
                          if (vehType.compare("C") == 0 || vehType.compare("CAR") == 0) temp = new GarageCar(v, cross);
                     else if (vehType.compare("B") == 0 || vehType.compare("BUS") == 0) temp = new GarageBus(v, cross);
 
-                    if (temp == nullptr) throw "failed to create garage " + id + " of vehicle type " + vehType;
+                    if (temp == nullptr) throw ExceptionClass("failed to create garage " + id + " of vehicle type " + vehType);
 
                     temp->id = id;
                     temp->maxVehicles = maxVehicles;
@@ -136,7 +136,7 @@ void ObjectsLoader::loadRoad(const string fileName)
                 {
                     float x1,y1,z1;
                     ss >> x1 >> y1 >> z1;
-                    if (ss.fail()) throw "failed to load info about intersection with lights " + id;
+                    if (ss.fail()) throw ExceptionClass("failed to load info about intersection with lights " + id);
                     Vec3 v1(x1,y1,z1);
 
                     Cross *temp;
@@ -148,16 +148,16 @@ void ObjectsLoader::loadRoad(const string fileName)
                 }
                 else
                 {
-                    throw "could not find type " + type;
+                    throw ExceptionClass("could not find type " + type);
                 }
             }
-            catch (string e)
+            catch (ExceptionClass e)
             {
-                cout << "ERROR while loading object: " << e <<endl;
+                cout << "ERROR while loading object: " << e.what() <<endl;
             }
             catch (int e)
             {
-
+                //empty line in the file; it's ok
             }
         }
     }
@@ -221,13 +221,13 @@ void ObjectsLoader::loadRightOfWay(const string fileName)
             }
             catch (string e)
             {
-                cout << "ERROR while loading file containing right of way: " << e << endl;
+                cout << "ERROR while loading right of way: " << e << endl;
             }
         }
     }
     else
     {
-        throw "failed to open file containing right of way";
+        throw ExceptionClass("failed to open file containing right of way");
     }
     file.close();
 }

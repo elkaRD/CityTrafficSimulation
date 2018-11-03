@@ -24,7 +24,10 @@ int main(int argc, char** argv)
     cout << "   Steering: " << endl << endl;
     cout << " W,A,S,D - movement" << endl;
     cout << " Q, E    - vertical movement" << endl;
+    cout << " LEFT SHIFT while moving - faster movement" << endl;
+    cout << endl;
     cout << " dragging mouse cursor - rotating camera" << endl;
+    cout << endl;
     cout << " ESC - exit" << endl;
 
     try
@@ -35,9 +38,9 @@ int main(int argc, char** argv)
         simulator->loadRightOfWay("exampleRightOfWay.txt");
         simulator->run();
     }
-    catch (string e)
+    catch (exception e)
     {
-        cout << "ERROR: " << e;
+        cout << "ERROR: " << e.what();
     }
 
     return 0;

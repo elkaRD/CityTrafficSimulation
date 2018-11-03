@@ -559,7 +559,7 @@ Bus::Bus(Driveable *spawnRoad) : Vehicle(spawnRoad)
     specs.maxV = randFloat(0.8, 1.1);
     velocity = randFloat(2,5);
 
-    specs.vehicleLength = 0.65;
+    specs.vehicleLength = 0.66;
     specs.remainDst = randFloat(0.14, 0.15);
 
     color = Vec3(0.7, 0.7, 0);

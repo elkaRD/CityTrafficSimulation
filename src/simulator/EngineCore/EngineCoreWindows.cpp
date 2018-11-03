@@ -91,7 +91,7 @@ void EngineCore::checkMouse()
     POINT cursorPos;
     GetCursorPos(&cursorPos);
 
-    if((GetKeyState(VK_LBUTTON) & 0x100) != 0)
+    if((GetKeyState(VK_LBUTTON) & 0x100) != 0 || (GetKeyState(VK_RBUTTON) & 0x100) != 0)
         mouseMove((cursorPos.x - prevMouseX) / 2.0, (cursorPos.y - prevMouseY) / 2.0);
 
     prevMouseX = cursorPos.x;
@@ -140,7 +140,7 @@ LRESULT CALLBACK EngineCore::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
     switch (uMsg)
     {
         case WM_CLOSE:
-            PostQuitMessage(0);
+            instance->keyPressed(27);
             break;
 
         case WM_DESTROY:

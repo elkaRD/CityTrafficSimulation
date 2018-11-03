@@ -12,6 +12,7 @@
 #ifndef ROAD_H
 #define ROAD_H
 
+#include "EngineCore/ExceptionClass.h"
 #include "GameObject.h"
 #include "Vehicle.h"
 #include <sstream>

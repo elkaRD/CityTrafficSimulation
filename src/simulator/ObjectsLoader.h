@@ -16,6 +16,7 @@
 #include <vector>
 #include <algorithm>
 
+#include "EngineCore/ExceptionClass.h"
 #include "GameObject.h"
 #include "Road.h"
 #include "Garage.h"

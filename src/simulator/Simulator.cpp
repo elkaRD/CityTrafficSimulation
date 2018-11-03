@@ -48,8 +48,8 @@ Simulator::Simulator() : CAMERA_VELOCITY(3)
 {
     init();
 
-    cameraPos = Vec3(12.3, 2.4, 16.3);
-    cameraRot = Vec3(-36.2, 9.8, 0);
+    cameraPos = Vec3(-5.5, 2.5, -7.84);
+    cameraRot = Vec3(-215, 13.2, 0);
 
     cameraDirection = 0;
 }
