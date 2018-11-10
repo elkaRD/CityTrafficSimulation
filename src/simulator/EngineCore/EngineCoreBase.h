@@ -41,12 +41,15 @@ protected:
 
     void initLight();
     void updateRatio();
+    void breakMainLoop();
 
     void run();
 
     virtual float getDeltaTime() = 0;
     virtual void checkEvents() = 0;
     virtual void swapBuffers() = 0;
+    virtual void showWindow() = 0;
+    virtual void hideWindow() = 0;
 
     virtual void keyHeld(char k) = 0;
     virtual void keyPressed(char k) = 0;
@@ -60,6 +63,7 @@ protected:
 
 private:
     bool goingToUpdateRatio;
+    bool goingToBreakMainLoop;
 
     void updateWindowRatio();
     void performFrame(const float realUnscaledDelta);

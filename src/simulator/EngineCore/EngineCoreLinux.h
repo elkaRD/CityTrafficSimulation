@@ -36,6 +36,9 @@ protected:
     void swapBuffers();
 
 private:
+    void showWindow();
+    void hideWindow();
+
     int prevMouseX;
     int prevMouseY;
 
@@ -47,6 +50,7 @@ private:
     GLboolean  doubleBuffer;
 
     long eventMask;
+    bool heldKeys[256];
 
     static int argc;
     static char **argv;

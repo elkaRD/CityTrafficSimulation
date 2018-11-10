@@ -62,8 +62,6 @@ int EngineCore::init()
     if (hwnd == NULL)
         throw ExceptionClass("Cannot create a window");
 
-    ShowWindow(hwnd, SW_SHOWDEFAULT);
-
     /* enable OpenGL for the window */
     enableOpenGL(hwnd, &hDC, &hRC);
 
@@ -208,6 +206,16 @@ void EngineCore::disableOpenGL (HWND hwnd, HDC hDC, HGLRC hRC)
     wglMakeCurrent(NULL, NULL);
     wglDeleteContext(hRC);
     ReleaseDC(hwnd, hDC);
+}
+
+void EngineCore::showWindow()
+{
+    ShowWindow(hwnd, SW_SHOWDEFAULT);
+}
+
+void EngineCore::hideWindow()
+{
+    ShowWindow(hwnd, SW_HIDE);
 }
 
 #endif // _WIN32

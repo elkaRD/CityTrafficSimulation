@@ -14,7 +14,7 @@ EngineCoreBase::EngineCoreBase() :  MIN_TIME_SCALE(0.25),       MAX_TIME_SCALE(1
                                     MIN_UPDATES_PER_FRAME(1),   MAX_UPDATES_PER_FRAME(1000),
                                     MIN_DELTA(0.007),           MAX_DELTA(0.15)
 {
-    timeScale = 2.0;
+    timeScale = 1.2;
     updatesPerFrame = 2;
     goingToUpdateRatio = true;
 
@@ -22,18 +22,19 @@ EngineCoreBase::EngineCoreBase() :  MIN_TIME_SCALE(0.25),       MAX_TIME_SCALE(1
     height = 720;
 }
 
-void EngineCoreBase::updateRatio()
-{
-    goingToUpdateRatio = true;
-}
-
 void EngineCoreBase::run()
 {
+    showWindow();
+    goingToBreakMainLoop = false;
+
     while (true)
     {
         checkEvents();
+        if (goingToBreakMainLoop) break;
+
         performFrame(getDeltaTime());
     }
+    hideWindow();
 }
 
 void EngineCoreBase::performFrame(const float realUnscaledDelta)
@@ -108,4 +109,14 @@ void EngineCoreBase::initLight()
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   mdiffuse);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  mspecular);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+}
+
+void EngineCoreBase::updateRatio()
+{
+    goingToUpdateRatio = true;
+}
+
+void EngineCoreBase::breakMainLoop()
+{
+    goingToBreakMainLoop = true;
 }

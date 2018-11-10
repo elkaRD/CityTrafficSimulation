@@ -15,11 +15,6 @@
 #include "EngineCoreLinux.h"
 using namespace std;
 
-void fatalError(string e)           //TODO: remove this function; create class for exceptions
-{
-    throw "ENGINE CORE ERROR: " + e;
-}
-
 int EngineCore::argc = 0;
 char **EngineCore::argv = NULL;
 
@@ -50,12 +45,12 @@ int EngineCore::init()
 
     dpy = XOpenDisplay(NULL);
     if (dpy == NULL)
-        fatalError("could not open display");
+        throw ExceptionClass("could not open display");
 
     /*** (2) make sure OpenGL's GLX extension supported ***/
 
     if(!glXQueryExtension(dpy, &dummy, &dummy))
-        fatalError("X server has no OpenGL GLX extension");
+        throw ExceptionClass("X server has no OpenGL GLX extension");
 
     /*** (3) find an appropriate visual ***/
 
@@ -64,11 +59,11 @@ int EngineCore::init()
     if (vi == NULL)
     {
         vi = glXChooseVisual(dpy, DefaultScreen(dpy), snglBuf);
-        if (vi == NULL) fatalError("no RGB visual with depth buffer");
+        if (vi == NULL) throw ExceptionClass("no RGB visual with depth buffer");
         doubleBuffer = GL_FALSE;
     }
     if(vi->c_class != TrueColor)
-        fatalError("TrueColor visual required for this program");
+        throw ExceptionClass("TrueColor visual required for this program");
 
     /*** (4) create an OpenGL rendering context  ***/
 
@@ -76,7 +71,7 @@ int EngineCore::init()
     cx = glXCreateContext(dpy, vi, /* no shared dlists */ None,
                             /* direct rendering if possible */ GL_TRUE);
     if (cx == NULL)
-        fatalError("could not create rendering context");
+        throw ExceptionClass("could not create rendering context");
 
     /*** (5) create an X window with the selected visual ***/
 
@@ -96,9 +91,7 @@ int EngineCore::init()
 
     glXMakeCurrent(dpy, win, cx);
 
-    /*** (7) request the X window to be displayed on the screen ***/
-
-    XMapWindow(dpy, win);
+    XAutoRepeatOff(dpy);
 
     /*** (8) configure the OpenGL context for rendering ***/
 
@@ -111,7 +104,20 @@ int EngineCore::init()
     gettimeofday(&startTime, 0);
     lastTime = startTime;
 
+    for (int i = 0; i < 256; i++)
+        heldKeys[i] = false;
+
     return 0;
+}
+
+void EngineCore::showWindow()
+{
+    XMapWindow(dpy, win);
+}
+
+void EngineCore::hideWindow()
+{
+    XUnmapWindow(dpy, win);
 }
 
 float EngineCore::getDeltaTime()
@@ -142,15 +148,23 @@ void EngineCore::checkEvents()
             {
                 KeySym     keysym;
                 char       buffer[4];
-
                 XLookupString((XKeyEvent *)&event, buffer, 4, &keysym, NULL);
+
                 keyPressed(buffer[0]);
+                heldKeys[(unsigned int)buffer[0]] = true;
 
                 break;
             }
 
             case KeyRelease:
             {
+                KeySym     keysym;
+                char       buffer[4];
+                XLookupString((XKeyEvent *)&event, buffer, 4, &keysym, NULL);
+
+                heldKeys[(unsigned int)buffer[0]] = false;
+                if (buffer[0] >= 'a' && buffer[0] <= 'z') heldKeys[(unsigned int)buffer[0] - 32] = false;
+                if (buffer[0] >= 'A' && buffer[0] <= 'Z') heldKeys[(unsigned int)buffer[0] + 32] = false;
                 break;
             }
 
@@ -189,6 +203,10 @@ void EngineCore::checkEvents()
                 break;
         }
     }
+
+    for (int i = 0; i < 256; i++)
+        if (heldKeys[i])
+            keyHeld(i);
 }
 
 void EngineCore::swapBuffers()

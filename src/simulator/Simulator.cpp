@@ -83,7 +83,8 @@ void Simulator::keyPressed(char k)
     if (k == 27)
     {
         cleanSimulation();
-        exit(0);
+        breakMainLoop();
+        return;
     }
 
     if (k >= 'A' && k <= 'Z') k += 32;
@@ -196,13 +197,10 @@ void Simulator::destroyObject(GameObject *go)
 
 void Simulator::cleanSimulation()
 {
-    int i = objects.size();
+    maxNumberOfObjects = 0;
 
-    while (i > 0)
-    {
-        destroyObject(*objects.begin());
-        i--;
-    }
+    while (objects.size() > 0)
+        destroyObject(objects.back());
 }
 
 GameObject* Simulator::findObjectByName(const string objectName) const

@@ -24,7 +24,6 @@ int main(int argc, char** argv)
     cout << "   Steering: " << endl << endl;
     cout << " W,A,S,D       - movement" << endl;
     cout << " Q, E          - vertical movement" << endl;
-    cout << " LEFT SHIFT    - faster movement" << endl;
     cout << endl;
     cout << " T, Y          - decrease/increase updates per frame" << endl;
     cout << " G, H          - decrease/increase time scale" << endl;

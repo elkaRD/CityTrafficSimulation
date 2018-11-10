@@ -32,6 +32,9 @@ protected:
     void swapBuffers();
 
 private:
+    void showWindow();
+    void hideWindow();
+
     clock_t prevTime;
 
     int prevMouseX;
