@@ -22,13 +22,16 @@ int main(int argc, char** argv)
     cout << "      Copyright (C) Robert Dudzinski 2018" << endl;
     cout << endl << endl;
     cout << "   Steering: " << endl << endl;
-    cout << " W,A,S,D - movement" << endl;
-    cout << " Q, E    - vertical movement" << endl;
-    cout << " LEFT SHIFT while moving - faster movement" << endl;
+    cout << " W,A,S,D       - movement" << endl;
+    cout << " Q, E          - vertical movement" << endl;
+    cout << " LEFT SHIFT    - faster movement" << endl;
     cout << endl;
-    cout << " dragging mouse cursor - rotating camera" << endl;
+    cout << " T, Y          - decrease/increase updates per frame" << endl;
+    cout << " G, H          - decrease/increase time scale" << endl;
     cout << endl;
-    cout << " ESC - exit" << endl;
+    cout << " dragging cursor - rotating camera" << endl;
+    cout << endl;
+    cout << " ESC           - exit" << endl;
 
     try
     {

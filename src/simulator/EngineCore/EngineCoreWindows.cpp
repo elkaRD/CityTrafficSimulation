@@ -13,7 +13,6 @@
 #ifdef _WIN32
 
 #include "EngineCoreWindows.h"
-using namespace std;
 
 EngineCore *EngineCore::instance = nullptr;
 
@@ -83,8 +82,8 @@ void EngineCore::checkKeyboard()
     {
         if (GetAsyncKeyState(i) != 0)
         {
-            if (i >= 'A' && i <= 'Z' && !isShiftPressed) keyPressed(i + 32);
-            else keyPressed(i);
+            if (i >= 'A' && i <= 'Z' && !isShiftPressed) keyHeld(i + 32);
+            else keyHeld(i);
         }
     }
 }
@@ -104,7 +103,7 @@ void EngineCore::checkMouse()
 float EngineCore::getDeltaTime()
 {
     clock_t newTime = clock();
-    float realDelta = clock() - newTime;
+    float realDelta = clock() - prevTime;
     realDelta /= CLOCKS_PER_SEC;
     prevTime = newTime;
 
@@ -144,6 +143,10 @@ LRESULT CALLBACK EngineCore::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
     {
         case WM_CLOSE:
             instance->keyPressed(27);
+            break;
+
+        case WM_KEYDOWN:
+            instance->keyPressed(wParam);
             break;
 
         case WM_DESTROY:

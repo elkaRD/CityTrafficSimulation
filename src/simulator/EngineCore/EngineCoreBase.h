@@ -48,6 +48,7 @@ protected:
     virtual void checkEvents() = 0;
     virtual void swapBuffers() = 0;
 
+    virtual void keyHeld(char k) = 0;
     virtual void keyPressed(char k) = 0;
     virtual void update(const float delta) = 0;
     virtual void singleUpdate(const float delta) = 0;

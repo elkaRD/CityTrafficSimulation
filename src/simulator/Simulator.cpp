@@ -55,14 +55,8 @@ Simulator::Simulator() : maxNumberOfObjects(0), CAMERA_VELOCITY(3)
     cameraDirection = 0;
 }
 
-void Simulator::keyPressed(char k)
+void Simulator::keyHeld(char k)
 {
-    if (k == 27)
-    {
-        cleanSimulation();
-        exit(0);
-    }
-
     if (k >= 'A' && k <= 'Z')
     {
         k += 32;
@@ -82,6 +76,28 @@ void Simulator::keyPressed(char k)
         case 'e': cameraDirection |= (1 << UP);         break;
         case 'q': cameraDirection |= (1 << DOWN);       break;
     }
+}
+
+void Simulator::keyPressed(char k)
+{
+    if (k == 27)
+    {
+        cleanSimulation();
+        exit(0);
+    }
+
+    if (k >= 'A' && k <= 'Z') k += 32;
+
+    switch (k)
+    {
+        case 'y': updatesPerFrame++;    break;
+        case 't': updatesPerFrame--;    break;
+        case 'h': timeScale += 0.1;     break;
+        case 'g': timeScale -= 0.1;     break;
+    }
+
+    updatesPerFrame = max(MIN_UPDATES_PER_FRAME, min(updatesPerFrame, MAX_UPDATES_PER_FRAME));
+    timeScale = max(MIN_TIME_SCALE, min(timeScale, MAX_TIME_SCALE));
 }
 
 void Simulator::cameraMove(const float delta)

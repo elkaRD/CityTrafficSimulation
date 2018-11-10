@@ -53,6 +53,7 @@ private:
     std::vector<GameObject*> objects;
     std::vector<Garage*> spots;
 
+    void keyHeld(char k);
     void keyPressed(char k);
     void update(const float delta);
     void singleUpdate(const float delta);
