@@ -37,6 +37,7 @@ Vehicle::Vehicle(Driveable *spawnRoad)
     rot = Vec3(0, curRoad->getDirection().angleXZ(), 0);
 
     color = Colors::getRandomColor();
+    color *= 0.70f;
 }
 
 void Vehicle::initRandValues()

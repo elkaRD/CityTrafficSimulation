@@ -44,7 +44,7 @@ int EngineCore::init()
     wcex.hIconSm = LoadIcon(NULL, IDI_APPLICATION);;
 
     if (!RegisterClassEx(&wcex))
-        return 0;
+        throw ExceptionClass("Cannot register window class");
 
     /* create main window */
     hwnd = CreateWindowEx(0,
@@ -59,6 +59,9 @@ int EngineCore::init()
                           NULL,
                           hInstance,
                           NULL);
+
+    if (hwnd == NULL)
+        throw ExceptionClass("Cannot create a window");
 
     ShowWindow(hwnd, SW_SHOWDEFAULT);
 

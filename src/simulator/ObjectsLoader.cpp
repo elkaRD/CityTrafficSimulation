@@ -35,7 +35,7 @@ void ObjectsLoader::loadRoad(const string fileName)
                 string id;
 
                 ss >> type;
-                if (ss.fail()) throw 0;
+                if (ss.fail()) throw EmptyLineException();
                 transform(type.begin(), type.end(), type.begin(), [] (unsigned char c) -> unsigned char {return toupper(c);});
 
                 ss >> id;
@@ -56,7 +56,7 @@ void ObjectsLoader::loadRoad(const string fileName)
                     temp = new Cross(v1);
                     temp->id = id;
 
-                    LoadedNewObject(temp);
+                    loadedNewObject(temp);
                     crosses.push_back(temp);
                 }
                 else if (type.compare("ST") == 0 || type.compare("STREET") == 0)
@@ -92,7 +92,7 @@ void ObjectsLoader::loadRoad(const string fileName)
                     temp = new Street(crossB, crossE);
                     temp->id = id;
 
-                    LoadedNewObject(temp);
+                    loadedNewObject(temp);
                 }
                 else if (type.compare("GA") == 0 || type.compare("GARAGE") == 0)
                 {
@@ -129,8 +129,8 @@ void ObjectsLoader::loadRoad(const string fileName)
                     temp->maxVehicles = maxVehicles;
                     temp->frecSpot = spotFrec;
 
-                    LoadedNewObject(temp);
-                    LoadedNewFactory(temp);
+                    loadedNewObject(temp);
+                    loadedNewFactory(temp);
                 }
                 else if (type.compare("CL") == 0 || type.compare("CROSSLIGHTS") == 0 || type.compare("IL") == 0 || type.compare("INTERSECTIONLIGHTS") == 0)
                 {
@@ -143,7 +143,7 @@ void ObjectsLoader::loadRoad(const string fileName)
                     temp = new CrossLights(v1);
                     temp->id = id;
 
-                    LoadedNewObject(temp);
+                    loadedNewObject(temp);
                     crosses.push_back(temp);
                 }
                 else
@@ -155,15 +155,15 @@ void ObjectsLoader::loadRoad(const string fileName)
             {
                 cout << "ERROR while loading object: " << e.what() <<endl;
             }
-            catch (int e)
+            catch (EmptyLineException e)
             {
-                //empty line in the file; it's ok
+
             }
         }
     }
     else
     {
-        throw "failed to open file with objects";
+        throw ExceptionClass("failed to open file with objects");
     }
     file.close();
 }
@@ -187,10 +187,10 @@ void ObjectsLoader::loadRightOfWay(const string fileName)
                 int number; //of streets in the cross
 
                 ss >> id;
-                if (ss.fail()) throw 0;
+                if (ss.fail()) throw EmptyLineException();
 
                 ss >> number;
-                if (ss.fail() || number > 4 || number < 2) throw "failed to read number of streets at intersection " + id;
+                if (ss.fail() || number > 4 || number < 2) throw ExceptionClass("failed to read number of streets at intersection " + id);
 
                 Driveable *ptrs[4];
 
@@ -198,30 +198,30 @@ void ObjectsLoader::loadRightOfWay(const string fileName)
                 {
                     string ids;
                     ss >> ids;
-                    if (ss.fail()) throw "failed to load streets at intersection " + id;
+                    if (ss.fail()) throw ExceptionClass("failed to load streets at intersection " + id);
 
                     ptrs[i] = dynamic_cast<Driveable*>(findObjectByName(ids));
-                    if (ptrs[i] == nullptr) throw "failed to get street " + ids + " at intersection " + id;
+                    if (ptrs[i] == nullptr) throw ExceptionClass("failed to get street " + ids + " at intersection " + id);
                 }
 
                 Cross *cross = dynamic_cast<Cross*>(findObjectByName(id));
                 if (cross != nullptr)
                 {
-                    if (number != (int)cross->streets.size()) throw "incorrect number of streets at intersection " + id;
+                    if (number != (int)cross->streets.size()) throw ExceptionClass("incorrect number of streets at intersection " + id);
                     cross->setDefaultPriority(ptrs[0], ptrs[1], ptrs[2], ptrs[3]);
                 }
                 else
                 {
-                    throw "failed to find intersection " + id;
+                    throw ExceptionClass("failed to find intersection " + id);
                 }
             }
-            catch (int e)
+            catch (ExceptionClass e)
+            {
+                cout << "ERROR while loading right of way: " << e.what() << endl;
+            }
+            catch (EmptyLineException e)
             {
 
-            }
-            catch (string e)
-            {
-                cout << "ERROR while loading right of way: " << e << endl;
             }
         }
     }

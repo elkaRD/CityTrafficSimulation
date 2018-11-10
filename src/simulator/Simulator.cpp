@@ -20,6 +20,7 @@ Simulator &Simulator::getInstance()
 
 void Simulator::run()
 {
+    objects.reserve(maxNumberOfObjects);
     EngineCore::run();
 }
 
@@ -44,7 +45,7 @@ void Simulator::redraw()
     popMatrix();
 }
 
-Simulator::Simulator() : CAMERA_VELOCITY(3)
+Simulator::Simulator() : maxNumberOfObjects(0), CAMERA_VELOCITY(3)
 {
     init();
 
@@ -196,12 +197,14 @@ GameObject* Simulator::findObjectByName(const string objectName) const
     return nullptr;
 }
 
-void Simulator::LoadedNewObject(GameObject *newGameObject)
+void Simulator::loadedNewObject(GameObject *newGameObject)
 {
     objects.push_back(newGameObject);
+    maxNumberOfObjects++;
 }
 
-void Simulator::LoadedNewFactory(Garage *newFactory)
+void Simulator::loadedNewFactory(Garage *newFactory)
 {
     spots.push_back(newFactory);
+    maxNumberOfObjects += newFactory->maxVehicles;
 }

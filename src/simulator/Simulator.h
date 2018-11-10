@@ -39,8 +39,8 @@ public:
 
 protected:
     GameObject* findObjectByName(const std::string objectName) const;
-    void LoadedNewObject(GameObject *newGameObject);
-    void LoadedNewFactory(Garage *newFactory);
+    void loadedNewObject(GameObject *newGameObject);
+    void loadedNewFactory(Garage *newFactory);
 
 private:
     Simulator();
@@ -68,6 +68,8 @@ private:
         UP,
         DOWN
     };
+
+    int maxNumberOfObjects;
 
     unsigned int cameraDirection;
     float cameraVelocity;

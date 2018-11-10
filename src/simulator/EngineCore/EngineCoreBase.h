@@ -17,6 +17,8 @@
 #include <vector>
 #include <string>
 
+#include "ExceptionClass.h"
+
 class EngineCoreBase
 {
 protected:

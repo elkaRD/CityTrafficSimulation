@@ -14,7 +14,7 @@ using namespace std;
 
 class Simulator;
 
-Vec3 Road::roadColor = Vec3(0.2, 0.2, 0.2);
+Vec3 Road::roadColor = Vec3(0.3, 0.3, 0.3);
 
 float Driveable::getLength() const
 {
@@ -350,7 +350,6 @@ void Cross::setDefaultPriority(Driveable *s0, Driveable *s1, Driveable *s2, Driv
         finalVec.push_back(yield[3]);
 
         vector<OneStreet> tempVector = streets;
-
         for (int i = 0; i < 4; i++)
         {
             if (streets[i].street == s0) tempVector[0] = streets[i];

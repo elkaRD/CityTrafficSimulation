@@ -30,8 +30,11 @@ public:
 
 protected:
     virtual GameObject* findObjectByName(const std::string on) const = 0;
-    virtual void LoadedNewObject(GameObject *newGameObject) = 0;
-    virtual void LoadedNewFactory(Garage *newIntersection) = 0;
+    virtual void loadedNewObject(GameObject *newGameObject) = 0;
+    virtual void loadedNewFactory(Garage *newIntersection) = 0;
+
+private:
+    enum EmptyLineException{};
 };
 
 #endif // OBJECTSLOADER_H

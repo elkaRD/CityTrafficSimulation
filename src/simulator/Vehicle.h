@@ -24,10 +24,9 @@ class Vehicle : public GameObject
 {
 public:
     Vehicle(Driveable *spawnRoad);
-    virtual ~Vehicle(){};
+
     float getXPos() const;
     float getDstToCross() const;
-    static int getNumberId();
 
     virtual void initRandValues();
     struct Adjustable
@@ -42,6 +41,8 @@ public:
     } specs;
 
 protected:
+    virtual ~Vehicle(){};
+
     float velocity;
     float xPos;
     bool isBraking;
@@ -51,7 +52,7 @@ protected:
     float getDst() const;
     bool isEnoughSpace() const;
 
-    struct CrossingState
+    struct
     {
         bool isChanging;
         bool didReachCross;
