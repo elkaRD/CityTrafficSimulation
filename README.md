@@ -79,7 +79,7 @@ Next parameters – names of streets (including garages) in counterclockwise order
 In case of any errors while reding a file or loading an object, the Objectsloader will throw an appropriate exception and will display a message in standard output.
 
 # Copyright
-Copyright © Robert Dudziñski 2018
+Copyright © Robert Dudzinski 2018
 
 ![screenshot2](screenshots/screenshot_2.png)
 
