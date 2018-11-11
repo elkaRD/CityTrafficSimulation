@@ -515,10 +515,6 @@ void Car::draw()
     }
     setColor(color);
 
-    //todo debug remove
-    //if (curCross != nullptr) setColor(0,0,1);
-    //if (allowedToCross) setColor(1,0,0);
-
     pushMatrix();
     translate(0,0.05,0);
     drawCube(0.2,0.05,0.1);

@@ -30,7 +30,7 @@ int main(int argc, char** argv)
     cout << endl;
     cout << " dragging cursor - rotating camera" << endl;
     cout << endl;
-    cout << " ESC           - exit" << endl;
+    cout << " ESC           - exit" << endl << endl << endl;
 
     try
     {

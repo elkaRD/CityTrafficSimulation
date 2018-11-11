@@ -92,7 +92,7 @@ void EngineCore::checkMouse()
     GetCursorPos(&cursorPos);
 
     if((GetKeyState(VK_LBUTTON) & 0x100) != 0 || (GetKeyState(VK_RBUTTON) & 0x100) != 0)
-        mouseMove((cursorPos.x - prevMouseX) / 2.0, (cursorPos.y - prevMouseY) / 2.0);
+        mouseMove((cursorPos.x - prevMouseX), (cursorPos.y - prevMouseY));
 
     prevMouseX = cursorPos.x;
     prevMouseY = cursorPos.y;
@@ -101,7 +101,7 @@ void EngineCore::checkMouse()
 float EngineCore::getDeltaTime()
 {
     clock_t newTime = clock();
-    float realDelta = clock() - prevTime;
+    float realDelta = newTime - prevTime;
     realDelta /= CLOCKS_PER_SEC;
     prevTime = newTime;
 

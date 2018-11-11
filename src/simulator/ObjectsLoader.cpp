@@ -14,6 +14,8 @@ using namespace std;
 
 void ObjectsLoader::loadRoad(const string fileName)
 {
+    cout << "Loading objects from " << fileName << "...  ";
+
     fstream file;
     file.open(fileName.c_str(), ios::app | ios::in);
     if (file.good())
@@ -153,23 +155,27 @@ void ObjectsLoader::loadRoad(const string fileName)
             }
             catch (ExceptionClass e)
             {
-                cout << "ERROR while loading object: " << e.what() <<endl;
+                cout << endl << "ERROR while loading object: " << e.what() <<endl;
             }
             catch (EmptyLineException e)
             {
-
+                //skipping an empty line; it's ok
             }
         }
     }
     else
     {
-        throw ExceptionClass("failed to open file with objects");
+        throw ExceptionClass("failed to open file with objects (" + fileName + ")");
     }
     file.close();
+
+    cout << "Success" << endl;
 }
 
 void ObjectsLoader::loadRightOfWay(const string fileName)
 {
+    cout << "Loading right of way from " << fileName << "...  ";
+
     fstream file;
     file.open(fileName.c_str(), ios::app | ios::in);
     if (file.good())
@@ -221,13 +227,15 @@ void ObjectsLoader::loadRightOfWay(const string fileName)
             }
             catch (EmptyLineException e)
             {
-
+                //skipping an empty line; it's ok
             }
         }
     }
     else
     {
-        throw ExceptionClass("failed to open file containing right of way");
+        throw ExceptionClass("failed to open file containing right of way (" + fileName + ")");
     }
     file.close();
+
+    cout << "Success" << endl;
 }

@@ -21,6 +21,8 @@ Simulator &Simulator::getInstance()
 void Simulator::run()
 {
     objects.reserve(maxNumberOfObjects);
+
+    cout << "Simulator is running" << endl;
     EngineCore::run();
 }
 
@@ -47,12 +49,16 @@ void Simulator::redraw()
 
 Simulator::Simulator() : maxNumberOfObjects(0), CAMERA_VELOCITY(3)
 {
+    cout << "Initializing simulator...  ";
+
     init();
 
     cameraPos = Vec3(-5.5, 2.5, -7.84);
     cameraRot = Vec3(-215, 13.2, 0);
 
     cameraDirection = 0;
+
+    cout << "Success" << endl;
 }
 
 void Simulator::keyHeld(char k)
@@ -82,6 +88,7 @@ void Simulator::keyPressed(char k)
 {
     if (k == 27)
     {
+        cout << "Stopping simulator" << endl;
         cleanSimulation();
         breakMainLoop();
         return;
