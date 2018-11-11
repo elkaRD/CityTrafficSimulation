@@ -5,7 +5,7 @@ Simulator uses OpenGL to render graphics and depending on OS it uses WinAPI or X
 
 [Link to Youtube video](https://youtu.be/NdPUuOY7QYQ)
 
-![alt text](https://lh5.googleusercontent.com/Gv3fjI3NSgUdjqpt-dTR75MaiVqLv2UpTqnMtGwZrAnc1wM5AJcDY0scQzZx8ln1EIqaoSkkzsGxTQ=w1920-h938-rw)
+![screenshot1](screenshots/screenshot_1.png)
 
 ## Requirements
 This program should work on Windows and Linux machines (Linux must support X11). 
@@ -81,5 +81,5 @@ In case of any errors while reding a file or loading an object, the Objectsloade
 # Copyright
 Copyright © Robert Dudziñski 2018
 
-![alt text](https://lh5.googleusercontent.com/x486FNOhku-6YPDnqay3-1JEKNxAHg5uo9IXCvt5Ly0SljEB94CH6JsTdQVFVnywMedaKiEotOCjDQ=w1920-h938-rw)
+![screenshot2](screenshots/screenshot_2.png)
 
