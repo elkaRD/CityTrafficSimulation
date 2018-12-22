@@ -16,8 +16,8 @@ void ObjectsLoader::loadRoad(const string fileName)
 {
     cout << "Loading objects from " << fileName << "...  ";
 
-    fstream file;
-    file.open(fileName.c_str(), ios::app | ios::in);
+    ifstream file;
+    file.open(fileName.c_str());
     if (file.good())
     {
         vector<Cross*>crosses;
@@ -176,8 +176,8 @@ void ObjectsLoader::loadRightOfWay(const string fileName)
 {
     cout << "Loading right of way from " << fileName << "...  ";
 
-    fstream file;
-    file.open(fileName.c_str(), ios::app | ios::in);
+    ifstream file;
+    file.open(fileName.c_str());
     if (file.good())
     {
         while (!file.eof())

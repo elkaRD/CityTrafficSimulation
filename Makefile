@@ -1,9 +1,15 @@
 C=gcc
 CXX=g++
 RM=rm -f
-CPPFLAGS= -std=c++11 -g
+CPPFLAGS= -std=c++11 
 LDFLAGS=
 LDLIBS= -lm -lGL -lX11
+
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+	LDLIBS+= -L/opt/X11/lib
+	CPPFLAGS+= -I /opt/X11/include/
+endif
 
 SRCS=src/main.cpp
 SRCS+=src/simulator/EngineCore/EngineCoreBase.cpp 

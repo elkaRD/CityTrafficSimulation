@@ -10,7 +10,7 @@
 
 
 #ifndef COLORS_H
-#define COLORS_h
+#define COLORS_H
 
 #include <cstdlib>
 #include "Vec3.h"
